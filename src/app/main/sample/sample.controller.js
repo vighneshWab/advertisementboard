@@ -12,7 +12,8 @@
         var vm = this;
 
         // Data
-        vm.helloText = SampleData.data.helloText;
+        // vm.helloText = SampleData.data.helloText;
+        vm.helloText='this is demo';
 
         // Methods
 
