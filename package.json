@@ -1,7 +1,9 @@
 {
   "name": "fuse",
   "version": "1.4.4",
-  "dependencies": {},
+  "dependencies": {
+    "datatables": "^1.10.13"
+  },
   "scripts": {
     "test": "gulp test"
   },

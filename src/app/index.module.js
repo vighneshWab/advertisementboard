@@ -1,5 +1,4 @@
-(function ()
-{
+(function () {
     'use strict';
 
     /**
@@ -21,6 +20,12 @@
             'app.quick-panel',
 
             // Sample
-            'app.sample'
+
+
+            // Final modules
+            'app.pages',
+            'app.admin',
+            // 'app.sample',
+            // 'app.e-commerce'
         ]);
 })();
