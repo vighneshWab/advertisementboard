@@ -2,22 +2,39 @@
     'use strict';
 
     angular
-        .module('app.admin')
-        .controller('PackagesController', PackagesController);
+        .module('app.seller')
+        .controller('sellerPackagesController', sellerPackagesController);
 
     /** @ngInject */
-    function PackagesController($state, $scope, $firebaseObject, $firebaseArray, indexService) {
+    function sellerPackagesController($state) {
+
+
         var vm = this;
+        console.log('PackagesController seller')
 
-        vm.packages = list;
-        var list = indexService.getRefData().$loaded(function (success) {
-            vm.packages = success;
+        var packages = [
+            {
+                id: 1,
+                UserRole: 'Seller',
+                CategoryDescription: 'Description',
+                MaxSellCount: 100,
+                MaxProductCount: 10,
+                MaxCompanyCount: 10,
 
-        }, function (error) {
-            console.log('data error');
+            },
+            {
+                id: 2,
+                UserRole: 'Buyer',
+                CategoryDescription: 'Description',
+                MaxSellCount: 1000,
+                MaxProductCount: 100,
+                MaxCompanyCount: 10,
 
-        });
+            },
 
+        ]
+        // Data
+        vm.packages = packages;
 
         vm.dtInstance = {};
         vm.dtOptions = {
@@ -136,6 +153,5 @@
         function gotoPackageDetail(id) {
             $state.go('app.admin.products.detail', { id: id });
         }
-
     }
 })();

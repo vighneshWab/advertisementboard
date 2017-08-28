@@ -2,19 +2,21 @@
     'use strict';
 
     angular
-        .module('app.admin')
-        .controller('CategoryController', CategoryController);
+        .module('app.seller')
+        .controller('sellerPackageController', sellerPackageController);
 
     /** @ngInject */
-    function CategoryController($scope, $document, indexService,$state) {
+    function sellerPackageController($scope, $document, $state) {
         var vm = this;
-        var Product;
 
         // Data
         vm.taToolbar = [
             ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'quote', 'bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'redo', 'undo', 'clear'],
             ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'indent', 'outdent', 'html', 'insertImage', 'insertLink', 'insertVideo', 'wordcount', 'charcount']
         ];
+
+     
+        var Product;
         vm.product = Product;
         vm.categoriesSelectFilter = '';
         vm.ngFlowOptions = {
@@ -34,16 +36,7 @@
         vm.imageZoomOptions = {};
 
         // Methods
-        vm.saveCompanyCategory = function (formData) {
-            console.log('saveCopnayCategroy');
-
-            indexService.addRefData('admin/companycategory', formData).then(function (res) {
-                console.log(res);
-
-            });
-
-        };
-
+        vm.savePackage = savePackage;
         vm.gotoProducts = gotoProducts;
         vm.onCategoriesSelectorOpen = onCategoriesSelectorOpen;
         vm.onCategoriesSelectorClose = onCategoriesSelectorClose;
@@ -53,7 +46,39 @@
         vm.isFormValid = isFormValid;
         vm.updateImageZoomOptions = updateImageZoomOptions;
 
+        //////////
 
+        init();
+
+        /**
+         * Initialize
+         */
+        function init() {
+            // if (vm.product.images.length > 0) {
+            //     vm.updateImageZoomOptions(vm.product.images[0].url);
+            // }
+        }
+
+        /**
+         * Save product
+         */
+        function savePackage() {
+            // Since we have two-way binding in place, we don't really need
+            // this function to update the products array in the demo.
+            // But in real world, you would need this function to trigger
+            // an API call to update your database.
+            if (vm.product.id) {
+                eCommerceService.updateProduct(vm.product.id, vm.product);
+            }
+            else {
+                eCommerceService.createProduct(vm.product);
+            }
+
+        }
+
+        /**
+         * Go to products page
+         */
         function gotoProducts() {
             $state.go('app.admin.companies');
         }

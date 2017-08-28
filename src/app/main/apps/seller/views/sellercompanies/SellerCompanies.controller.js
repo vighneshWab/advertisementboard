@@ -2,22 +2,60 @@
     'use strict';
 
     angular
-        .module('app.admin')
-        .controller('PackagesController', PackagesController);
+        .module('app.seller')
+        .controller('SellerCompaniesController', SellerCompaniesController);
 
     /** @ngInject */
-    function PackagesController($state, $scope, $firebaseObject, $firebaseArray, indexService) {
+    function SellerCompaniesController($state) {
         var vm = this;
 
-        vm.packages = list;
-        var list = indexService.getRefData().$loaded(function (success) {
-            vm.packages = success;
+        var sellerCompanies = [
+            {
+                CompanyID: 1,
+                Image: '',
+                Name: 'Apple',
+                Description: 'Inventor ',
+                Telephone: '122-123-223',
+                Website: 'www.apple.io',
+                Email: 'info@apple.io',
+                CreatedDate: '',
+                CompanyCategoryID: '',
+                IsDisabled: false,
+                IsProductDisabled: false
 
-        }, function (error) {
-            console.log('data error');
+            },
+            {
+                CompanyID: 2,
+                Image: '',
+                Name: 'Apple',
+                Description: 'Inventor ',
+                Telephone: '122-123-223',
+                Website: 'www.apple.io',
+                Email: 'info@apple.io',
+                CreatedDate: '',
+                CompanyCategoryID: '',
+                IsDisabled: false,
+                IsProductDisabled: false
 
-        });
+            },
+            {
+                CompanyID: 3,
+                Image: '',
+                Name: 'Apple',
+                Description: 'Inventor ',
+                Telephone: '122-123-223',
+                Website: 'www.apple.io',
+                Email: 'info@apple.io',
+                CreatedDate: '',
+                CompanyCategoryID: '',
+                IsDisabled: false,
+                IsProductDisabled: false
 
+            },
+        ]
+
+        // Data
+        vm.sellerCompanies = sellerCompanies;
 
         vm.dtInstance = {};
         vm.dtOptions = {
@@ -116,16 +154,17 @@
         };
 
         // Methods
-        vm.gotoAddPackage = gotoAddPackage;
-        vm.gotoPackageDetail = gotoPackageDetail;
+        vm.gotoAddCompany = gotoAddCompany;
+        vm.gotoCompanyDetail = gotoCompanyDetail;
 
         //////////
 
         /**
          * Go to add product
          */
-        function gotoAddPackage() {
-            $state.go('app.admin.packages.add');
+        function gotoAddCompany() {
+            console.log('company:gotoAddProduct')
+            $state.go('app.seller.sellercompanies.SellerCompany');
         }
 
         /**
@@ -133,9 +172,8 @@
          *
          * @param id
          */
-        function gotoPackageDetail(id) {
-            $state.go('app.admin.products.detail', { id: id });
+        function gotoCompanyDetail(id) {
+            $state.go('app.seller.sellercompanies.detail', { id: id });
         }
-
     }
 })();

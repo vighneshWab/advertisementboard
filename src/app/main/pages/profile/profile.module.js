@@ -31,7 +31,7 @@
                     return msApi.resolve('profile.photosVideos@get');
                 }
             },
-            bodyClass: 'profile'
+            bodyClass: 'e-commerce'
         });
 
         // Translation

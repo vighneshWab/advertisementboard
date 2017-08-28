@@ -12,23 +12,22 @@
             <div class="white-fg" layout="column" layout-align="start start">
                 <div class="h1" layout="row" layout-align="start center">
                     <md-icon md-font-icon="icon-cube-outline"></md-icon>
-                    <span >User Roles</span>
+                    <span>Company </span>
                 </div>
                 <div class="product-count secondary-text">
-                    <span >Total User Roles:</span>
-                    <span>{{vm.packages.length}}</span>
+                    <span>Total Companies :</span>
+                    <span>{{vm.companyCategories.length}}</span>
                 </div>
             </div>
 
             <div class="search" layout="row" layout-align="start center" flex>
                 <md-icon md-font-icon="icon-magnify" class="white-text icon search-icon"></md-icon>
-                <input id="e-commerce-products-search" class="search-input" type="text" placeholder="Search"
-                    flex>
+                <input id="e-commerce-products-search" class="search-input" type="text" placeholder="Search" flex>
             </div>
 
             <div>
-                <md-button class="md-raised md-background" ng-click="vm.gotoAddPackage()">
-                    <span>Add User Role</span>
+                <md-button class="md-raised md-background" ng-click="vm.gotoAddCompany()">
+                    <span>Add Company </span>
                 </md-button>
             </div>
         </div>
@@ -54,27 +53,27 @@
                             </th>
                             <th class="secondary-text">
                                 <div class="table-header">
-                                    <span class="column-title">User Role</span>
+                                    <span class="column-title">Image</span>
                                 </div>
                             </th>
                             <th class="secondary-text">
                                 <div class="table-header">
-                                    <span class="column-title">Category Description</span>
+                                    <span class="column-title">Name</span>
                                 </div>
                             </th>
                             <th class="secondary-text">
                                 <div class="table-header">
-                                    <span class="column-title">Max Sell Count</span>
+                                    <span class="column-title">Description</span>
                                 </div>
                             </th>
                             <th class="secondary-text">
                                 <div class="table-header">
-                                    <span class="column-title">Max Product Count</span>
+                                    <span class="column-title">Website</span>
                                 </div>
                             </th>
                             <th class="secondary-text">
                                 <div class="table-header">
-                                    <span class="column-title">Max Company Count</span>
+                                    <span class="column-title">Email</span>
                                 </div>
                             </th>
                             <th class="secondary-text">
@@ -85,18 +84,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="product in ::vm.packages">
-                            <td>{{$index+1}}</td>
-                            <td>{{product.UserRole}}</td>
-                            <td>{{product.CategoryDescription}}</td>
-                            <td>{{product.MaxSellCount}}</td>
-                            <td>{{product.MaxProductCount}}</td>
-                            <td>{{product.MaxCompanyCount}}</td>
+                        <tr ng-repeat="product in ::vm.sellerCompanies">
+
+                            <td>{{product.CompanyID}}</td>
+                            <td>{{product.Image}}</td>
+                            <td>{{product.Name}}</td>
+                            <td>{{product.Description}}</td>
+                            <td>{{product.Website}}</td>
+                            <td>{{product.Email}}</td>
                             <td>
-                                <md-button class="edit-button md-icon-button" ng-click="vm.gotoPackageDetail(product.id)" aria-label="Product details" 
-                                  >
+                                <md-button class="edit-button md-icon-button" ng-click="vm.gotoCompanyDetail(product.id)" aria-label="Product details" translate>
                                     <md-icon md-font-icon="icon-pencil" class="s16"></md-icon>
-                                    </md-button>
+                                </md-button>
                             </td>
                         </tr>
                     </tbody>

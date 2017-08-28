@@ -3,11 +3,11 @@
     'use strict';
 
     angular
-        .module('app.e-commerce')
-        .factory('eCommerceService', eCommerceService);
+        .module('app.seller')
+        .factory('sellerService', sellerService);
 
     /** @ngInject */
-    function eCommerceService($q, $mdToast, msApi)
+    function sellerService($q, $mdToast, msApi)
     {
         var products = [],
             orders = [],

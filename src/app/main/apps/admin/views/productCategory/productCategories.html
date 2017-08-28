@@ -12,10 +12,10 @@
             <div class="white-fg" layout="column" layout-align="start start">
                 <div class="h1" layout="row" layout-align="start center">
                     <md-icon md-font-icon="icon-cube-outline"></md-icon>
-                    <span >User Roles</span>
+                    <span >Product Category</span>
                 </div>
                 <div class="product-count secondary-text">
-                    <span >Total User Roles:</span>
+                    <span >Total Product Categories:</span>
                     <span>{{vm.packages.length}}</span>
                 </div>
             </div>
@@ -27,8 +27,8 @@
             </div>
 
             <div>
-                <md-button class="md-raised md-background" ng-click="vm.gotoAddPackage()">
-                    <span>Add User Role</span>
+                <md-button class="md-raised md-background" ng-click="vm.gotoAddProductCategory()">
+                    <span>Add Product Category </span>
                 </md-button>
             </div>
         </div>
@@ -86,14 +86,14 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="product in ::vm.packages">
-                            <td>{{$index+1}}</td>
+                            <td>{{product.id}}</td>
                             <td>{{product.UserRole}}</td>
                             <td>{{product.CategoryDescription}}</td>
                             <td>{{product.MaxSellCount}}</td>
                             <td>{{product.MaxProductCount}}</td>
                             <td>{{product.MaxCompanyCount}}</td>
                             <td>
-                                <md-button class="edit-button md-icon-button" ng-click="vm.gotoPackageDetail(product.id)" aria-label="Product details" 
+                                <md-button class="edit-button md-icon-button" ng-click="vm.gotoProductCategoryDetail(product.id)" aria-label="Product details" 
                                   >
                                     <md-icon md-font-icon="icon-pencil" class="s16"></md-icon>
                                     </md-button>

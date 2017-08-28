@@ -1,5 +1,4 @@
-(function ()
-{
+(function () {
     'use strict';
 
     angular
@@ -7,11 +6,21 @@
         .controller('LoginController', LoginController);
 
     /** @ngInject */
-    function LoginController()
-    {
+    function LoginController(indexService) {
         // Data
-
+        var vm = this;
         // Methods
+
+
+        vm.login = function (formData) {
+
+            console.log('login function');
+
+             indexService.postData('login', formData).then(function (rep) {
+               
+            });
+
+        }
 
         //////////
     }

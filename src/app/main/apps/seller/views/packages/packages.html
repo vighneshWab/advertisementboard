@@ -12,10 +12,10 @@
             <div class="white-fg" layout="column" layout-align="start start">
                 <div class="h1" layout="row" layout-align="start center">
                     <md-icon md-font-icon="icon-cube-outline"></md-icon>
-                    <span >User Roles</span>
+                    <span >Packages</span>
                 </div>
                 <div class="product-count secondary-text">
-                    <span >Total User Roles:</span>
+                    <span >Total Packages:</span>
                     <span>{{vm.packages.length}}</span>
                 </div>
             </div>
@@ -28,7 +28,7 @@
 
             <div>
                 <md-button class="md-raised md-background" ng-click="vm.gotoAddPackage()">
-                    <span>Add User Role</span>
+                    <span>Add New Package</span>
                 </md-button>
             </div>
         </div>
@@ -86,7 +86,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="product in ::vm.packages">
-                            <td>{{$index+1}}</td>
+                            <td>{{product.id}}</td>
                             <td>{{product.UserRole}}</td>
                             <td>{{product.CategoryDescription}}</td>
                             <td>{{product.MaxSellCount}}</td>

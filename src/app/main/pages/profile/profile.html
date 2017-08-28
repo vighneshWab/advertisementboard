@@ -1,56 +1,108 @@
-<div id="profile" class="page-layout simple tabbed">
+<div id="e-commerce-product" class="page-layout simple tabbed" layout="column">
 
     <!-- HEADER -->
-    <div class="header md-accent-bg" layout="column" layout-align="center center" layout-gt-sm="row" layout-align-gt-sm="space-between end">
-        <div class="user-info" layout="column" layout-align="center center" layout-gt-sm="row" layout-align-gt-sm="start center">
-            <img class="profile-image avatar huge" src="assets/images/avatars/katherine.jpg">
+    <div class="header md-accent-bg" layout="row" layout-align="start center">
+        <div class="white-fg" layout="row" layout-align="start center" flex>
+            <md-button class="goto-products-button md-icon-button" aria-label="Go to products" ng-click="vm.gotoProducts()">
+                <md-icon md-font-icon="icon-arrow-left"></md-icon>
+            </md-button>
 
-            <div class="name">Katherine Wilson</div>
+            <div layout="row" layout-align="start center">
+                <div class="product-image" hide-xs>
+                    <img ng-src="{{vm.product.images[0].url}}">
+                </div>
+
+                <div layout="column" layout-align="start start">
+                    <div class="h2">
+                        Profile
+                    </div>
+                    <!--<div class="subtitle secondary-text">
+                            <span> Company Categories</span>
+                        </div>-->
+                </div>
+            </div>
         </div>
 
-        <div class="actions" layout="row" layout-align="end center">
-            <md-button class="md-raised md-accent" aria-label="Follow" translate="PROFILE.FOLLOW"
-                       translate-attr-aria-label="PROFILE.FOLLOW">Follow
-            </md-button>
-            <md-button class="md-raised md-primary" translate="PROFILE.SEND_MESSAGE"
-                       translate-attr-aria-label="PROFILE.SEND_MESSAGE">Send Message
+        <div>
+            <md-button class="md-raised md-background" ng-click="vm.saveCompanyCategory()" ng-disabled="!vm.isFormValid('productForm')">
+                <span>SAVE</span>
             </md-button>
         </div>
     </div>
     <!-- / HEADER -->
 
     <!-- CONTENT -->
-    <div class="content" flex>
+    <div class="content">
 
         <md-tabs md-dynamic-height>
+
             <md-tab>
                 <md-tab-label>
-                    <span translate="PROFILE.TIMELINE">Timeline</span>
+                    <span>Company Details</span>
                 </md-tab-label>
                 <md-tab-body>
-                    <md-content class="timeline-tab"
-                                ng-include="'app/main/pages/profile/tabs/timeline/timeline.html'">
-                    </md-content>
-                </md-tab-body>
-            </md-tab>
-            <md-tab>
-                <md-tab-label>
-                    <span translate="PROFILE.ABOUT">About</span>
-                </md-tab-label>
-                <md-tab-body>
-                    <md-content class="about-tab"
-                                ng-include="'app/main/pages/profile/tabs/about/about.html'">
-                    </md-content>
-                </md-tab-body>
-            </md-tab>
-            <md-tab>
-                <md-tab-label>
-                    <span translate="PROFILE.PHOTOS_VIDEOS">Photos & Videos</span>
-                </md-tab-label>
-                <md-tab-body>
-                    <md-content class="photos-videos-tab"
-                                ng-include="'app/main/pages/profile/tabs/photos-videos/photos-videos.html'">
-                    </md-content>
+                    <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
+                        <form id="productForm" name="productForm">
+
+
+                            <div layout="column" layout-gt-sm="row">
+                                <md-input-container flex>
+                                    <label>User name</label>
+                                    <input type="text" ng-model="vm.user.Username" required>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>Email</label>
+                                    <input type="text" ng-model="vm.sellerCompany.Email" required>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>Telephone</label>
+                                    <input type="text" ng-model="vm.sellerCompany.Telephone" required>
+                                </md-input-container>
+                            </div>
+
+
+
+                            <div layout="column" layout-gt-sm="row">
+                                <md-input-container flex>
+                                    <label>Street No</label>
+                                    <input type="text" ng-model="vm.sellerCompany.StreetNo" required>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>Street Name</label>
+                                    <input type="text" ng-model="vm.sellerCompany.StreetName" required>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>Suburb</label>
+                                    <input type="text" ng-model="vm.sellerCompany.Suburb" required>
+                                </md-input-container>
+                            </div>
+                            <div layout="column" layout-gt-xs="row">
+                                <md-input-container flex>
+                                    <label>State</label>
+                                    <input type="text" ng-model="vm.sellerCompany.State" required>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>Country</label>
+                                    <input type="text" ng-model="vm.sellerCompany.Country" required>
+                                </md-input-container>
+                            </div>
+                            <div layout="column" layout-gt-xs="row">
+                                <md-input-container flex>
+                                    <label>Company Category</label>
+                                    <md-select ng-model="vm.sellerCompany.CompanyCategoryID" required>
+                                        <md-option ng-repeat="role in vm.companyCategories" ng-value="role.CompanyCategoryID">
+                                            {{role.CategoryName}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>Name</label>
+                                    <input type="text" ng-model="vm.sellerCompany.Name" required>
+
+                                </md-input-container>
+                            </div>
+                        </form>
+                    </div>
                 </md-tab-body>
             </md-tab>
         </md-tabs>

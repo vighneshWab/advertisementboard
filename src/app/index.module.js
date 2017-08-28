@@ -12,6 +12,8 @@
 
             // Navigation
             'app.navigation',
+            'firebase',
+            
 
             // Toolbar
             'app.toolbar',
@@ -25,7 +27,7 @@
             // Final modules
             'app.pages',
             'app.admin',
-            // 'app.sample',
-            // 'app.e-commerce'
+            'app.seller',
+            
         ]);
 })();

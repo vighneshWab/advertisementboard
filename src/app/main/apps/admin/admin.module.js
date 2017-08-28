@@ -45,7 +45,7 @@
                         controller: 'CategoryController as vm'
                     }
                 },
-               
+
                 bodyClass: 'e-commerce'
             })
             .state('app.admin.companies.detail', {
@@ -78,7 +78,7 @@
                         controller: 'PackageController as vm'
                     }
                 },
-                                bodyClass: 'e-commerce'
+                bodyClass: 'e-commerce'
             })
             .state('app.admin.packages.detail', {
                 url: '/:id',
@@ -88,7 +88,38 @@
                         controller: 'PackageController as vm'
                     }
                 },
-                
+
+                bodyClass: 'e-commerce'
+            })
+            .state('app.admin.productCategories', {
+                url: '/productCategories',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/admin/views/productCategory/productCategories.html',
+                        controller: 'ProductCategoriesController as vm'
+                    }
+                },
+                bodyClass: 'e-commerce'
+            })
+            .state('app.admin.productCategories.add', {
+                url: '/add',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/admin/views/productCategory/productCategory.html',
+                        controller: 'ProductCategoryController as vm'
+                    }
+                },
+                bodyClass: 'e-commerce'
+            })
+            .state('app.admin.productCategories.detail', {
+                url: '/:id',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/admin/views/productCategory/productCategory.html',
+                        controller: 'ProductCategoryController as vm'
+                    }
+                },
+
                 bodyClass: 'e-commerce'
             })
 
@@ -105,8 +136,12 @@
             state: 'app.admin.companies'
         });
         msNavigationServiceProvider.saveItem('apps.admin.package', {
-            title: 'Packages',
+            title: 'User Role',
             state: 'app.admin.packages'
+        });
+         msNavigationServiceProvider.saveItem('apps.admin.productCategory', {
+            title: 'Prodcut Category',
+            state: 'app.admin.productCategories'
         });
 
     }
