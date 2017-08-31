@@ -6,15 +6,13 @@
         .controller('PackagesController', PackagesController);
 
     /** @ngInject */
-    function PackagesController($state, $scope, $firebaseObject, $firebaseArray, indexService) {
+    function PackagesController($state, $scope, indexService) {
         var vm = this;
-
-        vm.packages = list;
-        var list = indexService.getRefData().$loaded(function (success) {
+        $scope.FBref = firebase.database().ref('admin/userRoles');
+        var list = indexService.getAll($scope.FBref).$loaded(function (success) {
             vm.packages = success;
-
         }, function (error) {
-            console.log('data error');
+            indexService.errorMessage("error while getting data");
 
         });
 
@@ -134,7 +132,7 @@
          * @param id
          */
         function gotoPackageDetail(id) {
-            $state.go('app.admin.products.detail', { id: id });
+            $state.go('app.admin.packages.detail', { id: id });
         }
 
     }

@@ -6,50 +6,36 @@
         .factory('indexService', indexService);
 
     /** @ngInject */
-    function indexService($q, $mdToast, msApi, $http, api, $firebaseObject, $firebaseArray, $filter) {
+    function indexService($q, $mdToast, msApi, $http, api, $firebaseObject, $firebaseStorage, $firebaseArray, $filter) {
 
 
         var services = {};
 
 
-        services.getData = function (resourceUrl) {
 
+        services.sucessMessage = function (msg) {
 
-            var endPoint = api.apiUrl + resourceUrl;
-            console.log('getMethod', endPoint);
+            var configOptions = {
+                hideDelay: 3000,
+                position: 'top right',
+                template: '<md-toast class="md-toast">' + msg + '</md-toast>'
 
-            var deferred = $q.defer();
-            $http.get(api.apiUrl + resourceUrl)
-                .success(function (response) {
-                    deferred.resolve(response);
-                    // deferred.reject(response);
-
-                }).error(function (error) {
-                    deferred.reject(error);
-                })
-
-            return deferred.promise;
+            }
+            $mdToast.show($mdToast.simple(configOptions));
         }
 
-        services.postData = function (resourceUrl, param) {
-            var deferred = $q.defer();
+        services.errorMessage = function (msg) {
+            var configOptions = {
+                hideDelay: 3000,
+                position: 'top right',
+                template: '<md-toast class="md-toast">' + msg + '</md-toast>'
 
-            var endPoint = api.apiUrl + resourceUrl;
-            console.log('postMethod', endPoint);
+            }
+            $mdToast.show($mdToast.simple(configOptions));
 
-            $http.post(api.apiUrl + resourceUrl, param)
-                .success(function (response) {
-                    console.log('response', response)
-
-                    deferred.resolve(response);
-                    // deferred.reject(response);
-
-                }).error(function (error) {
-                    deferred.reject(error);
-                });
-
-            return deferred.promise;
         }
+
+
 
         var ref = firebase.database().ref('userRoles');
         services.getRefData = function () {
@@ -58,23 +44,68 @@
 
         }
 
+        var admin = firebase.database().ref('admin');
 
-        services.addRefData = function (ref, formData) {
-            var endPoint = firebase.database().ref(ref);
-            var list = $firebaseArray(endPoint);
-            list.$add(formData).then(function (res) {
-                console.log("added record with id " + res);
-                return res;
+        services.getByRef = function (refD) {
+            var child = admin.child(refD)
+            var refDdata = refD;
+            var list = $firebaseArray(child);
 
-            });
+            return list;
+
         }
 
 
+        // optimiza code starts
+
+        services.getAll = function (refD) {
+            var list = $firebaseArray(refD);
+            return list;
+
+        }
+        services.create = function (refD, obj) {
+            console.log('create ', refD)
+            var list = $firebaseArray(refD);
+            list.$add(obj).then(function (res) {
+                if (res) {
+                    services.sucessMessage('Record added succfully');
+
+                } else {
+                    console.log('error:', res)
+                    services.errorMessage('error adding record');
+                }
+
+            });
+
+        }
+
+        services.update = function (refD, childRef, obj) {
+            var list = refD.child(childRef).set(obj, function (error) {
+                if (error) {
+                    services.errorMessage('error while update record');
+                } else {
+                    services.sucessMessage('Record updated succfully');
+
+                }
 
 
+            });
+
+        }
+
+        services.strorage = function (file) {
+            var currentDate = Date.now();
+            var randomNumberBetween0and19 = Math.floor(Math.random() * 1000);
+            var imageName = currentDate + randomNumberBetween0and19.toString();
+            const imageStorageRef = firebase.storage().ref(imageName);
+            const imageStorage = $firebaseStorage(imageStorageRef)
+            const uploadTask = imageStorage.$put(file);
+           return uploadTask;
+
+        }
 
 
-
+        //ends 
 
 
 

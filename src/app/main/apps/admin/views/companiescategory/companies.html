@@ -41,6 +41,8 @@
             <!-- / CONTENT TOOLBAR -->
 
             <!-- CONTENT -->
+
+
             <div class="content fullpage-datatable" layout="column" flex>
 
                 <table class="dataTable row-border hover" datatable="ng" dt-instance="vm.dtInstance" dt-options="vm.dtOptions">
@@ -73,14 +75,16 @@
                             </th>
                         </tr>
                     </thead>
+
+
                     <tbody>
                         <tr ng-repeat="product in ::vm.companyCategories">
-                            <td>{{product.CompanyCategoryID}}</td>
+                            <td>{{$index + 1}}</td>
                             <td>{{product.CategoryName}}</td>
                             <td>{{product.CategoryDescription}}</td>
-                            <td>{{product.Image}}</td>
+                            <td><img class="product-image1" ng-src="{{product.Image}}"></td>
                             <td>
-                                <md-button class="edit-button md-icon-button" ng-click="vm.gotoProductDetail(product.id)" aria-label="Product details" translate
+                                <md-button class="edit-button md-icon-button" ng-click="vm.gotoProductDetail(product.$id)" aria-label="Product details" translate
                                     translate-attr-aria-label="EC.PRODUCT_DETAILS">
                                     <md-icon md-font-icon="icon-pencil" class="s16"></md-icon>
                                     </md-button>

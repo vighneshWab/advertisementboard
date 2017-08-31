@@ -13,11 +13,35 @@
         vm.regEx = "/^[0-9]{1,10}$/;"
 
         vm.registration = function (formData) {
-            console.log('vm.registration function');
-            indexService.postData('signUp', formData).then(function (rep) {
-               
-            });
 
+            var users =  firebase.database().ref('users/');
+
+
+            var email = formData.email;
+            var password = formData.password;
+
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then(function (user) {
+                    user.updateProfile({
+                        displayName: formData.username
+                    }).then(function () {
+                        console.log('updated successfully', formData.username);
+                    }, function (error) {
+                        // An error happened.
+                        console.log('updated error');
+                    });
+                }, function (error) {
+                    // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    // [START_EXCLUDE]
+                    if (errorCode == 'auth/weak-password') {
+                        console.log('auth/weak-password')
+                    } else {
+                        console.log(error);
+                    }
+                    // [END_EXCLUDE]
+                });
 
 
         }

@@ -11,3 +11,19 @@
  */
 // injector
 // endinjector
+
+.product-image1 {
+                            width: 52px;
+                            max-width:52px;
+                            max-height: 52px;
+                            height: 52px;
+                            border: 1px solid rgba(0, 0, 0, 0.12);
+                        }
+
+ .md-toast.error {
+    background-color: red;
+}
+
+.md-toast.success {
+    background-color: green;
+}

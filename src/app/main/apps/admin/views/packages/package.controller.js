@@ -6,23 +6,56 @@
         .controller('PackageController', PackageController);
 
     /** @ngInject */
-    function PackageController($scope, $document, $firebaseArray, $state, indexService) {
+    function PackageController($scope, $document,$stateParams , $firebaseArray, $state, indexService) {
         var vm = this;
         // Methods
-        var ref = firebase.database().ref('userRoles');
-        var list = $firebaseArray(ref);
+        $scope.FBref = firebase.database().ref('admin/userRoles');
 
         vm.package = {};
+        $scope.imgAvailable = false;
+        $scope.vidAvailable = false;
+        $scope.img = $scope.vid = {};
         vm.isFormValid = isFormValid;
         vm.gotoProducts = gotoProducts;
-        vm.savePackage = function (formData) {
-            console.log('savePackage');
-            list.$add(formData).then(function (res) {
-                console.log('ref', res);
+        if ($stateParams.id) {
+            var list = $scope.FBref.child($stateParams.id);
+            list.on('value', function (snap) {
+                vm.package = snap.val();
+                $scope.the_url = vm.package.Image;
+                $scope.imgAvailable = true;
+            });
+        }
 
-                var id = res.key;
-                console.log("added record with id " + id);
-                list.$indexFor(id); // returns location in the array
+        vm.create = function (createObject) {
+            indexService.create($scope.FBref, createObject);
+        }
+
+        vm.update = function (createObject) {
+            indexService.update($scope.FBref, $stateParams.id, createObject);
+        }
+
+        vm.savePackage = function () {
+            if ($stateParams.id) {
+                vm.update(vm.package);
+
+            } else {
+                vm.create(vm.package);
+
+            }
+
+        }
+        vm.uploadFile = function () {
+            var file = $scope.myFile;
+            var uploadTask = indexService.strorage(file);
+            vm.companyCategory.Image = uploadTask;
+            uploadTask.$error(function (error) {
+                console.error(error);
+
+            });
+            uploadTask.$complete(function (snapshot) {
+                var urlPath = snapshot.downloadURL;
+                vm.companyCategory.Image = urlPath;
+                
 
             });
 

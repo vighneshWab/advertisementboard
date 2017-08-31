@@ -6,35 +6,15 @@
         .controller('CompaniesController', CompaniesController);
 
     /** @ngInject */
-    function CompaniesController($state) {
+    function CompaniesController($state, $scope, indexService) {
         var vm = this;
+        $scope.FBref = firebase.database().ref('admin/companycategory');
+        var list = indexService.getAll($scope.FBref).$loaded(function (success) {
+            vm.companyCategories = success;
+        }, function (error) {
+            indexService.errorMessage("error while getting data");
 
-        var companyCategories = [
-            {
-                CompanyCategoryID: 1,
-                CategoryName: 'General',
-                CategoryDescription: 'General Desciption',
-                Image: ''
-
-            },
-           {
-                CompanyCategoryID: 2,
-                CategoryName: 'Private',
-                CategoryDescription: 'Private Desciption',
-                Image: ''
-
-            },
-            {
-                CompanyCategoryID: 3,
-                CategoryName: 'Global',
-                CategoryDescription: 'Global Desciption',
-                Image: ''
-
-            },
-        ]
-
-        // Data
-        vm.companyCategories = companyCategories;
+        });
 
         vm.dtInstance = {};
         vm.dtOptions = {
@@ -142,7 +122,6 @@
          * Go to add product
          */
         function gotoAddCategory() {
-            console.log('company:gotoAddProduct')
             $state.go('app.admin.companies.category');
         }
 

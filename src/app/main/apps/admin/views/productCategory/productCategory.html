@@ -3,30 +3,29 @@
     <!-- HEADER -->
     <div class="header md-accent-bg" layout="row" layout-align="start center">
         <div class="white-fg" layout="row" layout-align="start center" flex>
-            <md-button class="goto-products-button md-icon-button" aria-label="Go to products" ng-click="vm.gotoProducts()" 
-              >
+            <md-button class="goto-products-button md-icon-button" aria-label="Go to products" ng-click="vm.gotoProductCategories()">
                 <md-icon md-font-icon="icon-arrow-left"></md-icon>
-                </md-button>
+            </md-button>
 
-                <div layout="row" layout-align="start center">
-                    <div class="product-image" hide-xs>
-                        <img ng-src="{{vm.product.images[0].url}}">
+            <div layout="row" layout-align="start center">
+                <div class="product-image" hide-xs>
+                    <img ng-src="{{the_url}}">
+                </div>
+
+                <div layout="column" layout-align="start start">
+                    <div class="h2">
+                        {{vm.product.name}}
                     </div>
-
-                    <div layout="column" layout-align="start start">
-                        <div class="h2">
-                            {{vm.product.name}}
-                        </div>
-                        <div class="subtitle secondary-text">
-                            <span>create Package</span>
-                        </div>
+                    <div class="subtitle secondary-text">
+                        <span>Product Category</span>
                     </div>
                 </div>
+            </div>
         </div>
 
         <div>
-            <md-button class="md-raised md-background" ng-click="vm.savePackage()" ng-disabled="!vm.isFormValid('productForm')">
-                <span >SAVE</span>
+            <md-button class="md-raised md-background" ng-click="vm.saveProductCategory(vm.productCategory)" ng-disabled="!vm.isFormValid('productForm')">
+                <span>SAVE</span>
             </md-button>
         </div>
     </div>
@@ -39,36 +38,36 @@
 
             <md-tab>
                 <md-tab-label>
-                    <span>Create Package</span>
+                    <span>Product Category</span>
                 </md-tab-label>
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
                         <form id="productForm" name="productForm">
-                            <md-input-container class="md-block">
-                                <label>User Role</label>
-                                <md-select ng-model="vm.package.UserRole">
-                                    <md-option ng-repeat="role in vm.userRoles" >
-                                        {{role}}
-                                    </md-option>
-                                </md-select>
-                            </md-input-container>
+                            <div layout="column" layout-gt-xs="row">
+                                <md-input-container flex>
+                                    <label>Category Name</label>
+                                    <input type="text" ng-model="vm.productCategory.CategoryName" required>
+                                </md-input-container>
 
-                            <md-input-container class="md-block">
-                                <label>Category Description</label>
-                                <input type="text" ng-model="vm.package.CategoryDescription" required>
-                            </md-input-container>
-                            <md-input-container class="md-block">
-                                <label>Max Sell Count</label>
-                                <input type="number" ng-model="vm.package.MaxSellCount" required>
-                            </md-input-container>
-                            <md-input-container class="md-block">
-                                <label>Max Product Count</label>
-                                <input type="number" ng-model="vm.package.MaxProductCount" required>
-                            </md-input-container>
-                            <md-input-container class="md-block">
-                                <label>Max Company Count</label>
-                                <input type="number" ng-model="vm.package.MaxCompanyCount" required>
-                            </md-input-container>
+                            </div>
+
+                            <div layout="column" layout-gt-xs="row">
+                                <md-input-container flex>
+                                    <label>Category Description</label>
+                                    <input type="text" ng-model="vm.productCategory.CategoryDescription" required>
+                                </md-input-container>
+
+                            </div>
+
+                            <div layout="column" layout-gt-xs="row">
+                                <input type="file" file-model="myFile" filelist-bind required />
+                                <div class="product-image1" ng-show="imgAvailable" id="preview" hide-xs>
+                                    <img ng-src="{{ the_url }}">
+                                </div>
+                                <md-button class="md-raised md-background" ng-click="vm.uploadFile()" ng-disabled="!the_url">
+                                    <span>Upload Image</span>
+                                </md-button>
+                            </div>
                         </form>
                     </div>
                 </md-tab-body>

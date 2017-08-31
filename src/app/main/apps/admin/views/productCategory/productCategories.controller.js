@@ -6,32 +6,16 @@
         .controller('ProductCategoriesController', ProductCategoriesController);
 
     /** @ngInject */
-    function ProductCategoriesController($state) {
+    function ProductCategoriesController($state,$scope, indexService) {
         var vm = this;
 
-        var packages = [
-            {
-                id: 1,
-                UserRole: 'Seller',
-                CategoryDescription: 'Description',
-                MaxSellCount: 100,
-                MaxProductCount: 10,
-                MaxCompanyCount: 10,
+        $scope.FBref = firebase.database().ref('admin/productcategory');
+        var list = indexService.getAll($scope.FBref).$loaded(function (success) {
+            vm.productCategories = success;
+        }, function (error) {
+            indexService.errorMessage("error while getting data");
 
-            },
-            {
-                id: 2,
-                UserRole: 'Buyer',
-                CategoryDescription: 'Description',
-                MaxSellCount: 1000,
-                MaxProductCount: 100,
-                MaxCompanyCount: 10,
-
-            },
-
-        ]
-        // Data
-        vm.packages = packages;
+        });
 
         vm.dtInstance = {};
         vm.dtOptions = {
@@ -131,7 +115,9 @@
 
         // Methods
         vm.gotoAddProductCategory = gotoAddProductCategory;
-        vm.gotoProductCategoryDetail = gotoProductCategoryDetail;
+        vm.gotoProductCategoryDetail = function (id) {
+            $state.go('app.admin.productCategories.detail', { id: id });
+        };
 
         //////////
 
@@ -139,16 +125,9 @@
          * Go to add product
          */
         function gotoAddProductCategory() {
-            $state.go('app.admin.packages.add');
+            $state.go('app.admin.productCategories.add');
         }
 
-        /**
-         * Go to product detail
-         *
-         * @param id
-         */
-        function gotoProductCategoryDetail(id) {
-            $state.go('app.admin.products.detail', { id: id });
-        }
+
     }
 })();
