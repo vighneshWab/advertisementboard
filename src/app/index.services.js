@@ -58,6 +58,8 @@
 
         // optimiza code starts
 
+
+
         services.getAll = function (refD) {
             var list = $firebaseArray(refD);
             return list;
@@ -78,6 +80,8 @@
             });
 
         }
+
+
 
         services.update = function (refD, childRef, obj) {
             var list = refD.child(childRef).set(obj, function (error) {
@@ -100,13 +104,47 @@
             const imageStorageRef = firebase.storage().ref(imageName);
             const imageStorage = $firebaseStorage(imageStorageRef)
             const uploadTask = imageStorage.$put(file);
-           return uploadTask;
+            return uploadTask;
+
+        }
+
+        services.usersProfile = function (refD, obj) {
+            console.log('usersProfile ', refD)
+            var list = $firebaseArray(refD);
+            list.$add(obj).then(function (res) {
+                if (res) {
+                    console.log(res);
+                    // services.sucessMessage('Record added succfully');
+
+                } else {
+                    console.log('error:', res)
+                    // services.errorMessage('error adding record');
+                }
+
+            });
 
         }
 
 
+
         //ends 
 
+
+        // undeerstabdn codeing 
+
+        services.getAllProfiles = function () {
+            var qProfile = $q.defer();
+            var ref = new Firebase(FBURL);
+            ref.child("users").orderByChild('last_update').on("value", function (snapshot) {
+                snapshot.forEach(function (child) {
+                    console.log(child.val()) // NOW THE CHILDREN PRINT IN ORDER
+                });
+                qProfile.resolve(snapshot.val());
+            }, function (errorObject) {
+                qProfile.reject(errorObject);
+            });
+            return qProfile.promise;
+        };
 
 
         return services;

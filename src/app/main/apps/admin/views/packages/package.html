@@ -52,7 +52,7 @@
 
                                 <md-input-container flex>
                                     <label>Category Description</label>
-                                    <input type="text"  name="CategoryDescription" ng-model="vm.package.CategoryDescription" required>
+                                    <input type="text" name="CategoryDescription" ng-model="vm.package.CategoryDescription" required>
                                 </md-input-container>
 
                             </div>
@@ -60,15 +60,23 @@
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
                                     <label>Max Sell Count</label>
-                                    <input type="number"  name="MaxSellCount"  ng-model="vm.package.MaxSellCount" required>
+                                    <input type="number" name="MaxSellCount" ng-model="vm.package.MaxSellCount" required>
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Max Product Count</label>
-                                    <input type="number"  name="MaxProductCount"  ng-model="vm.package.MaxProductCount" required>
+                                    <input type="number" name="MaxProductCount" ng-model="vm.package.MaxProductCount" required>
                                 </md-input-container>
+
+                            </div>
+
+                            <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
                                     <label>Max Company Count</label>
-                                    <input type="number"  name="MaxCompanyCount" ng-model="vm.package.MaxCompanyCount" required>
+                                    <input type="number" name="MaxCompanyCount" ng-model="vm.package.MaxCompanyCount" required>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>Price</label>
+                                    <input type="number" name="MaxCompanyCount" ng-model="vm.package.price" required>
                                 </md-input-container>
                             </div>
                         </form>

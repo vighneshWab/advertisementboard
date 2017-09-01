@@ -28,6 +28,7 @@
             'app.pages',
             'app.admin',
             'app.seller',
+          
             
         ]);
 })();

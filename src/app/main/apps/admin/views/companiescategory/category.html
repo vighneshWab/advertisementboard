@@ -25,7 +25,7 @@
         </div>
 
         <div>
-            <md-button class="md-raised md-background" ng-click="vm.saveCompanyCategory(vm.companyCategory)" ng-disabled="!vm.isFormValid('productForm')">
+            <md-button class="md-raised md-background" ng-click="vm.saveCompanyCategory(vm.companyCategory)" ng-disabled="productForm.$invalid">
                 <span>SAVE</span>
             </md-button>
         </div>
@@ -43,11 +43,11 @@
                 </md-tab-label>
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
-                        <form id="productForm" name="productForm">
+                        <form id="productForm" name="productForm" novalidate>
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
                                     <label>Category Name</label>
-                                    <input type="text" ng-model="vm.companyCategory.CategoryName" required>
+                                    <input type="text" ng-model="vm.companyCategory.CategoryName" name="name" required>
                                 </md-input-container>
 
                             </div>
@@ -55,13 +55,13 @@
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
                                     <label>Category Description</label>
-                                    <input type="text" ng-model="vm.companyCategory.CategoryDescription" required>
+                                    <input type="text" ng-model="vm.companyCategory.CategoryDescription" name="dec" required>
                                 </md-input-container>
 
                             </div>
 
                             <div layout="column" layout-gt-xs="row">
-                                <input type="file" file-model="myFile" filelist-bind required />
+                                <input type="file" file-model="myFile" filelist-bind name="file" ng-required="true" />
                                 <div class="product-image1" ng-show="imgAvailable" id="preview" hide-xs>
                                     <img ng-src="{{ the_url }}">
                                 </div>

@@ -1,0 +1,67 @@
+<div id="e-commerce-product" class="page-layout simple tabbed" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="start center">
+        <div class="white-fg" layout="row" layout-align="start center" flex>
+            <!--<md-button class="goto-products-button md-icon-button" aria-label="Go to products" ng-click="vm.gotoProducts()" translate
+                translate-attr-aria-label="EC.GO_TO_PRODUCTS">
+                <md-icon md-font-icon="icon-arrow-left"></md-icon>
+                </md-button>-->
+
+            <div layout="row" layout-align="start center">
+                <!--<div class="product-image" hide-xs>
+                        <img ng-src="{{vm.product.images[0].url}}">
+                    </div>-->
+
+                <div layout="column" layout-align="start start">
+                    <!--<div class="h2">
+                            {{vm.product.name}}
+                        </div>-->
+                    <div class="subtitle secondary-text">
+                        <span>Become A Seller </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <md-button class="md-raised md-background" ng-click="vm.saveBecomeSeller()" ng-disabled="!vm.isFormValid('productForm')">
+                <span>SAVE</span>
+            </md-button>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content">
+
+        <md-tabs md-dynamic-height>
+
+            <md-tab>
+                <md-tab-label>
+                    <span>Become seller</span>
+                </md-tab-label>
+                <md-tab-body>
+                    <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
+                        <form id="productForm" name="productForm">
+                            <div layout="column" layout-gt-xs="row">
+                                <md-input-container flex>
+                                    <label>Select Package</label>
+                                    <md-select ng-model="vm.formdata.CompanyCategoryID" required>
+                                        <md-option ng-repeat="role in vm.packages" ng-value="role.$id">
+                                            {{role.CategoryDescription}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+
+                            </div>
+                        </form>
+                    </div>
+                </md-tab-body>
+            </md-tab>
+        </md-tabs>
+
+    </div>
+    <!-- / CONTENT -->
+
+</div>

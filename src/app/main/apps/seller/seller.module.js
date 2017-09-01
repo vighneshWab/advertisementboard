@@ -45,7 +45,7 @@
                         controller: 'SellerCompanyController as vm'
                     }
                 },
-               
+
                 bodyClass: 'e-commerce'
             })
             .state('app.seller.sellercompanies.detail', {
@@ -58,39 +58,49 @@
                 },
                 bodyClass: 'e-commerce'
             })
+            .state('app.seller.becomeseller', {
+                url: '/becomeseller',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/seller/views/becomeseller/becomeseller.html',
+                        controller: 'becomeSellerController as vm'
+                    }
+                },
+                bodyClass: 'e-commerce'
+            })
 
-            // packge module states
-            // .state('app.seller.packages', {
-            //     url: '/packages',
-            //     views: {
-            //         'content@app': {
-            //             templateUrl: 'app/main/apps/seller/views/packages/packages.html',
-            //             controller: 'PackagesController as vm'
-            //         }
-            //     },
-            //     bodyClass: 'e-commerce'
-            // })
-            // .state('app.seller.packages.add', {
-            //     url: '/add',
-            //     views: {
-            //         'content@app': {
-            //             templateUrl: 'app/main/apps/seller/views/packages/package.html',
-            //             controller: 'PackageController as vm'
-            //         }
-            //     },
-            //                     bodyClass: 'e-commerce'
-            // })
-            // .state('app.seller.packages.detail', {
-            //     url: '/:id',
-            //     views: {
-            //         'content@app': {
-            //             templateUrl: 'app/main/apps/seller/views/packages/package.html',
-            //             controller: 'PackageController as vm'
-            //         }
-            //     },
-                
-            //     bodyClass: 'e-commerce'
-            // })
+        // packge module states
+        // .state('app.seller.packages', {
+        //     url: '/packages',
+        //     views: {
+        //         'content@app': {
+        //             templateUrl: 'app/main/apps/seller/views/packages/packages.html',
+        //             controller: 'PackagesController as vm'
+        //         }
+        //     },
+        //     bodyClass: 'e-commerce'
+        // })
+        // .state('app.seller.packages.add', {
+        //     url: '/add',
+        //     views: {
+        //         'content@app': {
+        //             templateUrl: 'app/main/apps/seller/views/packages/package.html',
+        //             controller: 'PackageController as vm'
+        //         }
+        //     },
+        //                     bodyClass: 'e-commerce'
+        // })
+        // .state('app.seller.packages.detail', {
+        //     url: '/:id',
+        //     views: {
+        //         'content@app': {
+        //             templateUrl: 'app/main/apps/seller/views/packages/package.html',
+        //             controller: 'PackageController as vm'
+        //         }
+        //     },
+
+        //     bodyClass: 'e-commerce'
+        // })
 
 
         // Navigation
