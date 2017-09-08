@@ -13,7 +13,8 @@
             // Navigation
             'app.navigation',
             'firebase',
-            
+            // 'angularPayments',
+            // 'angular-stripe',
 
             // Toolbar
             'app.toolbar',
@@ -28,7 +29,7 @@
             'app.pages',
             'app.admin',
             'app.seller',
-          
-            
+
+
         ]);
 })();

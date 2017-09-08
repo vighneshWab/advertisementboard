@@ -1,5 +1,4 @@
-(function ()
-{
+(function () {
     'use strict';
 
     angular
@@ -7,8 +6,9 @@
         .config(config);
 
     /** @ngInject */
-    function config($translateProvider)
-    {
+    function config($translateProvider) {
+        
+        // stripe.setPublishableKey('pk_test_BfrgMjMHgcUujV73QMAGOgWU');
         // Put your common app configurations here
 
         // angular-translate configuration

@@ -25,8 +25,8 @@
         </div>
 
         <div>
-            <md-button class="md-raised md-background" ng-click="vm.saveBecomeSeller()" ng-disabled="!vm.isFormValid('productForm')">
-                <span>SAVE</span>
+            <md-button class="md-raised md-background" ng-click="vm.purchasePackage($event)" ng-disabled="!vm.isFormValid('productForm')">
+                <span>Purchase</span>
             </md-button>
         </div>
     </div>
@@ -43,12 +43,16 @@
                 </md-tab-label>
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
+                        <!--<pre>{{vm.formData.package}}</pre>-->
+
                         <form id="productForm" name="productForm">
                             <div layout="column" layout-gt-xs="row">
+
+
                                 <md-input-container flex>
                                     <label>Select Package</label>
-                                    <md-select ng-model="vm.formdata.CompanyCategoryID" required>
-                                        <md-option ng-repeat="role in vm.packages" ng-value="role.$id">
+                                    <md-select ng-model="vm.formData.package" required>
+                                        <md-option ng-repeat="role in vm.packages  | filter:{isTrial: ! true }" ng-value="role" >
                                             {{role.CategoryDescription}}
                                         </md-option>
                                     </md-select>

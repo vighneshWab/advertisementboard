@@ -60,8 +60,6 @@
                                 </md-input-container>
                             </div>
 
-
-
                             <div layout="column" layout-gt-sm="row">
                                 <md-input-container flex>
                                     <label>Street No</label>
@@ -84,21 +82,6 @@
                                 <md-input-container flex>
                                     <label>Country</label>
                                     <input type="text" ng-model="vm.sellerCompany.Country" required>
-                                </md-input-container>
-                            </div>
-                            <div layout="column" layout-gt-xs="row">
-                                <md-input-container flex>
-                                    <label>Company Category</label>
-                                    <md-select ng-model="vm.sellerCompany.CompanyCategoryID" required>
-                                        <md-option ng-repeat="role in vm.companyCategories" ng-value="role.CompanyCategoryID">
-                                            {{role.CategoryName}}
-                                        </md-option>
-                                    </md-select>
-                                </md-input-container>
-                                <md-input-container flex>
-                                    <label>Name</label>
-                                    <input type="text" ng-model="vm.sellerCompany.Name" required>
-
                                 </md-input-container>
                             </div>
                         </form>

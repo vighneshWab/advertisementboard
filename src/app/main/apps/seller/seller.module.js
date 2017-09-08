@@ -26,11 +26,23 @@
             })
 
             // seller SellerCompany seller companies
+
+            .state('app.seller.dashboard', {
+                url: '/dashboard',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/seller/views/dashboard/sellerdashboard.html',
+                        controller: 'SellerDashboardController as vm'
+                    }
+                },
+
+                bodyClass: 'e-commerce'
+            })
             .state('app.seller.sellercompanies', {
                 url: '/sellercompanies',
                 views: {
                     'content@app': {
-                        templateUrl: 'app/main/apps/seller/views/sellercompanies/sellercompanies.html',
+                         templateUrl: 'app/main/apps/seller/views/sellercompanies/sellercompanies.html',
                         controller: 'SellerCompaniesController as vm'
                     }
                 },
@@ -69,38 +81,38 @@
                 bodyClass: 'e-commerce'
             })
 
-        // packge module states
-        // .state('app.seller.packages', {
-        //     url: '/packages',
-        //     views: {
-        //         'content@app': {
-        //             templateUrl: 'app/main/apps/seller/views/packages/packages.html',
-        //             controller: 'PackagesController as vm'
-        //         }
-        //     },
-        //     bodyClass: 'e-commerce'
-        // })
-        // .state('app.seller.packages.add', {
-        //     url: '/add',
-        //     views: {
-        //         'content@app': {
-        //             templateUrl: 'app/main/apps/seller/views/packages/package.html',
-        //             controller: 'PackageController as vm'
-        //         }
-        //     },
-        //                     bodyClass: 'e-commerce'
-        // })
-        // .state('app.seller.packages.detail', {
-        //     url: '/:id',
-        //     views: {
-        //         'content@app': {
-        //             templateUrl: 'app/main/apps/seller/views/packages/package.html',
-        //             controller: 'PackageController as vm'
-        //         }
-        //     },
+            // product module states
+            .state('app.seller.products', {
+                url: '/product',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/seller/views/product/products.html',
+                        controller: 'ProductsController as vm'
+                    }
+                },
+                bodyClass: 'e-commerce'
+            })
+            .state('app.seller.products.add', {
+                url: '/add',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/seller/views/product/product.html',
+                        controller: 'ProductController as vm'
+                    }
+                },
+                bodyClass: 'e-commerce'
+            })
+            .state('app.seller.products.detail', {
+                url: '/:id',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/seller/views/product/product.html',
+                        controller: 'ProductController as vm'
+                    }
+                },
 
-        //     bodyClass: 'e-commerce'
-        // })
+                bodyClass: 'e-commerce'
+            })
 
 
         // Navigation
@@ -110,14 +122,19 @@
             weight: 3
         });
 
+
+        msNavigationServiceProvider.saveItem('apps.seller.dashboard', {
+            title: 'Dashboard',
+            state: 'app.seller.dashboard'
+        });
         msNavigationServiceProvider.saveItem('apps.seller.SellerCompany', {
             title: 'Company',
             state: 'app.seller.sellercompanies'
         });
-        // msNavigationServiceProvider.saveItem('apps.seller.package', {
-        //     title: 'Packages',
-        //     state: 'app.seller.packages'
-        // });
+        msNavigationServiceProvider.saveItem('apps.seller.product', {
+            title: 'Upload Products',
+            state: 'app.seller.products'
+        });
 
     }
 })();

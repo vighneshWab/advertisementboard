@@ -3,28 +3,28 @@
     <!-- HEADER -->
     <div class="header md-accent-bg" layout="row" layout-align="start center">
         <div class="white-fg" layout="row" layout-align="start center" flex>
-            <md-button class="goto-products-button md-icon-button" aria-label="Go to products" ng-click="vm.gotoSellerCompanies()">
+            <md-button class="goto-products-button md-icon-button" aria-label="Go to products" ng-click="vm.gotoProductCategories()">
                 <md-icon md-font-icon="icon-arrow-left"></md-icon>
             </md-button>
 
             <div layout="row" layout-align="start center">
                 <div class="product-image" hide-xs>
-                    <!--<img ng-src="{{vm.product.images[0].url}}">-->
+                    <img ng-src="{{the_url}}">
                 </div>
 
                 <div layout="column" layout-align="start start">
                     <div class="h2">
-                        {{vm.product.name}}
+                        {{vm.formData.name}}
                     </div>
                     <div class="subtitle secondary-text">
-                        <span> Company Categories</span>
+                        <span>Product</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <div>
-            <md-button class="md-raised md-background" ng-click="vm.saveSellerCompany()" ng-disabled="!vm.isFormValid('productForm')">
+            <md-button class="md-raised md-background" ng-click="vm.saveProduct()" ng-disabled="!vm.isFormValid('productForm')">
                 <span>SAVE</span>
             </md-button>
         </div>
@@ -38,64 +38,75 @@
 
             <md-tab>
                 <md-tab-label>
-                    <span>Company Details</span>
+                    <span>Product Category</span>
                 </md-tab-label>
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
                         <div ng-show="vm.recachedMaxCount">
-                             <h1>{{vm.message}} </h1> 
+                            <h1>{{vm.message}} </h1>
                             <div>
                                 <md-button class="md-raised md-background" ng-click="vm.chagePackage()">
                                     <span>Change Package</span>
                                 </md-button>
                             </div>
                         </div>
+
+
                         <form id="productForm" name="productForm" ng-show="!vm.recachedMaxCount">
                             <div layout="column" layout-gt-xs="row">
+                                <md-input-container flex >
+                                    <label>Company</label>
+                                    <md-select ng-model="vm.formData.companyId" required >
+                                        <md-option ng-repeat="role in vm.companies track by $index" ng-value="role.$id">
+                                            {{role.Name}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
                                 <md-input-container flex>
-                                    <label>Company Category</label>
-                                    <md-select ng-model="vm.formData.CompanyCategoryID" required>
-                                        <!--<md-option ng-disabled="true" >Company Catgory</md-option>-->
-                                        <md-option ng-repeat="role in vm.companyCategories track by $index" ng-value="role.$id">
-                                            {{role.CategoryName}}
+                                    <label>Product Category</label>
+                                    <md-select ng-model="vm.formData.productCategoryId" required>
+                                        <md-option ng-repeat="role in vm.prodcutCategories track by $index" ng-value="role.$id">
+                                            {{role.CategoryDescription}}
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
 
-                                <md-input-container flex>
-                                    <label>Name</label>
-                                    <input type="text" ng-model="vm.formData.Name" required>
 
-                                </md-input-container>
-                            </div>
-                            <div layout="column" layout-gt-sm="row">
-                                <md-input-container flex>
-                                    <label>Website</label>
-                                    <input type="text" ng-model="vm.formData.Website" required>
-                                </md-input-container>
-                                <md-input-container flex>
-                                    <label>Email</label>
-                                    <input type="text" ng-model="vm.formData.Email" required>
-                                </md-input-container>
-                                <md-input-container flex>
-                                    <label>Telephone</label>
-                                    <input type="text" ng-model="vm.formData.Telephone" required>
-                                </md-input-container>
+
                             </div>
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
-                                    <label>Description</label>
-                                    <input type="text" ng-model="vm.formData.Description" required>
+                                    <label>Name</label>
+                                    <input type="text" ng-model="vm.formData.CategoryName" required>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>Price</label>
+                                    <input type="text" ng-model="vm.formData.price" required>
                                 </md-input-container>
 
+                            </div>
+
+                            <div layout="column" layout-gt-xs="row">
+                                <md-input-container flex>
+                                    <label>Category Description</label>
+                                    <input type="text" ng-model="vm.formData.CategoryDescription" required>
+                                </md-input-container>
+
+                            </div>
+
+                            <div layout="column" layout-gt-xs="row">
+                                <input type="file" file-model="myFile" filelist-bind required />
+                                <div class="product-image1" ng-show="imgAvailable" id="preview" hide-xs>
+                                    <img ng-src="{{ the_url }}">
+                                </div>
                             </div>
                         </form>
                     </div>
                 </md-tab-body>
             </md-tab>
+
+
         </md-tabs>
 
     </div>
-    <!-- / CONTENT -->
-
 </div>

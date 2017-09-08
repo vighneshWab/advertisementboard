@@ -11,53 +11,43 @@
         var vm = this;
         // Methods
 
-        $scope.FBRef = firebase.database().ref("usersProfile/");
-        var reqestEmail = "vighneshdandekar@gmail.com";
-
-
-
+        $scope.FBRef = firebase.database().ref("usersProfile");
+        // var orderByChild = $scope.FBRef.orderByChild("email").equalTo("vighneshdandekar@gmail.com").on("child_added", function (data) {
+        //     console.log('userProfile', data.key);
+        //     $scope.userProfile = data.val();
+        //     console.log($scope.userProfile);
+        // });
 
         vm.login = function (formData) {
-
             console.log('login function');
             var email = formData.email;
             var password = formData.password;
-
             firebase.auth().signInWithEmailAndPassword(email, password)
                 .then(function (user) {
-                    console.log('Login User ', user.uid, user.email)
                     if (user.emailVerified) {
-
-                        var orderByChild = $scope.FBRef.orderByChild("uid").equalTo(user.uid).on("child_added", function (data) {
-                            $scope.userProfile = data.val();
-                            switch ($scope.userProfile.role) {
-
+                        indexService.setUser(user.uid);
+                        var getUsers = indexService.getUser();
+                        var orderByChild = $scope.FBRef.orderByChild("email").equalTo(user.email).on("child_added", function (data) {
+                            $scope.userRole = data.val().userRole;
+                            console.log(JSON.stringify($scope.userRole));
+                            switch ($scope.userRole) {
                                 case 'buyer':
                                     // redirect to  buyer dashboard once advertisment board is designed
                                     $state.go('app.admin.companies');
-
                                     break;
                                 case 'seller':
                                     // redirect to  seller dashboard once advertisment board is designed
                                     $state.go('app.admin.companies');
-
                                     break;
                                 case 'admin':
                                     // redirect to  admin dashboard once advertisment board is designed
                                     $state.go('app.admin.companies');
                                     break;
-
                             }
                         });
-
-
-
-
                     } else {
                         $state.go('app.pages_coming-soon');
-
                     }
-                    console.log('user', user);
 
                 }, function (error) {
                     // Handle Errors here.

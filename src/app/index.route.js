@@ -11,7 +11,7 @@
     {
         $locationProvider.html5Mode(true);
 
-        $urlRouterProvider.otherwise('/admin/companies');
+        $urlRouterProvider.otherwise('pages/auth/login');
 
         /**
          * Layout Style Switcher

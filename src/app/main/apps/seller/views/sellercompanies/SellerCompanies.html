@@ -16,7 +16,7 @@
                 </div>
                 <div class="product-count secondary-text">
                     <span>Total Companies :</span>
-                    <span>{{vm.companyCategories.length}}</span>
+                    <span>{{vm.sellerCompanies.length}}</span>
                 </div>
             </div>
 
@@ -53,11 +53,6 @@
                             </th>
                             <th class="secondary-text">
                                 <div class="table-header">
-                                    <span class="column-title">Image</span>
-                                </div>
-                            </th>
-                            <th class="secondary-text">
-                                <div class="table-header">
                                     <span class="column-title">Name</span>
                                 </div>
                             </th>
@@ -86,14 +81,13 @@
                     <tbody>
                         <tr ng-repeat="product in ::vm.sellerCompanies">
 
-                            <td>{{product.CompanyID}}</td>
-                            <td>{{product.Image}}</td>
+                            <td>{{$index + 1}}</td>
                             <td>{{product.Name}}</td>
                             <td>{{product.Description}}</td>
                             <td>{{product.Website}}</td>
                             <td>{{product.Email}}</td>
                             <td>
-                                <md-button class="edit-button md-icon-button" ng-click="vm.gotoCompanyDetail(product.id)" aria-label="Product details" translate>
+                                <md-button class="edit-button md-icon-button" ng-click="vm.gotoCompanyDetail(product.$id)" aria-label="Product details" translate>
                                     <md-icon md-font-icon="icon-pencil" class="s16"></md-icon>
                                 </md-button>
                             </td>
