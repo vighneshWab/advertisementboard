@@ -40,7 +40,9 @@
                         <md-button>My Profile</md-button>
                     </md-menu-item>
 
-                   <md-menu-item class="md-indent" ng-click="vm.becomeSeller()">
+
+
+                   <md-menu-item ng-if="userRole=='seller'" class="md-indent" ng-click="vm.becomeSeller()">
                         <md-icon md-font-icon="icon-email" class="icon"></md-icon>
                         <md-button>Become a seller</md-button>
                     </md-menu-item>

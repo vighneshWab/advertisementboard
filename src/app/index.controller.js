@@ -1,5 +1,4 @@
-(function ()
-{
+(function () {
     'use strict';
 
     angular
@@ -7,12 +6,15 @@
         .controller('IndexController', IndexController);
 
     /** @ngInject */
-    function IndexController(fuseTheming)
-    {
+    function IndexController(fuseTheming, indexService, $rootScope) {
         var vm = this;
 
         // Data
         vm.themes = fuseTheming.themes;
+
+        
+
+
 
         //////////
     }

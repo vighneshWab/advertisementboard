@@ -9,14 +9,32 @@
     function LoginController(indexService, $scope, $state) {
         // Data
         var vm = this;
-        // Methods
+        var todayis = Date.now();
 
+        console.log('todayis', todayis);
+
+        var today=new Date()
+
+        console.log('Today in date',today.toDateString() )
+
+
+        var addNoDaysinMilSec = 1000 * 60 * 60 * 24 * 15;
+
+
+
+        var tomarrowWill = todayis + addNoDaysinMilSec;
+         var tomarrow=new Date(tomarrowWill)
+
+        console.log('tomarrowWill', tomarrowWill);
+        console.log('tomarrow in date',tomarrow.toDateString() )
+        
+
+
+
+
+
+        // Methods
         $scope.FBRef = firebase.database().ref("usersProfile");
-        // var orderByChild = $scope.FBRef.orderByChild("email").equalTo("vighneshdandekar@gmail.com").on("child_added", function (data) {
-        //     console.log('userProfile', data.key);
-        //     $scope.userProfile = data.val();
-        //     console.log($scope.userProfile);
-        // });
 
         vm.login = function (formData) {
             console.log('login function');

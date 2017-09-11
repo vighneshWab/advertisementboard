@@ -76,9 +76,25 @@
         vm.becomeSeller = becomeSeller;
         vm.now = Date.now();
         vm.expirydate = Date.now();
-        vm.expirydate.setDate(vm.expirydate.getDate() + 15);
+        vm.getUserRole = getUserRole;
+        // vm.expirydate.setDate(vm.expirydate.getDate() + 15);
+
         $scope.FBref = firebase.database().ref('seller/transation');
         $scope.UserProfile = firebase.database().ref('usersProfile')
+
+
+
+        function getUserRole() {
+
+            indexService.haveingUid('usersProfile').then(function (res) {
+                if (res.isArray) {
+                
+                    vm.userRole = res[0].userRole;
+                }
+            })
+
+        }
+
 
 
 
@@ -231,6 +247,7 @@
         }
 
         $scope.userRoles = 'admin/userRoles';
+     
 
         vm.create = function (createObject) {
             console.log('Create', JSON.stringify(createObject))
@@ -276,8 +293,8 @@
                         MaxCompanyCount: vm.trialPackage[0].MaxCompanyCount,
                         MaxProductCount: vm.trialPackage[0].MaxProductCount,
                         MaxSellCount: vm.trialPackage[0].MaxSellCount,
-                        purchaseDate: vm.now,
-                        expirydate: vm.expirydate
+                        purchaseDate: indexService.createdDate,
+                        expirydate: indexService.expireDate15
                     }
                     vm.create(vm.formData);
                 }

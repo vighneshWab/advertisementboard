@@ -9,7 +9,19 @@
     function indexService($q, $mdToast, msApi, $http, api, $firebaseObject, $firebaseStorage, $firebaseArray, $filter) {
 
 
-        var services = {};
+        var today = Date.now();
+        var add15Days = 1000 * 60 * 60 * 24 * 15;
+        var add30Days = 1000 * 60 * 60 * 24 * 30;
+        var dateAfter15Days = today + add15Days;
+        var dateAfter30Days = today + add30Days;
+
+        var services = {
+            createdDate: today,
+            expireDate15: dateAfter15Days,
+            expireDate30: dateAfter30Days,
+
+
+        };
 
 
         services.updateUserRole = function () {
@@ -106,10 +118,12 @@
 
         }
         services.update = function (refD, childRef, obj) {
+            var qProfile = $q.defer();
             var list = refD.child(childRef).set(obj, function (error) {
                 if (error) {
                     services.errorMessage('error while update record');
                 } else {
+
                     services.sucessMessage('Record updated succfully');
 
                 }
@@ -142,6 +156,7 @@
         }
         services.haveingUid = function (refs) {
             var getuser = services.getUser();
+            console.log(getuser)
             var qProfile = $q.defer();
             var ref = firebase.database().ref(refs);
             var list = $firebaseArray(ref.orderByChild("uid").equalTo(getuser)).$loaded(function (success) {
@@ -195,6 +210,22 @@
 
             var list = $firebaseArray(refs);
             list.$add(obj).then(function (res) {
+                if (res) {
+                    qProfile.resolve(res);
+                } else {
+                    console.log('error:', res)
+                    qProfile.reject(res);
+                }
+
+            });
+            return qProfile.promise;
+        };
+
+        services.updateData = function (refs, obj) {
+            
+            var qProfile = $q.defer();
+            var list = $firebaseArray(refs);
+            list.$save(obj).then(function (res) {
                 if (res) {
                     qProfile.resolve(res);
                 } else {

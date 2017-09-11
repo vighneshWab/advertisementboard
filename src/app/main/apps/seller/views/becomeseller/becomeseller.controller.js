@@ -16,7 +16,7 @@
         $scope.FBref = firebase.database().ref('seller/transation');
         vm.now = Date.now()
         vm.expirydate = Date.now()
-        vm.expirydate.setDate(vm.expirydate.getDate() + 15);
+        // vm.expirydate.setDate(vm.expirydate.getDate() + 15);
         vm.purchasePackage = purchasePackage;
         vm.changePackage = changePackage;
 
