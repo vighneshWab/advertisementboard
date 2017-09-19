@@ -10,7 +10,7 @@
             'app.pages.auth.reset-password',
             'app.pages.auth.login',
             'app.pages.auth.register',
-            // 'app.pages.auth.lock',
+            // 'app.pages.auth.lock',   
             // 'app.pages.coming-soon',
             // 'app.pages.error-404',
             // 'app.pages.error-500',
@@ -25,10 +25,10 @@
     /** @ngInject */
     function config(msNavigationServiceProvider) {
         // Navigation
-        msNavigationServiceProvider.saveItem('pages', {
-            title: 'PAGES',
-            group: true,
-            weight: 2
-        });
+        // msNavigationServiceProvider.saveItem('pages', {
+        //     title: 'PAGES',
+        //     group: true,
+        //     weight: 2
+        // });
     }
 })();

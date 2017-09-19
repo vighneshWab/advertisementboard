@@ -26,11 +26,16 @@
         // updated optimizedx code starts
 
         vm.create = function (createObject) {
-            indexService.create($scope.FBref, createObject);
+            indexService.create($scope.FBref, createObject).then(function (res) {
+                console.log('categiry created')
+
+            });
         }
 
         vm.update = function (createObject) {
-            indexService.update($scope.FBref, $stateParams.id, createObject);
+            indexService.update($scope.FBref, $stateParams.id, createObject).then(function (res) {
+                console.log('category updated')
+            });
         }
 
         vm.saveCompanyCategory = saveWithUpload;

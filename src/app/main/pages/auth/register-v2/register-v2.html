@@ -48,7 +48,7 @@
 
                 <md-input-container class="md-block" md-no-float>
                     <input type="text" name="contactnumber" ng-model="vm.form.contactnumber" placeholder="Contact Number" translate translate-attr-placeholder="REGISTER_V2.CONTACT"
-                       required>
+                        required>
                         <div ng-messages="registerForm.contactnumber.$error" role="alert" multiple>
                             <div ng-message="required">
                                 <span translate="REGISTER_V2.ERRORS.CONTACT_REQUIRED">Contact Number field is required</span>
@@ -70,12 +70,17 @@
                 </md-input-container>
 
                 <md-input-container class="md-block" md-no-float>
+                    {{vm.form.passwordConfirm!=vm.form.password}}
                     <input type="password" name="passwordConfirm" ng-model="vm.form.passwordConfirm" placeholder="Password (Confirm)" translate
-                        translate-attr-placeholder="REGISTER_V2.PASSWORD_CONFIRM" required>
+                        translate-attr-placeholder="REGISTER_V2.PASSWORD_CONFIRM" required >
                         <div ng-messages="registerForm.passwordConfirm.$error" role="alert">
                             <div ng-message="required">
                                 <span translate="REGISTER_V2.ERRORS.PASSWORD_CONFIRM_REQUIRED">Password (Confirm) field is required</span>
                             </div>
+                            <div ng-message-exp="vm.form.passwordConfirm!=vm.form.password">
+                                <span >Password Does not matched</span>
+                            </div>
+
                         </div>
                 </md-input-container>
 

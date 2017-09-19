@@ -8,13 +8,15 @@
     /** @ngInject */
     function config($translateProvider) {
 
-        
+
         // angular-translate configuration
         $translateProvider.useLoader('$translatePartialLoader', {
             urlTemplate: '{part}/i18n/{lang}.json'
         });
         $translateProvider.preferredLanguage('en');
         $translateProvider.useSanitizeValueStrategy('sanitize');
+
+
     }
 
 })();

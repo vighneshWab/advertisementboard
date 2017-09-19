@@ -6,13 +6,15 @@
         .controller('ToolbarController', ToolbarController);
 
     /** @ngInject */
-    function ToolbarController($rootScope, $q, $state, $scope, indexService, $timeout, $mdSidenav, $translate, $mdToast, msNavigationService) {
+    function ToolbarController($rootScope, $q, $state, $scope, indexService, api, $timeout, $mdSidenav, $translate, $mdToast, msNavigationService) {
         var vm = this;
-
         // Data
         $rootScope.global = {
             search: ''
         };
+
+        vm.userBuyerRole = api.getUserRole();
+        console.log(vm.userBuyerRole.userRole);
 
         vm.bodyEl = angular.element('body');
         var getUsers = indexService.getUser();
@@ -88,7 +90,7 @@
 
             indexService.haveingUid('usersProfile').then(function (res) {
                 if (res.isArray) {
-                
+
                     vm.userRole = res[0].userRole;
                 }
             })
@@ -136,6 +138,15 @@
          */
         function logout() {
             // Do logout here..
+            // indexService.setRole(null);
+
+            // indexService.setUser(null);
+            // var getUsers = indexService.getUser();
+            // console.log(getUsers)
+            localStorage.clear();
+            $state.go('app.pages_auth_login');
+
+
         }
 
         /**
@@ -247,7 +258,7 @@
         }
 
         $scope.userRoles = 'admin/userRoles';
-     
+
 
         vm.create = function (createObject) {
             console.log('Create', JSON.stringify(createObject))
@@ -272,10 +283,29 @@
             var orderByChild = $scope.UserProfile.orderByChild("uid").equalTo(getUsers).on("child_added", function (data) {
                 var obj = data.val();
                 obj.userRole = 'seller';
-                console.log(JSON.stringify(obj));
-                indexService.update($scope.UserProfile, data.key, obj)
+                indexService.update($scope.UserProfile, data.key, obj).then(function (res) {
+                    console.log('response:', res)
+                    api.setRole('seller');
+                    vm.userBuyerRole = api.getUserRole();
+
+
+                })
             });
-            console.log('updateUserRole');
+
+            // indexService.haveingUid('usersProfile').then(function (res) {
+            //     vm.userProfile = res[0];
+            //     vm.userProfile.userRole = 'seller';
+
+            //     console.log('userProfile:', JSON.stringify(vm.userProfile))
+
+            //     indexService.updateData('usersProfile', vm.userProfile).then(function (res) {
+            //         console.log('res', res)
+            //         vm.userRole = 'seller';
+
+            //     })
+
+
+            // })
 
 
         }

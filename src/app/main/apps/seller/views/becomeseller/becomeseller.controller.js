@@ -54,9 +54,11 @@
                 var obj = data.val();
                 obj.userRole = 'seller';
                 console.log(JSON.stringify(obj));
-                indexService.update($scope.UserProfile, data.key, obj)
+                indexService.update($scope.UserProfile, data.key, obj).then(function (res) {
+                    console.log('become a seller  updated')
+                })
             });
-            console.log('updateUserRole');
+            // console.log('updateUserRole');
 
 
         }

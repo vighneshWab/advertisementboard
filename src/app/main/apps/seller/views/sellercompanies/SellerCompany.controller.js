@@ -13,7 +13,8 @@
         var timestamp = Date.now();
         vm.formData = {
             uid: getUsers,
-            created: timestamp
+            created: indexService.createdDate,
+            created_uid: indexService.createdDate.toString() + "_" + getUsers
 
         };
 
@@ -44,11 +45,29 @@
         }
 
         vm.create = function (createObject) {
-            indexService.create($scope.FBRef, createObject);
+            indexService.create($scope.FBRef, createObject).then(function (res) {
+                console.log('JOSNrespnos', res);
+                if (res) {
+                    indexService.sucessMessage('Record added succfully');
+                    vm.comapireCompany($scope.company);
+
+
+                } else {
+
+                    indexService.errorMessage('error adding record');
+
+                }
+
+
+
+            });
+
         }
 
         vm.update = function (createObject) {
-            indexService.update($scope.FBRef, $stateParams.id, createObject);
+            indexService.update($scope.FBRef, $stateParams.id, createObject).then(function (res) {
+                console.log('seller company updated')
+            });
         }
 
         function saveSellerCompany() {
@@ -86,37 +105,24 @@
             console.log('getLastTransaction')
             indexService.lastTransaction($scope.transation).then(function (res) {
 
-                console.log('lastTransaction', res)
                 vm.lastTransaction = res[0];
-
-
-                vm.dateCompaire(res);
+                vm.dateCompaire(vm.lastTransaction);
             });
         }
 
-        function dateCompaire(res) {
-            angular.forEach(res, function (element) {
-                vm.expireDate = new Date(element.expirydate);
-                vm.MaxCompanyCount = element.MaxCompanyCount;
-            });
-            var today = new Date();
 
-            if (today <= vm.expireDate) {
-                vm.comapireCompany(vm.MaxCompanyCount);
+
+        function dateCompaire(lastTransaction) {
+            if (indexService.createdDate <= lastTransaction.expirydate) {
+                vm.comapireCompany(lastTransaction.MaxCompanyCount);
             } else {
                 vm.recachedMaxCount = true;
                 vm.message = 'Your Package Has been exprired Kindly update your package'
-
             }
-
         }
-        function comapireCompany(companyCount) {
 
-            indexService.dataBetween($scope.company, vm.lastTransaction.purchaseDate, vm.lastTransaction.expirydate).then(function (res) {
-                angular.forEach(res, function (value) {
-                    console.log('forEach')
-                    console.log('created date:', value.created)
-                })
+        function comapireCompany(companyCount) {
+            indexService.dateBetweenUid($scope.company, vm.lastTransaction.purchaseDate, vm.lastTransaction.expirydate).then(function (res) {
                 if (companyCount <= res.length) {
                     vm.recachedMaxCount = true;
                     vm.message = 'Your Reached  max count Kindly update your package'

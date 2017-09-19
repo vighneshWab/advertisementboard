@@ -6,10 +6,9 @@
         .controller('SellerDashboardController', SellerDashboardController);
 
     /** @ngInject */
-    function SellerDashboardController(indexService, $scope, $state) {
-        var vm = this;
+    function SellerDashboardController(indexService, $scope, $state,DTOptionsBuilder, DTColumnDefBuilder) {
         console.log('sellerdashboard');
-
-
+        var vm = this;
+       
     }
 })();

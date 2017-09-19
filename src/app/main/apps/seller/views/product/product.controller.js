@@ -8,8 +8,11 @@
     /** @ngInject */
     function ProductController($scope, $document, $stateParams, indexService, $state) {
         var vm = this;
+        var getUsers = indexService.getUser();
         vm.formData = {
-            uid: indexService.getUser()
+            uid: getUsers,
+            created:  indexService.createdDate,
+            created_uid:  indexService.createdDate.toString() + "_" + getUsers
 
         };
         $scope.productcategory = firebase.database().ref('admin/productcategory');
@@ -25,7 +28,7 @@
         vm.loadCompanyCategory = loadCompanyCategory;
         vm.getLastTransaction = getLastTransaction;
         $scope.img = $scope.vid = {};
-        vm.formData = {};
+
         vm.message = ''
 
         //  company dropdown
@@ -61,12 +64,17 @@
         }
         vm.create = function (createObject) {
             console.log(JSON.stringify(createObject));
-            indexService.create($scope.FBref, createObject);
+            indexService.create($scope.FBref, createObject).then(function (res) {
+                console.log('created producsr')
+
+            });
         }
 
         vm.update = function (createObject) {
 
-            indexService.update($scope.FBref, $stateParams.id, createObject);
+            indexService.update($scope.FBref, $stateParams.id, createObject).then(function (res) {
+                console.log('produts updated')
+            });
         }
 
         vm.saveProduct = saveWithUpload;
@@ -131,36 +139,29 @@
         // get last trancaton by logi user
         function getLastTransaction() {
             indexService.lastTransaction($scope.transation).then(function (res) {
-                vm.dateCompaire(res);
+                vm.lastTransaction = res[0];
+                vm.dateCompaire(vm.lastTransaction);
             });
         }
 
         // check exprire date is less than today
 
-        function dateCompaire(res) {
-            console.log('dateComapire:', JSON.stringify(res));
-            angular.forEach(res, function (element) {
-                vm.expireDate = new Date(element.expirydate);
-                vm.MaxProductCount = element.MaxProductCount;
-            });
-            var today = new Date();
-
-            if (today <= vm.expireDate) {
-                vm.comapireCompany(vm.MaxProductCount);
+        function dateCompaire(lastTransaction) {
+            if (indexService.createdDate <= lastTransaction.expirydate) {
+                vm.comapireCompany(lastTransaction.MaxCompanyCount);
             } else {
                 vm.recachedMaxCount = true;
                 vm.message = 'Your Package Has been exprired Kindly update your package'
             }
-
         }
 
         // check max comapnies count is less then total company 
-        function comapireCompany(Count) {
-            indexService.haveingUid($scope.prodcuts).then(function (res) {
-                console.log(Count, res.length)
-                if (Count <= res.length) {
+        function comapireCompany(companyCount) {
+            indexService.dataBetween($scope.prodcuts, vm.lastTransaction.purchaseDate, vm.lastTransaction.expirydate).then(function (res) {
+                if (companyCount <= res.length) {
                     vm.recachedMaxCount = true;
                     vm.message = 'Your Reached  max count Kindly update your package'
+
                 } else {
                     vm.recachedMaxCount = false
                 }

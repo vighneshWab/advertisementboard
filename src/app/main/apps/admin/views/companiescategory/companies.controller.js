@@ -8,14 +8,6 @@
     /** @ngInject */
     function CompaniesController($state, $scope, indexService) {
         var vm = this;
-        $scope.FBref = firebase.database().ref('admin/companycategory');
-        var list = indexService.getAll($scope.FBref).$loaded(function (success) {
-            vm.companyCategories = success;
-        }, function (error) {
-            indexService.errorMessage("error while getting data");
-
-        });
-
         vm.dtInstance = {};
         vm.dtOptions = {
             dom: 'rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
@@ -23,72 +15,34 @@
                 {
                     // Target the id column
                     targets: 0,
-                    width: '72px'
+                    width: '72px',
+                    filterable: false,
+                    sortable: false,
                 },
                 {
                     // Target the image column
                     targets: 1,
                     filterable: false,
-                    sortable: false,
-                    width: '80px'
-                },
-                {
-                    // Target the price column
-                    targets: 4,
-                    render: function (data, type) {
-                        if (type === 'display') {
-                            return '<div class="layout-align-start-start layout-row">' + '<i class="s16 icon-currency-usd"></i>' + '<span>' + data + '</span>' + '</div>';
-                        }
+                    sortable: true,
 
-                        return data;
-                    }
                 },
                 {
-                    // Target the quantity column
-                    targets: 5,
-                    render: function (data, type) {
-                        if (type === 'display') {
-                            if (parseInt(data) <= 5) {
-                                return '<div class="quantity-indicator md-red-500-bg"></div><div>' + data + '</div>';
-                            }
-                            else if (parseInt(data) > 5 && parseInt(data) <= 25) {
-                                return '<div class="quantity-indicator md-amber-500-bg"></div><div>' + data + '</div>';
-                            }
-                            else {
-                                return '<div class="quantity-indicator md-green-600-bg"></div><div>' + data + '</div>';
-                            }
-                        }
-
-                        return data;
-                    }
-                },
-                {
-                    // Target the status column
-                    targets: 6,
+                    // Target the image column
+                    targets: 2,
                     filterable: false,
-                    render: function (data, type) {
-                        if (type === 'display') {
-                            if (data === 'true') {
-                                return '<i class="icon-checkbox-marked-circle green-500-fg"></i>';
-                            }
+                    sortable: true,
 
-                            return '<i class="icon-cancel red-500-fg"></i>';
-                        }
+                },
+                {
+                    // Target the image column
+                    targets: 3,
+                    filterable: false,
+                    sortable: false,
 
-                        if (type === 'filter') {
-                            if (data) {
-                                return '1';
-                            }
-
-                            return '0';
-                        }
-
-                        return data;
-                    }
                 },
                 {
                     // Target the actions column
-                    targets: 7,
+                    targets: 4,
                     responsivePriority: 1,
                     filterable: false,
                     sortable: false
@@ -111,6 +65,16 @@
             scrollY: 'auto',
             responsive: true
         };
+
+        $scope.FBref = firebase.database().ref('admin/companycategory');
+        var list = indexService.getAll($scope.FBref).$loaded(function (success) {
+            vm.companyCategories = success;
+        }, function (error) {
+            indexService.errorMessage("error while getting data");
+
+        });
+
+
 
         // Methods
         vm.gotoAddCategory = gotoAddCategory;

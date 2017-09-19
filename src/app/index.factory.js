@@ -3,7 +3,8 @@
 
     angular
         .module('fuse')
-        .factory('indexService', indexService);
+        .factory('indexService', indexService)
+
 
     /** @ngInject */
     function indexService($q, $mdToast, msApi, $http, api, $firebaseObject, $firebaseStorage, $firebaseArray, $filter) {
@@ -19,12 +20,14 @@
             createdDate: today,
             expireDate15: dateAfter15Days,
             expireDate30: dateAfter30Days,
+            isAdmin: true
 
 
         };
 
 
         services.updateUserRole = function () {
+
             var orderByChild = $scope.UserProfile.orderByChild("uid").equalTo(getUsers).on("child_added", function (data) {
                 var obj = data.val();
                 obj.userRole = 'seller';
@@ -68,6 +71,16 @@
             return JSON.parse(localStorage.advboard);
         }
 
+        services.setRole = function (users) {
+            localStorage.advboardRole = JSON.stringify(users);
+        }
+        services.getUserRole = function () {
+            if (!localStorage.advboardRole) {
+                localStorage.advboardRole = JSON.stringify([]);
+            }
+            return JSON.parse(localStorage.advboardRole);
+        }
+
 
 
         var ref = firebase.database().ref('userRoles');
@@ -101,36 +114,37 @@
 
         }
         services.create = function (refD, obj) {
-            console.log('create ', refD)
-            console.log(obj)
+            var qProfile = $q.defer();
             var list = $firebaseArray(refD);
             list.$add(obj).then(function (res) {
                 console.log(res)
+                var data = res;
                 if (res) {
+                    qProfile.resolve(data);
                     services.sucessMessage('Record added succfully');
-
                 } else {
                     console.log('error:', res)
+                    qProfile.reject(errorObject);
                     services.errorMessage('error adding record');
                 }
 
             });
+            return qProfile.promise;
 
         }
         services.update = function (refD, childRef, obj) {
             var qProfile = $q.defer();
             var list = refD.child(childRef).set(obj, function (error) {
+                var data = error;
                 if (error) {
+                    qProfile.reject(errorObject);
                     services.errorMessage('error while update record');
                 } else {
-
+                    qProfile.resolve(data);
                     services.sucessMessage('Record updated succfully');
-
                 }
-
-
             });
-
+            return qProfile.promise;
         }
         services.strorage = function (file) {
             var currentDate = Date.now();
@@ -161,6 +175,7 @@
             var ref = firebase.database().ref(refs);
             var list = $firebaseArray(ref.orderByChild("uid").equalTo(getuser)).$loaded(function (success) {
                 var data = success;
+                console.log(JSON.stringify(data))
                 qProfile.resolve(data);
             }, function (errorObject) {
                 qProfile.reject(errorObject);
@@ -195,10 +210,36 @@
 
 
         services.dataBetween = function (refs, startDate, endDate) {
+            console.log(refs)
             var qProfile = $q.defer();
             var ref = firebase.database().ref(refs);
-            var list = $firebaseArray(ref.orderByChild("created")).$loaded(function (success) {
+            var list = $firebaseArray(ref.orderByChild("created").startAt(startDate).endAt(endDate)).$loaded(function (success) {
                 var data = success;
+                console.log('data', JSON.stringify(data))
+                qProfile.resolve(data);
+            }, function (errorObject) {
+                qProfile.reject(errorObject);
+            })
+            return qProfile.promise;
+        };
+
+        services.dateBetweenUid = function (refs, startDate, endDate) {
+            console.log(startDate)
+            var getuser = services.getUser();
+            var qProfile = $q.defer();
+            var ref = firebase.database().ref(refs);
+            //orderByValue blank
+
+
+            var startedDate = startDate.toString() + "_" + getuser;
+            var endedDate = endDate.toString() + "_" + getuser;
+
+            console.log('======startedDate' + startedDate + "====endedDate" + endedDate)
+
+            // var query = ref.orderByChild('uid_created').startAt(startedDate)
+            var list = $firebaseArray(ref.orderByChild('created_uid').startAt(startedDate).endAt(endedDate)).$loaded(function (success) {
+                var data = success;
+                console.log('data', JSON.stringify(data))
                 qProfile.resolve(data);
             }, function (errorObject) {
                 qProfile.reject(errorObject);
@@ -222,11 +263,14 @@
         };
 
         services.updateData = function (refs, obj) {
-            
+
             var qProfile = $q.defer();
-            var list = $firebaseArray(refs);
+            var ref = firebase.database().ref(refs);
+            var list = $firebaseArray(ref);
             list.$save(obj).then(function (res) {
+                console.log(res);
                 if (res) {
+                    console.log('sucess', res)
                     qProfile.resolve(res);
                 } else {
                     console.log('error:', res)

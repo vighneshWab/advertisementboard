@@ -24,68 +24,40 @@
                 {
                     // Target the id column
                     targets: 0,
-                    width: '72px'
+                    width: '72px',
+                    filterable: false,
+                    sortable: false,
                 },
                 {
                     // Target the image column
                     targets: 1,
                     filterable: false,
-                    sortable: false,
+                    sortable: true,
                     width: '80px'
                 },
                 {
                     // Target the price column
                     targets: 4,
-                    render: function (data, type) {
-                        if (type === 'display') {
-                            return '<div class="layout-align-start-start layout-row">' + '<i class="s16 icon-currency-usd"></i>' + '<span>' + data + '</span>' + '</div>';
-                        }
+                    filterable: false,
+                    sortable: true,
+                    width: '80px'
 
-                        return data;
-                    }
                 },
                 {
                     // Target the quantity column
                     targets: 5,
-                    render: function (data, type) {
-                        if (type === 'display') {
-                            if (parseInt(data) <= 5) {
-                                return '<div class="quantity-indicator md-red-500-bg"></div><div>' + data + '</div>';
-                            }
-                            else if (parseInt(data) > 5 && parseInt(data) <= 25) {
-                                return '<div class="quantity-indicator md-amber-500-bg"></div><div>' + data + '</div>';
-                            }
-                            else {
-                                return '<div class="quantity-indicator md-green-600-bg"></div><div>' + data + '</div>';
-                            }
-                        }
+                    filterable: false,
+                    sortable: true,
+                    width: '80px'
 
-                        return data;
-                    }
                 },
                 {
                     // Target the status column
                     targets: 6,
                     filterable: false,
-                    render: function (data, type) {
-                        if (type === 'display') {
-                            if (data === 'true') {
-                                return '<i class="icon-checkbox-marked-circle green-500-fg"></i>';
-                            }
+                    sortable: true,
+                    width: '80px'
 
-                            return '<i class="icon-cancel red-500-fg"></i>';
-                        }
-
-                        if (type === 'filter') {
-                            if (data) {
-                                return '1';
-                            }
-
-                            return '0';
-                        }
-
-                        return data;
-                    }
                 },
                 {
                     // Target the actions column
@@ -107,8 +79,8 @@
                 }
             },
             pagingType: 'simple',
-            lengthMenu: [10, 20, 30, 50, 100],
-            pageLength: 20,
+            lengthMenu: [5, 10, 20, 30, 50, 100],
+            pageLength: 5,
             scrollY: 'auto',
             responsive: true
         };

@@ -6,7 +6,7 @@
         [
             // 3rd Party Dependencies
             'wipImageZoom',
-            // 'datatables',
+            'datatables',
             // 'flow',
             // 'nvd3',
             // 'textAngular',
@@ -35,7 +35,7 @@
                     }
                 },
 
-                bodyClass: 'e-commerce'
+                bodyClass: 'admin'
             })
             .state('app.admin.companies.category', {
                 url: '/category',
@@ -46,7 +46,7 @@
                     }
                 },
 
-                bodyClass: 'e-commerce'
+                bodyClass: 'admin'
             })
             .state('app.admin.companies.detail', {
                 url: '/:id',
@@ -56,7 +56,7 @@
                         controller: 'CategoryController as vm'
                     }
                 },
-                bodyClass: 'e-commerce'
+                bodyClass: 'admin'
             })
 
             // packge module states
@@ -68,7 +68,7 @@
                         controller: 'PackagesController as vm'
                     }
                 },
-                bodyClass: 'e-commerce'
+                bodyClass: 'admin'
             })
             .state('app.admin.packages.add', {
                 url: '/add',
@@ -78,7 +78,7 @@
                         controller: 'PackageController as vm'
                     }
                 },
-                bodyClass: 'e-commerce'
+                bodyClass: 'admin'
             })
             .state('app.admin.packages.detail', {
                 url: '/:id',
@@ -89,7 +89,7 @@
                     }
                 },
 
-                bodyClass: 'e-commerce'
+                bodyClass: 'admin'
             })
             .state('app.admin.productCategories', {
                 url: '/productCategories',
@@ -99,7 +99,7 @@
                         controller: 'ProductCategoriesController as vm'
                     }
                 },
-                bodyClass: 'e-commerce'
+                bodyClass: 'admin'
             })
             .state('app.admin.productCategories.add', {
                 url: '/add',
@@ -120,29 +120,30 @@
                     }
                 },
 
-                bodyClass: 'e-commerce'
+                bodyClass: 'admin'
             })
 
 
-        // Navigation
-        msNavigationServiceProvider.saveItem('apps.admin', {
-            title: 'admin',
-            icon: 'icon-cart',
-            weight: 3
-        });
+        // // Navigation
+        // msNavigationServiceProvider.saveItem('apps.admin', {
+        //     title: 'admin',
+        //     icon: 'icon-cart',
+        //     weight: 3,
+           
+        // });
 
-        msNavigationServiceProvider.saveItem('apps.admin.company', {
-            title: 'Company Categories',
-            state: 'app.admin.companies'
-        });
-        msNavigationServiceProvider.saveItem('apps.admin.package', {
-            title: 'User Role',
-            state: 'app.admin.packages'
-        });
-         msNavigationServiceProvider.saveItem('apps.admin.productCategory', {
-            title: 'Prodcut Category',
-            state: 'app.admin.productCategories'
-        });
+        // msNavigationServiceProvider.saveItem('apps.admin.company', {
+        //     title: 'Company Categories',
+        //     state: 'app.admin.companies'
+        // });
+        // msNavigationServiceProvider.saveItem('apps.admin.package', {
+        //     title: 'User Role',
+        //     state: 'app.admin.packages'
+        // });
+        // msNavigationServiceProvider.saveItem('apps.admin.productCategory', {
+        //     title: 'Prodcut Category',
+        //     state: 'app.admin.productCategories'
+        // });
 
     }
 })();

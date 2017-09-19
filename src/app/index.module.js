@@ -24,11 +24,12 @@
 
             // Sample
 
-
+            // 'app.dashboards',
             // Final modules
             'app.pages',
             'app.admin',
             'app.seller',
+            'app.buyer'
 
 
         ]);

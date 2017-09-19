@@ -6,7 +6,7 @@
         .controller('PackageController', PackageController);
 
     /** @ngInject */
-    function PackageController($scope, $document,$stateParams , $firebaseArray, $state, indexService) {
+    function PackageController($scope, $document, $stateParams, $firebaseArray, $state, indexService) {
         var vm = this;
         // Methods
         $scope.FBref = firebase.database().ref('admin/userRoles');
@@ -27,11 +27,16 @@
         }
 
         vm.create = function (createObject) {
-            indexService.create($scope.FBref, createObject);
+            indexService.create($scope.FBref, createObject).then(function (res) {
+                console.log('packages producsr')
+
+            });
         }
 
         vm.update = function (createObject) {
-            indexService.update($scope.FBref, $stateParams.id, createObject);
+            indexService.update($scope.FBref, $stateParams.id, createObject).then(function (res) {
+                console.log('package updated')
+            });
         }
 
         vm.savePackage = function () {
@@ -55,7 +60,7 @@
             uploadTask.$complete(function (snapshot) {
                 var urlPath = snapshot.downloadURL;
                 vm.companyCategory.Image = urlPath;
-                
+
 
             });
 

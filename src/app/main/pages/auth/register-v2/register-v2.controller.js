@@ -42,7 +42,7 @@
                         displayName: formData.username,
 
                     }).then(function (res) {
-                        indexService.sucessMessage('Registraion successfully ')
+                        indexService.sucessMessage("Verification email has been sent")
                         console.log('updated successfully', res);
                     }, function (error) {
                         // An error happened.
@@ -59,7 +59,7 @@
                         indexService.errorMessage('auth/weak-password')
                     } else {
                         console.log(error);
-                        indexService.errorMessage('error while registering ')
+                        indexService.errorMessage("Email already exist in the system")
                     }
                     // [END_EXCLUDE]
                 });
