@@ -24,9 +24,6 @@
                 abstract: true,
                 url: '/buyer'
             })
-
-            // buyer buyerCompany buyer companies
-
             .state('app.buyer.dashboard', {
                 url: '/dashboard',
                 views: {
@@ -35,87 +32,25 @@
                         controller: 'buyerDashboardController as vm'
                     }
                 },
-
-                bodyClass: 'e-commerce'
+                bodyClass: 'e-commerce',
+                role: 'buyer'
             })
-        // .state('app.buyer.buyercompanies', {
-        //     url: '/buyercompanies',
-        //     views: {
-        //         'content@app': {
-        //             templateUrl: 'app/main/apps/buyer/views/buyercompanies/buyercompanies.html',
-        //             controller: 'buyerCompaniesController as vm'
-        //         }
-        //     },
-
-        //     bodyClass: 'e-commerce'
-        // })
-        // .state('app.buyer.buyercompanies.buyerCompany', {
-        //     url: '/buyerCompany',
-        //     views: {
-        //         'content@app': {
-        //             templateUrl: 'app/main/apps/buyer/views/buyercompanies/buyerCompany.html',
-        //             controller: 'buyerCompanyController as vm'
-        //         }
-        //     },
-
-        //     bodyClass: 'e-commerce'
-        // })
-        // .state('app.buyer.buyercompanies.detail', {
-        //     url: '/:id',
-        //     views: {
-        //         'content@app': {
-        //             templateUrl: 'app/main/apps/buyer/views/buyercompanies/buyerCompany.html',
-        //             controller: 'buyerCompanyController as vm'
-        //         }
-        //     },
-        //     bodyClass: 'e-commerce'
-        // })
-        // .state('app.buyer.becomebuyer', {
-        //     url: '/becomebuyer',
-        //     views: {
-        //         'content@app': {
-        //             templateUrl: 'app/main/apps/buyer/views/becomebuyer/becomebuyer.html',
-        //             controller: 'becomebuyerController as vm'
-        //         }
-        //     },
-        //     bodyClass: 'e-commerce'
-        // })
-
-        // // product module states
-        // .state('app.buyer.products', {
-        //     url: '/product',
-        //     views: {
-        //         'content@app': {
-        //             templateUrl: 'app/main/apps/buyer/views/product/products.html',
-        //             controller: 'ProductsController as vm'
-        //         }
-        //     },
-        //     bodyClass: 'e-commerce'
-        // })
-        // .state('app.buyer.products.add', {
-        //     url: '/add',
-        //     views: {
-        //         'content@app': {
-        //             templateUrl: 'app/main/apps/buyer/views/product/product.html',
-        //             controller: 'ProductController as vm'
-        //         }
-        //     },
-        //     bodyClass: 'e-commerce'
-        // })
-        // .state('app.buyer.products.detail', {
-        //     url: '/:id',
-        //     views: {
-        //         'content@app': {
-        //             templateUrl: 'app/main/apps/buyer/views/product/product.html',
-        //             controller: 'ProductController as vm'
-        //         }
-        //     },
-
-        //     bodyClass: 'e-commerce'
-        // })
 
 
         // Navigation
+
+        // msNavigationServiceProvider.saveItem('apps.buyer', {
+        //     title: 'buyer',
+        //     icon: 'icon-cart',
+        //     weight: 3
+        // });
+
+
+        // msNavigationServiceProvider.saveItem('apps.buyer.dashboard', {
+        //     title: 'Dashboard',
+        //     state: 'app.buyer.dashboard'
+        // });
+
 
 
 

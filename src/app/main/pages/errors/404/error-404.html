@@ -9,6 +9,6 @@
             <input ng-model="vm.search" type="text" placeholder="Search for anything" translate translate-attr-placeholder="ERROR404.SEARCH" flex>
         </div>
 
-        <a class="back-link md-accent-color" href="/" translate="ERROR404.GO_BACK">Go back to dashboard</a>
+        <a class="back-link md-accent-color" ng-click="vm.gotoDahboard()" translate="ERROR404.GO_BACK">Go back to dashboard</a>
     </div>
 </div>

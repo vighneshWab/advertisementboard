@@ -12,10 +12,7 @@
         $rootScope.global = {
             search: ''
         };
-
         vm.userBuyerRole = api.getUserRole();
-        console.log(vm.userBuyerRole.userRole);
-
         vm.bodyEl = angular.element('body');
         var getUsers = indexService.getUser();
         vm.userStatusOptions = [

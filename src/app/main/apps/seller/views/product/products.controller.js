@@ -10,11 +10,8 @@
         var vm = this;
 
         $scope.FBref = firebase.database().ref('seller/product');
-        var list = indexService.getAll($scope.FBref).$loaded(function (success) {
+        var list = indexService.haveingUid('seller/product').then(function (success) {
             vm.products = success;
-        }, function (error) {
-            indexService.errorMessage("error while getting data");
-
         });
 
         vm.dtInstance = {};

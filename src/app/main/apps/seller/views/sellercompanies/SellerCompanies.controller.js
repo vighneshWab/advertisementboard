@@ -67,12 +67,11 @@
             responsive: true
         };
 
-        $scope.FBref = firebase.database().ref('seller/company')
-        var list = indexService.getAll($scope.FBref).$loaded(function (success) {
-            vm.sellerCompanies = success;
-        }, function (error) {
-            indexService.errorMessage("error while getting data");
 
+        $scope.FBref = firebase.database().ref('seller/company')
+        var list = indexService.haveingUid('seller/company').then(function (success) {
+            console.log('vm.sellercompanies',success)
+            vm.sellerCompanies = success;
         });
 
        

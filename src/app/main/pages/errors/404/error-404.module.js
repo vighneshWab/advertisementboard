@@ -19,7 +19,8 @@
                 },
                 'content@app.pages_errors_error-404': {
                     templateUrl: 'app/main/pages/errors/404/error-404.html',
-                    controller : 'Error404Controller as vm'
+                    controller : 'Error404Controller as vm',
+                   
                 }
             },
             bodyClass: 'error-404'

@@ -20,9 +20,6 @@
         vm.purchasePackage = purchasePackage;
         vm.changePackage = changePackage;
 
-
-
-
         $scope.userRoles = firebase.database().ref('admin/userRoles')
         var list = indexService.getAll($scope.userRoles).$loaded(function (success) {
             vm.packages = success;
@@ -89,8 +86,9 @@
                 name: 'Infinity',
                 description: '2 widgets',
                 zipCode: true,
-                currency: 'aud',
-                amount: vm.formData.package.price
+                currency: 'usd',
+                // amount: vm.formData.package.price
+                amount: 100
             });
             e.preventDefault();
             window.addEventListener('popstate', function () {

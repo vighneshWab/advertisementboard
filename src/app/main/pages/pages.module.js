@@ -12,7 +12,7 @@
             'app.pages.auth.register',
             // 'app.pages.auth.lock',   
             // 'app.pages.coming-soon',
-            // 'app.pages.error-404',
+            'app.pages.error-404',
             // 'app.pages.error-500',
             // 'app.pages.invoice',
             // 'app.pages.maintenance',

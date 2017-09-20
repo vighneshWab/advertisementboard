@@ -173,11 +173,18 @@
             console.log(getuser)
             var qProfile = $q.defer();
             var ref = firebase.database().ref(refs);
+
+            // ref.orderByChild("uid").equalTo(getuser).on('value',function(snap){
+            //     console.log('orderby havibg uid',JSON.strigify(snap.val()));
+            // })
+
             var list = $firebaseArray(ref.orderByChild("uid").equalTo(getuser)).$loaded(function (success) {
+                 console.log('user uid code')
                 var data = success;
-                console.log(JSON.stringify(data))
+               
                 qProfile.resolve(data);
             }, function (errorObject) {
+                console.log('eroror code')
                 qProfile.reject(errorObject);
             })
             return qProfile.promise;
@@ -213,6 +220,8 @@
             console.log(refs)
             var qProfile = $q.defer();
             var ref = firebase.database().ref(refs);
+
+    
             var list = $firebaseArray(ref.orderByChild("created").startAt(startDate).endAt(endDate)).$loaded(function (success) {
                 var data = success;
                 console.log('data', JSON.stringify(data))

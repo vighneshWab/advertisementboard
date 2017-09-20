@@ -35,7 +35,7 @@
                         controller: 'SellerDashboardController as vm'
                     }
                 },
-
+                role: 'seller',
                 bodyClass: 'e-commerce'
             })
             .state('app.seller.sellercompanies', {
@@ -46,7 +46,7 @@
                         controller: 'SellerCompaniesController as vm'
                     }
                 },
-
+                role: 'seller',
                 bodyClass: 'e-commerce'
             })
             .state('app.seller.sellercompanies.SellerCompany', {
@@ -57,7 +57,7 @@
                         controller: 'SellerCompanyController as vm'
                     }
                 },
-
+                role: 'seller',
                 bodyClass: 'e-commerce'
             })
             .state('app.seller.sellercompanies.detail', {
@@ -68,6 +68,7 @@
                         controller: 'SellerCompanyController as vm'
                     }
                 },
+                role: 'seller',
                 bodyClass: 'e-commerce'
             })
             .state('app.seller.becomeseller', {
@@ -78,6 +79,7 @@
                         controller: 'becomeSellerController as vm'
                     }
                 },
+                role: 'seller',
                 bodyClass: 'e-commerce'
             })
 
@@ -90,6 +92,7 @@
                         controller: 'ProductsController as vm'
                     }
                 },
+                role: 'seller',
                 bodyClass: 'e-commerce'
             })
             .state('app.seller.products.add', {
@@ -100,6 +103,7 @@
                         controller: 'ProductController as vm'
                     }
                 },
+                role: 'seller',
                 bodyClass: 'e-commerce'
             })
             .state('app.seller.products.detail', {
@@ -110,7 +114,7 @@
                         controller: 'ProductController as vm'
                     }
                 },
-
+                role: 'seller',
                 bodyClass: 'e-commerce'
             })
 
