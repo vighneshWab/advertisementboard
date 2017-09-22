@@ -17,8 +17,13 @@
         .config(config);
 
     /** @ngInject */
-    function config($stateProvider, $translatePartialLoaderProvider, msApiProvider, msNavigationServiceProvider) {
+    function config($stateProvider, $translatePartialLoaderProvider,$mdThemingProvider, msApiProvider, msNavigationServiceProvider) {
         // State
+        $mdThemingProvider.theme('dark-grey').backgroundPalette('grey').dark();
+        $mdThemingProvider.theme('dark-orange').backgroundPalette('orange').dark();
+        $mdThemingProvider.theme('dark-purple').backgroundPalette('deep-purple').dark();
+        $mdThemingProvider.theme('dark-blue').backgroundPalette('blue').dark();
+
         $stateProvider
             .state('app.seller', {
                 abstract: true,

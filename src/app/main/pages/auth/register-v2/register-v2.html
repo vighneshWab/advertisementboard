@@ -68,21 +68,20 @@
                             </div>
                         </div>
                 </md-input-container>
-
+<!--
                 <md-input-container class="md-block" md-no-float>
-                    {{vm.form.passwordConfirm!=vm.form.password}}
                     <input type="password" name="passwordConfirm" ng-model="vm.form.passwordConfirm" placeholder="Password (Confirm)" translate
-                        translate-attr-placeholder="REGISTER_V2.PASSWORD_CONFIRM" required >
+                          required >
                         <div ng-messages="registerForm.passwordConfirm.$error" role="alert">
                             <div ng-message="required">
                                 <span translate="REGISTER_V2.ERRORS.PASSWORD_CONFIRM_REQUIRED">Password (Confirm) field is required</span>
                             </div>
-                            <div ng-message-exp="vm.form.passwordConfirm!=vm.form.password">
+                            <div ng-message-exp="[vm.form.password,vm.form.passwordConfirm]">
                                 <span >Password Does not matched</span>
                             </div>
 
                         </div>
-                </md-input-container>
+                </md-input-container>-->
 
                 <div class="terms" layout="row" layout-align="center center">
                     <md-checkbox name="terms" ng-model="data.cb1" aria-label="I read and accept" required></md-checkbox>

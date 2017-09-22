@@ -11,7 +11,23 @@
 
         var vm = this;
         vm.regEx = "/^[0-9]{1,10}$/;"
+        vm.form={}
         $scope.FBref = firebase.database().ref('usersProfile');
+        vm.checkPassword = checkPassword;
+
+        function checkPassword() {
+            console.log('checkPassword')
+            if (vm.form.password == vm.form.passwordConfirm) {
+                return true
+
+
+            }else {
+
+                return false
+            }
+
+
+        }
 
         vm.registration = function (formData) {
 
@@ -27,7 +43,8 @@
                         userRole: 'buyer',
                         contactNumber: formData.contactnumber,
                         email: email,
-                        uid:user.uid
+                        uid: user.uid,
+                        userName:formData.username
                     }
 
                     indexService.usersProfile($scope.FBref, userProfile);

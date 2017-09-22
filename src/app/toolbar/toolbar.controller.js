@@ -13,6 +13,7 @@
             search: ''
         };
         vm.userBuyerRole = api.getUserRole();
+        console.log(JSON.stringify(vm.userBuyerRole))
         vm.bodyEl = angular.element('body');
         var getUsers = indexService.getUser();
         vm.userStatusOptions = [
@@ -91,6 +92,24 @@
                     vm.userRole = res[0].userRole;
                 }
             })
+
+        }
+        function becomeSeller() {
+            console.log('become seller');
+
+            if (vm.trialPackage) {
+                vm.formData = {
+                    uid: getUsers,
+                    packageId: vm.trialPackage[0].$id,
+                    MaxCompanyCount: vm.trialPackage[0].MaxCompanyCount,
+                    MaxProductCount: vm.trialPackage[0].MaxProductCount,
+                    MaxSellCount: vm.trialPackage[0].MaxSellCount,
+                    purchaseDate: indexService.createdDate,
+                    expirydate: indexService.expireDate15
+                }
+                vm.create(vm.formData);
+            }
+
 
         }
 
@@ -270,11 +289,6 @@
 
 
             });
-
-
-
-            // vm.updateUserRole();
-
         }
         vm.updateUserRole = function () {
             var orderByChild = $scope.UserProfile.orderByChild("uid").equalTo(getUsers).on("child_added", function (data) {
@@ -289,54 +303,8 @@
                 })
             });
 
-            // indexService.haveingUid('usersProfile').then(function (res) {
-            //     vm.userProfile = res[0];
-            //     vm.userProfile.userRole = 'seller';
-
-            //     console.log('userProfile:', JSON.stringify(vm.userProfile))
-
-            //     indexService.updateData('usersProfile', vm.userProfile).then(function (res) {
-            //         console.log('res', res)
-            //         vm.userRole = 'seller';
-
-            //     })
-
-
-            // })
-
-
         }
 
-        function becomeSeller() {
-            console.log('become seller');
-            var list = indexService.getTrialPackage($scope.userRoles).then(function (success) {
-                vm.trialPackage = success;
-                console.log('trial trialPackage:', JSON.stringify(vm.trialPackage))
-
-                if (Array.isArray(vm.trialPackage)) {
-                    vm.formData = {
-                        uid: getUsers,
-                        packageId: vm.trialPackage[0].$id,
-                        MaxCompanyCount: vm.trialPackage[0].MaxCompanyCount,
-                        MaxProductCount: vm.trialPackage[0].MaxProductCount,
-                        MaxSellCount: vm.trialPackage[0].MaxSellCount,
-                        purchaseDate: indexService.createdDate,
-                        expirydate: indexService.expireDate15
-                    }
-                    vm.create(vm.formData);
-                }
-
-
-
-            });
-
-
-
-
-
-
-
-        }
     }
 
 })();

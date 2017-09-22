@@ -37,9 +37,9 @@
 
         <md-tabs md-dynamic-height>
 
-            <md-tab>
+            <md-tab ng-if="getRole.userRole=='seller'">
                 <md-tab-label>
-                    <span>Become seller</span>
+                    <span>Update Package</span>
                 </md-tab-label>
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
@@ -47,12 +47,10 @@
 
                         <form id="productForm" name="productForm">
                             <div layout="column" layout-gt-xs="row">
-
-
                                 <md-input-container flex>
                                     <label>Select Package</label>
                                     <md-select ng-model="vm.formData.package" required>
-                                        <md-option ng-repeat="role in vm.packages  | filter:{isTrial: ! true }" ng-value="role" >
+                                        <md-option ng-repeat="role in vm.packages  | filter:{isTrial: ! true }" ng-value="role">
                                             {{role.CategoryDescription}}
                                         </md-option>
                                     </md-select>
@@ -60,6 +58,33 @@
 
                             </div>
                         </form>
+                    </div>
+                </md-tab-body>
+            </md-tab>
+
+            <md-tab ng-if="getRole.userRole=='buyer'">
+                <md-tab-label>
+                    <span>Become seller</span>
+                </md-tab-label>
+                <md-tab-body>
+                        <md-card>
+                            <img ng-src="{{vm.imagePath}}" class="md-card-image" >
+                            <md-card-title>
+                                <md-card-title-text>
+                                    <span class="md-headline">Action buttons</span>
+                                </md-card-title-text>
+                            </md-card-title>
+                            <md-card-content>
+                                <h2>
+                                  {{vm.trialPackage.CategoryDescription}}
+                                </h3>
+                               
+                            </md-card-content>
+                            <md-card-actions layout="row" layout-align="start center">
+                                <md-button class="md-raised md-background"  ng-click="vm.becomeSeller()">Become A seller</md-button>
+                            </md-card-actions>
+                        </md-card>
+
                     </div>
                 </md-tab-body>
             </md-tab>

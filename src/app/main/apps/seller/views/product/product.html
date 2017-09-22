@@ -54,34 +54,53 @@
 
                         <form id="productForm" name="productForm" ng-show="!vm.recachedMaxCount">
                             <div layout="column" layout-gt-xs="row">
-                                <md-input-container flex >
+                                <md-input-container flex>
                                     <label>Company</label>
-                                    <md-select ng-model="vm.formData.companyId" required >
+                                    <md-select ng-model="vm.formData.companyId" name="companyId" required>
                                         <md-option ng-repeat="role in vm.companies track by $index" ng-value="role.$id">
                                             {{role.Name}}
                                         </md-option>
                                     </md-select>
+
+                                    <div ng-messages="productForm.companyId.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>Company field is required</span>
+                                        </div>
+                                    </div>
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Product Category</label>
-                                    <md-select ng-model="vm.formData.productCategoryId" required>
+                                    <md-select ng-model="vm.formData.productCategoryId" name="productCategoryId" required>
                                         <md-option ng-repeat="role in vm.prodcutCategories track by $index" ng-value="role.$id">
                                             {{role.CategoryDescription}}
                                         </md-option>
                                     </md-select>
+                                    <div ng-messages="productForm.productCategoryId.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>product Category field is required</span>
+                                        </div>
+                                    </div>
                                 </md-input-container>
-
-
-
                             </div>
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
                                     <label>Name</label>
-                                    <input type="text" ng-model="vm.formData.CategoryName" required>
+                                    <input type="text" ng-model="vm.formData.CategoryName" name="CategoryName" required>
+                                    <div ng-messages="productForm.CategoryName.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>Category Name field is required</span>
+                                        </div>
+                                    </div>
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Price</label>
-                                    <input type="text" ng-model="vm.formData.price" required>
+                                    <input type="number" ng-model="vm.formData.price" name="price" required>
+
+                                    <div ng-messages="productForm.price.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span> price field is required</span>
+                                        </div>
+                                    </div>
                                 </md-input-container>
 
                             </div>
@@ -89,15 +108,25 @@
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
                                     <label>Category Description</label>
-                                    <input type="text" ng-model="vm.formData.CategoryDescription" required>
+                                    <input type="text" ng-model="vm.formData.CategoryDescription" name="CategoryDescription" required>
+                                    <div ng-messages="productForm.CategoryDescription.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>Category Description field is required</span>
+                                        </div>
+                                    </div>
                                 </md-input-container>
 
                             </div>
 
                             <div layout="column" layout-gt-xs="row">
-                                <input type="file" file-model="myFile" filelist-bind required />
+                                <input type="file" file-model="myFile" filelist-bind name="file" required />
                                 <div class="product-image1" ng-show="imgAvailable" id="preview" hide-xs>
                                     <img ng-src="{{ the_url }}">
+                                </div>
+                                <div ng-messages="productForm.file.$error" role="alert">
+                                    <div ng-message="required">
+                                        <span>Image field is required</span>
+                                    </div>
                                 </div>
                             </div>
                         </form>

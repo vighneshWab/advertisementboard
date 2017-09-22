@@ -15,42 +15,46 @@
             $rootScope.gotoBuyer = gotoBuyer;
             $rootScope.gotoSeller = gotoSeller;
             $rootScope.gotoAdmin = gotoAdmin;
-            $rootScope.isBuyer=false;
-            $rootScope.isSeller=false;
-            $rootScope.isAdmin=false;
+            $rootScope.isBuyer = false;
+            $rootScope.isSeller = false;
+            $rootScope.isAdmin = false;
             $rootScope.getRole = api.getUserRole();
+            $rootScope.userName = $rootScope.getRole.userName;
             console.log($rootScope.getRole)
+
+
+            // if()
 
             switch ($rootScope.getRole.userRole) {
                 case 'buyer':
-                $rootScope.isBuyer=true;
-                $rootScope.gotoBuyer($rootScope.getRole.userRole)
+                    $rootScope.isBuyer = true;
+                    $rootScope.gotoBuyer($rootScope.getRole.userRole)
                     break;
-               case 'seller':
-               $rootScope.isSeller=true;
-                $rootScope.gotoSeller($rootScope.getRole.userRole)
+                case 'seller':
+                    $rootScope.isSeller = true;
+                    $rootScope.gotoSeller($rootScope.getRole.userRole)
                     break;
 
-             case 'admin':
-             $rootScope.isAdmin=true
-                $rootScope.gotoAdmin($rootScope.getRole.userRole)
+                case 'admin':
+                    $rootScope.isAdmin = true
+                    $rootScope.gotoAdmin($rootScope.getRole.userRole)
                     break;
-            
+
                 default:
-                console.log('defult');
-                if(Array.isArray($rootScope.getRole)){
+                    // console.log('defult');
+                    // if(Array.isArray($rootScope.getRole)){
 
-                    console.log('blank Array')
-                    $location.path('/pages/auth/login')
-                }
+                    //     console.log('blank Array')
+                    //     $location.path('/pages/auth/login')
+                    // }
 
                     break;
             }
 
-            if(toState.role!=$rootScope.getRole.userRole){
-                console.log('not access')
-                $location.path('/pages/errors/error-404')
-            }
+            // if(toState.role!=$rootScope.getRole.userRole){
+            //     console.log('not access')
+            //     $location.path('/pages/errors/error-404')
+            // }
 
         });
 
@@ -79,20 +83,27 @@
                 title: 'buyer',
                 icon: 'icon-cart',
                 weight: 3,
-                hidden: function ()
-                    {
-                        return !$rootScope.isBuyer; // must be a boolean value
-                    },
+                hidden: function () {
+                    return !$rootScope.isBuyer; // must be a boolean value
+                },
             });
 
 
             msNavigationService.saveItem('apps.buyer.dashboard', {
                 title: 'Dashboard',
                 state: 'app.buyer.dashboard',
-                hidden: function ()
-                    {
-                        return !$rootScope.isBuyer; // must be a boolean value
-                    },
+                hidden: function () {
+                    return !$rootScope.isBuyer; // must be a boolean value
+                },
+            });
+
+            msNavigationService.saveItem('becomeseller', {
+                title: 'Become Seller',
+                icon: 'icon-cart',
+                state: 'app.seller.becomeseller',
+                hidden: function () {
+                    return !$rootScope.isBuyer; // must be a boolean value
+                },
             });
 
         }
@@ -103,36 +114,32 @@
                 title: 'seller',
                 icon: 'icon-cart',
                 weight: 2,
-                 hidden: function ()
-                    {
-                        return !$rootScope.isSeller; // must be a boolean value
-                    },
+                hidden: function () {
+                    return !$rootScope.isSeller; // must be a boolean value
+                },
 
             });
             msNavigationService.saveItem('apps.seller.dashboard', {
                 title: 'Dashboard',
                 state: 'app.seller.dashboard',
-                  hidden: function ()
-                    {
-                        return !$rootScope.isSeller; // must be a boolean value
-                    },
+                hidden: function () {
+                    return !$rootScope.isSeller; // must be a boolean value
+                },
             });
             msNavigationService.saveItem('apps.seller.SellerCompany', {
                 title: 'Company',
                 state: 'app.seller.sellercompanies',
-                  hidden: function ()
-                    {
-                        return !$rootScope.isSeller; // must be a boolean value
-                    },
+                hidden: function () {
+                    return !$rootScope.isSeller; // must be a boolean value
+                },
             });
             msNavigationService.saveItem('apps.seller.product', {
                 title: 'Upload Products',
                 state: 'app.seller.products',
-                 
-                     hidden: function ()
-                    {
-                        return !$rootScope.isSeller; // must be a boolean value
-                    },
+
+                hidden: function () {
+                    return !$rootScope.isSeller; // must be a boolean value
+                },
             });
 
         }
@@ -142,34 +149,30 @@
                 title: 'admin',
                 icon: 'icon-cart',
                 weight: 1,
-                 hidden: function ()
-                    {
-                        return !$rootScope.isAdmin; // must be a boolean value
-                    },
+                hidden: function () {
+                    return !$rootScope.isAdmin; // must be a boolean value
+                },
             });
             msNavigationService.saveItem('apps.admin.company', {
                 title: 'Company Categories',
                 state: 'app.admin.companies',
-                  hidden: function ()
-                    {
-                        return !$rootScope.isAdmin; // must be a boolean value
-                    },
+                hidden: function () {
+                    return !$rootScope.isAdmin; // must be a boolean value
+                },
             });
             msNavigationService.saveItem('apps.admin.package', {
                 title: 'User Role',
                 state: 'app.admin.packages',
-                  hidden: function ()
-                    {
-                        return !$rootScope.isAdmin; // must be a boolean value
-                    },
+                hidden: function () {
+                    return !$rootScope.isAdmin; // must be a boolean value
+                },
             });
             msNavigationService.saveItem('apps.admin.productCategory', {
                 title: 'Prodcut Category',
                 state: 'app.admin.productCategories',
-                  hidden: function ()
-                    {
-                        return !$rootScope.isAdmin; // must be a boolean value
-                    },
+                hidden: function () {
+                    return !$rootScope.isAdmin; // must be a boolean value
+                },
 
             });
         }

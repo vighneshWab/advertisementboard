@@ -43,7 +43,7 @@
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
                         <div ng-show="vm.recachedMaxCount">
-                             <h1>{{vm.message}} </h1> 
+                            <h1>{{vm.message}} </h1>
                             <div>
                                 <md-button class="md-raised md-background" ng-click="vm.chagePackage()">
                                     <span>Change Package</span>
@@ -54,38 +54,72 @@
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
                                     <label>Company Category</label>
-                                    <md-select ng-model="vm.formData.CompanyCategoryID" required>
-                                        <!--<md-option ng-disabled="true" >Company Catgory</md-option>-->
+                                    <md-select ng-model="vm.formData.CompanyCategoryID" name="CompanyCategoryID" required>
                                         <md-option ng-repeat="role in vm.companyCategories track by $index" ng-value="role.$id">
                                             {{role.CategoryName}}
                                         </md-option>
                                     </md-select>
+
+                                    <div ng-messages="productForm.CompanyCategoryID.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span> Company Category field is required</span>
+                                        </div>
+                                    </div>
                                 </md-input-container>
 
                                 <md-input-container flex>
                                     <label>Name</label>
-                                    <input type="text" ng-model="vm.formData.Name" required>
+                                    <input type="text" ng-model="vm.formData.Name" name="Name" required>
+                                    <div ng-messages="productForm.Name.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>Name field is required</span>
+                                        </div>
+                                    </div>
+
 
                                 </md-input-container>
                             </div>
                             <div layout="column" layout-gt-sm="row">
                                 <md-input-container flex>
                                     <label>Website</label>
-                                    <input type="text" ng-model="vm.formData.Website" required>
+                                    <input type="text" ng-model="vm.formData.Website" name="Website" required>
+                                    <div ng-messages="productForm.Website.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>Website field is required</span>
+                                        </div>
+                                    </div>
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Email</label>
-                                    <input type="text" ng-model="vm.formData.Email" required>
+                                    <input type="email" ng-model="vm.formData.Email" name="email" ng-pattern="/^.+@.+\..+$/" required>
+                                    <div ng-messages="productForm.email.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>email field is required</span>
+                                        </div>
+                                        <div ng-message="pattern">
+                                            <span >Email must be a valid e-mail address</span>
+                                        </div>
+                                    </div>
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Telephone</label>
-                                    <input type="text" ng-model="vm.formData.Telephone" required>
+                                    <input type="number" ng-model="vm.formData.Telephone" name="Telephone" required>
+                                    <div ng-messages="productForm.Telephone.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>Telephone field is required</span>
+                                        </div>
+                                    </div>
                                 </md-input-container>
                             </div>
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
                                     <label>Description</label>
-                                    <input type="text" ng-model="vm.formData.Description" required>
+                                    <input type="text" ng-model="vm.formData.Description" name="Description" required>
+                                    <div ng-messages="productForm.Description.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>Description field is required</span>
+                                        </div>
+                                    </div>
                                 </md-input-container>
 
                             </div>

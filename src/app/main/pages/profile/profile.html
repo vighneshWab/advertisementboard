@@ -4,7 +4,7 @@
     <div class="header md-accent-bg" layout="row" layout-align="start center">
         <div class="white-fg" layout="row" layout-align="start center" flex>
             <md-button class="goto-products-button md-icon-button" aria-label="Go to products" ng-click="vm.gotoProducts()">
-                <md-icon md-font-icon="icon-arrow-left"></md-icon>
+                <!--<md-icon md-font-icon="icon-arrow-left"></md-icon>-->
             </md-button>
 
             <div layout="row" layout-align="start center">
@@ -24,8 +24,8 @@
         </div>
 
         <div>
-            <md-button class="md-raised md-background" ng-click="vm.saveCompanyCategory()" ng-disabled="!vm.isFormValid('productForm')">
-                <span>SAVE</span>
+            <md-button class="md-raised md-background" ng-click="vm.updateProfile()" ng-disabled="!vm.isFormValid('productForm')">
+                <span>Update</span>
             </md-button>
         </div>
     </div>
@@ -38,7 +38,7 @@
 
             <md-tab>
                 <md-tab-label>
-                    <span>Company Details</span>
+                    <span>Profile</span>
                 </md-tab-label>
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
@@ -48,40 +48,40 @@
                             <div layout="column" layout-gt-sm="row">
                                 <md-input-container flex>
                                     <label>User name</label>
-                                    <input type="text" ng-model="vm.user.Username" required>
+                                    <input type="text" ng-model="vm.user.userName" ng-disabled="true" required>
                                 </md-input-container>
                                 <md-input-container flex>
-                                    <label>Email</label>
-                                    <input type="text" ng-model="vm.sellerCompany.Email" required>
+                                    <label>Role</label>
+                                    <input type="text" ng-model="vm.user.userRole" ng-disabled="true" required>
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Telephone</label>
-                                    <input type="text" ng-model="vm.sellerCompany.Telephone" required>
+                                    <input type="text" ng-model="vm.user.contactNumber" required>
                                 </md-input-container>
                             </div>
 
                             <div layout="column" layout-gt-sm="row">
                                 <md-input-container flex>
                                     <label>Street No</label>
-                                    <input type="text" ng-model="vm.sellerCompany.StreetNo" required>
+                                    <input type="text" ng-model="vm.user.StreetNo" required>
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Street Name</label>
-                                    <input type="text" ng-model="vm.sellerCompany.StreetName" required>
+                                    <input type="text" ng-model="vm.user.StreetName" required>
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Suburb</label>
-                                    <input type="text" ng-model="vm.sellerCompany.Suburb" required>
+                                    <input type="text" ng-model="vm.user.Suburb" required>
                                 </md-input-container>
                             </div>
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
                                     <label>State</label>
-                                    <input type="text" ng-model="vm.sellerCompany.State" required>
+                                    <input type="text" ng-model="vm.user.State" required>
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>Country</label>
-                                    <input type="text" ng-model="vm.sellerCompany.Country" required>
+                                    <input type="text" ng-model="vm.user.Country" required>
                                 </md-input-container>
                             </div>
                         </form>

@@ -3,30 +3,29 @@
     <!-- HEADER -->
     <div class="header md-accent-bg" layout="row" layout-align="start center">
         <div class="white-fg" layout="row" layout-align="start center" flex>
-            <md-button class="goto-products-button md-icon-button" aria-label="Go to products" ng-click="vm.gotoProducts()" 
-              >
+            <md-button class="goto-products-button md-icon-button" aria-label="Go to products" ng-click="vm.gotoProducts()">
                 <md-icon md-font-icon="icon-arrow-left"></md-icon>
-                </md-button>
+            </md-button>
 
-                <div layout="row" layout-align="start center">
-                    <div class="product-image" hide-xs>
-                        <img ng-src="{{vm.product.images[0].url}}">
+            <div layout="row" layout-align="start center">
+                <div class="product-image" hide-xs>
+                    <img ng-src="{{vm.product.images[0].url}}">
+                </div>
+
+                <div layout="column" layout-align="start start">
+                    <div class="h2">
+                        {{vm.product.name}}
                     </div>
-
-                    <div layout="column" layout-align="start start">
-                        <div class="h2">
-                            {{vm.product.name}}
-                        </div>
-                        <div class="subtitle secondary-text">
-                            <span>create Package</span>
-                        </div>
+                    <div class="subtitle secondary-text">
+                        <span>create Package</span>
                     </div>
                 </div>
+            </div>
         </div>
 
         <div>
             <md-button class="md-raised md-background" ng-click="vm.savePackage()" ng-disabled="!vm.isFormValid('productForm')">
-                <span >SAVE</span>
+                <span>SAVE</span>
             </md-button>
         </div>
     </div>
@@ -46,11 +45,16 @@
                         <form id="productForm" name="productForm">
                             <md-input-container class="md-block">
                                 <label>User Role</label>
-                                <md-select ng-model="vm.package.UserRole">
-                                    <md-option ng-repeat="role in vm.userRoles" >
+                                <md-select ng-model="vm.package.UserRole" name="userRole" required>
+                                    <md-option ng-repeat="role in vm.userRoles">
                                         {{role}}
                                     </md-option>
                                 </md-select>
+                                <div ng-messages="productForm.userRole.$error" role="alert">
+                                    <div ng-message="required">
+                                        <span >{Password} field is required</span>
+                                    </div>
+                                </div>
                             </md-input-container>
 
                             <md-input-container class="md-block">

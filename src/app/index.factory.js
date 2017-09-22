@@ -39,6 +39,19 @@
 
         }
 
+        services.updateUserProfile = function (ProfileDetails) {
+
+            var orderByChild = $scope.UserProfile.orderByChild("uid").equalTo(getUsers).on("child_added", function (data) {
+                var obj = data.val();
+                obj = ProfileDetails;
+                console.log(JSON.stringify(obj));
+                indexService.update($scope.UserProfile, data.key, obj)
+            });
+            console.log('updateUserRole');
+
+
+        }
+
         services.sucessMessage = function (msg) {
 
             var configOptions = {
@@ -134,6 +147,21 @@
         }
         services.update = function (refD, childRef, obj) {
             var qProfile = $q.defer();
+
+            var list = refD.child(childRef).set(obj, function (error) {
+                var data = error;
+                if (error) {
+                    qProfile.reject(errorObject);
+                    services.errorMessage('error while update record');
+                } else {
+                    qProfile.resolve(data);
+                    services.sucessMessage('Record updated succfully');
+                }
+            });
+            return qProfile.promise;
+        }
+        services.updateProfile = function (refD, childRef, obj) {
+            var qProfile = $q.defer();
             var list = refD.child(childRef).set(obj, function (error) {
                 var data = error;
                 if (error) {
@@ -174,14 +202,10 @@
             var qProfile = $q.defer();
             var ref = firebase.database().ref(refs);
 
-            // ref.orderByChild("uid").equalTo(getuser).on('value',function(snap){
-            //     console.log('orderby havibg uid',JSON.strigify(snap.val()));
-            // })
-
             var list = $firebaseArray(ref.orderByChild("uid").equalTo(getuser)).$loaded(function (success) {
-                 console.log('user uid code')
+                console.log('user uid code')
                 var data = success;
-               
+
                 qProfile.resolve(data);
             }, function (errorObject) {
                 console.log('eroror code')
@@ -215,13 +239,26 @@
             return qProfile.promise;
         };
 
+        services.getAllPackage = function (refs) {
+            console.log(refs);
+            var qProfile = $q.defer();
+            var ref = firebase.database().ref(refs);
+            var list = $firebaseArray(ref.orderByChild("isTrial").equalTo(false)).$loaded(function (success) {
+                var data = success;
+                qProfile.resolve(data);
+            }, function (errorObject) {
+                qProfile.reject(errorObject);
+            })
+            return qProfile.promise;
+        };
+
 
         services.dataBetween = function (refs, startDate, endDate) {
             console.log(refs)
             var qProfile = $q.defer();
             var ref = firebase.database().ref(refs);
 
-    
+
             var list = $firebaseArray(ref.orderByChild("created").startAt(startDate).endAt(endDate)).$loaded(function (success) {
                 var data = success;
                 console.log('data', JSON.stringify(data))
