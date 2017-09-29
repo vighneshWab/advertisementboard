@@ -6,13 +6,13 @@
         .controller('ProductController', ProductController);
 
     /** @ngInject */
-    function ProductController($scope, $document, $stateParams, indexService, $state) {
+    function ProductController($scope, $document, api, $stateParams, indexService, $state) {
         var vm = this;
         var getUsers = indexService.getUser();
         vm.formData = {
             uid: getUsers,
-            created:  indexService.createdDate,
-            created_uid:  indexService.createdDate.toString() + "_" + getUsers
+            created: indexService.createdDate,
+            created_uid: indexService.createdDate.toString() + "_" + getUsers
 
         };
         $scope.productcategory = firebase.database().ref('admin/productcategory');
@@ -22,17 +22,16 @@
         $scope.FBref = firebase.database().ref('seller/product')
         $scope.imgAvailable = false;
         $scope.vidAvailable = false;
-        vm.dateCompaire = dateCompaire;
-        vm.comapireCompany = comapireCompany;
         vm.chagePackage = chagePackage;
+        vm.disableCompanies = disableCompanies;
         vm.loadCompanyCategory = loadCompanyCategory;
-        vm.getLastTransaction = getLastTransaction;
         $scope.img = $scope.vid = {};
+        vm.unable = unable;
 
         vm.message = ''
 
         //  company dropdown
-        var list = indexService.getAll($scope.company).$loaded(function (success) {
+        var list = api.userWiseData('sellercompany').then(function (success) {
             vm.companies = success;
             console.log(vm.companies);
         }, function (error) {
@@ -41,7 +40,7 @@
         });
 
         // Product Category Dropdown
-        var list = indexService.getAll($scope.productcategory).$loaded(function (success) {
+        var list = api.getAll('admin/productcategory').then(function (success) {
             vm.prodcutCategories = success;
         }, function (error) {
             indexService.errorMessage("error while getting data");
@@ -49,8 +48,26 @@
         });
 
 
+        var listproducts = api.userWiseData('sellerproduct').then(function (success) {
+            vm.products = success;
+        });
+
+        var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
+            vm.lastTransaction = res[0];
+            if (vm.products.length <= vm.lastTransaction.MaxProductCount) {
+                vm.reachedMaxLimit = false;
+                vm.disableCompanies(vm.products)
+            } else {
+                vm.reachedMaxLimit = true;
+                vm.disableCompanies(vm.products)
+
+
+            }
+        });
+
+
         if ($stateParams.id) {
-            vm.getLastTransaction();
+            // vm.getLastTransaction();
             var list = $scope.FBref.child($stateParams.id);
             list.on('value', function (snap) {
                 vm.formData = snap.val();
@@ -58,23 +75,31 @@
                 $scope.imgAvailable = true;
             });
         } else {
-            vm.getLastTransaction();
+            // vm.getLastTransaction();
 
 
         }
         vm.create = function (createObject) {
-            console.log(JSON.stringify(createObject));
-            indexService.create($scope.FBref, createObject).then(function (res) {
-                console.log('created producsr')
 
-            });
+            createObject.created = indexService.createdDate;
+            createObject.disable = true;
+            console.log(JSON.stringify(createObject));
+            api.insert('sellerproduct', createObject).then(function (success) {
+                indexService.sucessMessage('Product added success');
+            }, function (error) {
+                indexService.errorMessage('error while adding products');
+
+            })
         }
 
         vm.update = function (createObject) {
+            createObject.updated = indexService.createdDate;
+            api.update('sellerproduct', $stateParams.id, createObject).then(function (success) {
+                indexService.sucessMessage('Product updated success');
+            }, function (error) {
+                indexService.errorMessage('error while adding Product');
 
-            indexService.update($scope.FBref, $stateParams.id, createObject).then(function (res) {
-                console.log('produts updated')
-            });
+            })
         }
 
         vm.saveProduct = saveWithUpload;
@@ -137,37 +162,46 @@
         }
 
         // get last trancaton by logi user
-        function getLastTransaction() {
-            indexService.lastTransaction($scope.transation).then(function (res) {
-                vm.lastTransaction = res[0];
-                vm.dateCompaire(vm.lastTransaction);
+
+        function disableCompanies(comapanies) {
+            var bulkUpdate = {};
+            angular.forEach(comapanies, function (value, key) {
+                var loca = value.$id + '/disable';
+                bulkUpdate[loca] = true;
+
             });
+
+            api.bulkupdate('sellerproduct', bulkUpdate).then(function (res) {
+                console.log('res', res)
+
+            }, function (err) {
+                console.log('error', err)
+            })
+
+
         }
+        function unable() {
+            var data = {};
+            var loca = $stateParams.id + '/disable';
+            data[loca] = false;
+            api.bulkupdate('sellercompany', data).then(function (res) {
+                console.log('res', res)
+                indexService.sucessMessage('company is now unabled');
+                vm.gotoSellerCompanies();
+            }, function (err) {
+                console.log('error', err)
+            })
+        }
+
+
+
+
 
         // check exprire date is less than today
 
-        function dateCompaire(lastTransaction) {
-            if (indexService.createdDate <= lastTransaction.expirydate) {
-                vm.comapireCompany(lastTransaction.MaxCompanyCount);
-            } else {
-                vm.recachedMaxCount = true;
-                vm.message = 'Your Package Has been exprired Kindly update your package'
-            }
-        }
 
-        // check max comapnies count is less then total company 
-        function comapireCompany(companyCount) {
-            indexService.dataBetween($scope.prodcuts, vm.lastTransaction.purchaseDate, vm.lastTransaction.expirydate).then(function (res) {
-                if (companyCount <= res.length) {
-                    vm.recachedMaxCount = true;
-                    vm.message = 'Your Reached  max count Kindly update your package'
 
-                } else {
-                    vm.recachedMaxCount = false
-                }
 
-            });
-        }
         function chagePackage() {
             console.log('chagePackage');
         }

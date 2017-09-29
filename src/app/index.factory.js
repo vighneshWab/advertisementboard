@@ -130,9 +130,31 @@
             var qProfile = $q.defer();
             var list = $firebaseArray(refD);
             list.$add(obj).then(function (res) {
-                console.log(res)
                 var data = res;
                 if (res) {
+
+                    console.log('create Package', JSON.stringify(res));
+                    qProfile.resolve(data);
+                    services.sucessMessage('Record added succfully');
+                } else {
+                    console.log('error:', res)
+                    qProfile.reject(errorObject);
+                    services.errorMessage('error adding record');
+                }
+
+            });
+            return qProfile.promise;
+
+        }
+
+        services.create = function (refD, obj) {
+            var qProfile = $q.defer();
+            var list = $firebaseArray(refD);
+            list.$add(obj).then(function (res) {
+                var data = res;
+                if (res) {
+
+                    console.log('create Package', JSON.stringify(res));
                     qProfile.resolve(data);
                     services.sucessMessage('Record added succfully');
                 } else {
@@ -213,11 +235,47 @@
             })
             return qProfile.promise;
         };
+
+
+        services.createCustomer = function (data) {
+            var getuser = services.getUser();
+            console.log(getuser)
+            var qProfile = $q.defer();
+            var ref = firebase.database().ref(refs);
+
+            $http.post('https://us-central1-advertismentboard-a4a11.cloudfunctions.net/customer', data).then(function (success) {
+                console.log('success', JSON.stringify(success));
+
+
+
+                qProfile.resolve(success);
+
+
+            }, function (error) {
+                console.log('error', JSON.stringify(error));
+
+
+                qProfile.reject(error);
+
+
+            });
+
+            var list = $firebaseArray(ref.orderByChild("uid").equalTo(getuser)).$loaded(function (success) {
+                console.log('user uid code')
+                var data = success;
+
+            }, function (errorObject) {
+                console.log('eroror code')
+            })
+            return qProfile.promise;
+        };
+
         services.lastTransaction = function (refs) {
             var getuser = services.getUser();
             var qProfile = $q.defer();
-            var ref = firebase.database().ref(refs);
-            var list = $firebaseArray(ref.orderByChild("uid").equalTo(getuser).limitToLast(1)).$loaded(function (success) {
+            var uid = services.getUser();
+            var ref = firebase.database().ref(refs).child(uid);
+            var list = $firebaseArray(ref.limitToLast(1)).$loaded(function (success) {
                 var data = success;
                 qProfile.resolve(data);
             }, function (errorObject) {
@@ -243,7 +301,7 @@
             console.log(refs);
             var qProfile = $q.defer();
             var ref = firebase.database().ref(refs);
-            var list = $firebaseArray(ref.orderByChild("isTrial").equalTo(false)).$loaded(function (success) {
+            var list = $firebaseArray(ref).$loaded(function (success) {
                 var data = success;
                 qProfile.resolve(data);
             }, function (errorObject) {

@@ -20,36 +20,68 @@
             $rootScope.isAdmin = false;
             $rootScope.getRole = api.getUserRole();
             $rootScope.userName = $rootScope.getRole.userName;
-            console.log($rootScope.getRole)
+            // console.log($rootScope.getRole)
+            // api.insert('plan',{"test":123});
+            // api.getAll('plan');
+
+
+            if ($rootScope.getRole.userRole == undefined) {
+
+                $location.path('/pages/auth/login');
+            } else {
+
+                if (toState.role == $rootScope.getRole.userRole) {
+                    switch ($rootScope.getRole.userRole) {
+                        case 'buyer':
+                            $rootScope.isBuyer = true;
+                            $rootScope.gotoBuyer($rootScope.getRole.userRole)
+                            break;
+                        case 'seller':
+                            $rootScope.isSeller = true;
+                            $rootScope.gotoSeller($rootScope.getRole.userRole)
+                            break;
+
+                        case 'admin':
+                            $rootScope.isAdmin = true
+                            $rootScope.gotoAdmin($rootScope.getRole.userRole)
+                            break;
+
+                        default:
+                            // console.log('defult');
+                            // if(Array.isArray($rootScope.getRole)){
+
+                            //     console.log('blank Array')
+                            //     $location.path('/pages/auth/login')
+                            // }
+
+                            break;
+                    }
+                }
+                else  {
+
+                    switch (toState.role) {
+                        case 'com':
+                          
+                            break;
+
+                        default:
+                            $location.path('/pages/errors/error-404');
+
+                            break;
+                    }
+
+
+                }
+
+
+
+
+            }
 
 
             // if()
 
-            switch ($rootScope.getRole.userRole) {
-                case 'buyer':
-                    $rootScope.isBuyer = true;
-                    $rootScope.gotoBuyer($rootScope.getRole.userRole)
-                    break;
-                case 'seller':
-                    $rootScope.isSeller = true;
-                    $rootScope.gotoSeller($rootScope.getRole.userRole)
-                    break;
 
-                case 'admin':
-                    $rootScope.isAdmin = true
-                    $rootScope.gotoAdmin($rootScope.getRole.userRole)
-                    break;
-
-                default:
-                    // console.log('defult');
-                    // if(Array.isArray($rootScope.getRole)){
-
-                    //     console.log('blank Array')
-                    //     $location.path('/pages/auth/login')
-                    // }
-
-                    break;
-            }
 
             // if(toState.role!=$rootScope.getRole.userRole){
             //     console.log('not access')
@@ -109,7 +141,6 @@
         }
         function gotoSeller() {
 
-            console.log('gotoSeller')
             msNavigationService.saveItem('apps.seller', {
                 title: 'seller',
                 icon: 'icon-cart',
@@ -141,6 +172,14 @@
                     return !$rootScope.isSeller; // must be a boolean value
                 },
             });
+            msNavigationService.saveItem('apps.seller.UpdatePackage', {
+                title: 'Update package',
+                state: 'app.seller.UpdatePackage',
+                hidden: function () {
+                    return !$rootScope.isSeller; // must be a boolean value
+                },
+            });
+            // UpdatePackage
 
         }
         function gotoAdmin() {

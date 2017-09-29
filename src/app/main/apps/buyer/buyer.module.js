@@ -22,7 +22,9 @@
         $stateProvider
             .state('app.buyer', {
                 abstract: true,
-                url: '/buyer'
+                url: '/buyer',
+                role: 'buyer',
+
             })
             .state('app.buyer.dashboard', {
                 url: '/dashboard',

@@ -21,29 +21,24 @@
 
 
         // Methods
-        var list = indexService.haveingUid('usersProfile').then(function (success) {
+        var list = api.getUserData('user', getUsers).then(function (success) {
             vm.user = success[0];
-            delete vm.user.$id;
-            delete vm.user.$priority;
+
             console.log(JSON.stringify(vm.user))
         });
 
         function updateProfile() {
-            // indexService.update('usersProfile', vm.user.uid, vm.user).then(function (res) {
-            //     console.log(res)
 
-            // })
-            var orderByChild = $scope.Fref.orderByChild("uid").equalTo(getUsers).on("child_added", function (data) {
-                var obj = data.val();
-                console.log(JSON.stringify(obj))
+            var childId = vm.user.$id
 
+            delete vm.user.$id;
+            delete vm.user.$priority;
+            api.update('user', childId, vm.user).then(function (success) {
+                indexService.sucessMessage('Profile updated success');
+            }, function (error) {
+                indexService.errorMessage('error while updaing Profile');
 
-                indexService.update($scope.Fref, data.key, vm.user).then(function (res) {
-                    console.log('response:', res)
-
-
-                })
-            });
+            })
 
         }
 

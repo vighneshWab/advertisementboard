@@ -6,135 +6,122 @@
         .controller('SellerCompanyController', SellerCompanyController);
 
     /** @ngInject */
-    function SellerCompanyController($scope, $document, $stateParams, indexService, $state) {
+    function SellerCompanyController($scope, $document, $stateParams, api, indexService, $state) {
+
+        //data
         var vm = this;
         var getUsers = indexService.getUser();
-
-        var timestamp = Date.now();
-        vm.formData = {
-            uid: getUsers,
-            created: indexService.createdDate,
-            created_uid: indexService.createdDate.toString() + "_" + getUsers
-
-        };
-
-
-        $scope.FBRef = firebase.database().ref('seller/company');
-        $scope.company = 'seller/company';
-        $scope.transation = 'seller/transation';
-        $scope.companycategory = firebase.database().ref('admin/companycategory')
+        vm.isFormValid = isFormValid;
+        vm.sellercompany = 'sellercompany';
+        vm.formData = {};
         vm.saveSellerCompany = saveSellerCompany;
         vm.gotoSellerCompanies = gotoSellerCompanies;
-        vm.isFormValid = isFormValid;
-        vm.dateCompaire = dateCompaire;
-        vm.comapireCompany = comapireCompany;
-        vm.chagePackage = chagePackage;
-        vm.loadCompanyCategory = loadCompanyCategory;
-        vm.getLastTransaction = getLastTransaction;
+        vm.disableCompanies = disableCompanies;
+        vm.unable = unable;
+
+        var list = api.getAll('admin/companycategory').then(function (success) {
+            vm.companyCategories = success;
+        }, function (error) {
+            indexService.errorMessage("error while getting data");
+
+        });
+
         if ($stateParams.id) {
-            vm.loadCompanyCategory();
-            vm.getLastTransaction();
-            var list = $scope.FBRef.child($stateParams.id);
-            list.on('value', function (snap) {
-                vm.formData = snap.val();
+            api.userEditData('sellercompany', $stateParams.id).then(function (success) {
+                vm.formData = success;
+                indexService.sucessMessage('company geting data success');
+            }, function (error) {
+                indexService.errorMessage('error while adding company');
 
-            });
-        } else {
-            vm.loadCompanyCategory();
-            vm.getLastTransaction();
-        }
-
-        vm.create = function (createObject) {
-            indexService.create($scope.FBRef, createObject).then(function (res) {
-                console.log('JOSNrespnos', res);
-                if (res) {
-                    indexService.sucessMessage('Record added succfully');
-                    vm.comapireCompany($scope.company);
-
-
-                } else {
-
-                    indexService.errorMessage('error adding record');
-
-                }
-
-
-
-            });
+            })
 
         }
 
-        vm.update = function (createObject) {
-            indexService.update($scope.FBRef, $stateParams.id, createObject).then(function (res) {
-                console.log('seller company updated')
-            });
-        }
+        var list = api.userWiseData('sellercompany').then(function (success) {
+            vm.sellerCompanies = success;
+        }, function (error) {
+            indexService.errorMessage("error while getting data");
 
-        function saveSellerCompany() {
-            if ($stateParams.id) {
-                vm.update(vm.formData);
+        });
+        var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
+            vm.lastTransaction = res[0];
+            if (vm.sellerCompanies.length <= vm.lastTransaction.MaxCompanyCount) {
+                vm.reachedMaxLimit = false;
 
             } else {
-                vm.create(vm.formData);
+                vm.reachedMaxLimit = true;
+                vm.disableCompanies(vm.sellerCompanies)
 
+
+            }
+        });
+
+        // methods
+
+        function isFormValid(formName) {
+            if ($scope[formName] && $scope[formName].$valid) {
+                return $scope[formName].$valid;
             }
         }
 
         function gotoSellerCompanies() {
             $state.go('app.seller.sellercompanies')
         }
-        function isFormValid(formName) {
 
-            if ($scope[formName] && $scope[formName].$valid) {
-                return $scope[formName].$valid;
-            }
-        }
+        function saveSellerCompany() {
 
+            if ($stateParams.id) {
+                vm.formData.updated = indexService.createdDate;
+                console.log('formData:', JSON.stringify(vm.formData));
+                var childid = $stateParams.id;
+                api.update('sellercompany', childid, vm.formData).then(function (success) {
+                    indexService.sucessMessage('company updated success');
+                    vm.gotoSellerCompanies()
+                }, function (error) {
+                    indexService.errorMessage('error while adding company');
 
-        // updated code validation and load categries 
-        function loadCompanyCategory() {
-            var list = indexService.getAll($scope.companycategory).$loaded(function (success) {
-                vm.companyCategories = success;
-            }, function (error) {
-                indexService.errorMessage("error while getting data");
+                })
 
-            });
-
-        }
-        function getLastTransaction() {
-            console.log('getLastTransaction')
-            indexService.lastTransaction($scope.transation).then(function (res) {
-
-                vm.lastTransaction = res[0];
-                vm.dateCompaire(vm.lastTransaction);
-            });
-        }
-
-
-
-        function dateCompaire(lastTransaction) {
-            if (indexService.createdDate <= lastTransaction.expirydate) {
-                vm.comapireCompany(lastTransaction.MaxCompanyCount);
             } else {
-                vm.recachedMaxCount = true;
-                vm.message = 'Your Package Has been exprired Kindly update your package'
+                console.log('formData:', JSON.stringify(vm.formData));
+                vm.formData.created = indexService.createdDate;
+                vm.formData.disable = true;
+                api.insert('sellercompany', vm.formData).then(function (success) {
+                    indexService.sucessMessage('company added success');
+                    vm.gotoSellerCompanies();
+
+                }, function (error) {
+                    indexService.errorMessage('error while adding company');
+
+                })
+
             }
         }
-
-        function comapireCompany(companyCount) {
-            indexService.dateBetweenUid($scope.company, vm.lastTransaction.purchaseDate, vm.lastTransaction.expirydate).then(function (res) {
-                if (companyCount <= res.length) {
-                    vm.recachedMaxCount = true;
-                    vm.message = 'Your Reached  max count Kindly update your package'
-
-                } else {
-                    vm.recachedMaxCount = false
-                }
-
-            });
+        function unable() {
+            var data = {};
+            var loca = $stateParams.id + '/disable';
+            data[loca] = false;
+            api.bulkupdate('sellercompany', data).then(function (res) {
+                console.log('res', res)
+                indexService.sucessMessage('company is now unabled');
+                vm.gotoSellerCompanies();
+            }, function (err) {
+                console.log('error', err)
+            })
         }
-        function chagePackage() {
-            console.log('chagePackage');
+
+        function disableCompanies(comapanies) {
+            var bulkUpdate = {};
+            angular.forEach(comapanies, function (value, key) {
+                var loca = value.$id + '/disable';
+                bulkUpdate[loca] = true;
+            });
+            api.bulkupdate('sellercompany', bulkUpdate).then(function (res) {
+                console.log('res', res)
+
+            }, function (err) {
+                console.log('error', err)
+            })
         }
 
     }

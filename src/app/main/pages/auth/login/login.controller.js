@@ -10,7 +10,7 @@
         // Data
         var vm = this;
 
-                                 
+
         // Methods
         $scope.FBRef = firebase.database().ref("usersProfile");
         vm.login = function (formData) {
@@ -21,28 +21,52 @@
                     if (user.emailVerified) {
                         indexService.setUser(user.uid);
                         var getUsers = indexService.getUser();
+
+                        var list = api.getUserData('user', getUsers).then(function (success) {
+                            console.log('getUserData response for loggin', JSON.stringify(success));
+                            $rootScope.userRole = success[0];
+                            api.setRole($rootScope.userRole);
+                            vm.getRole = api.getUserRole().userRole;
+
+                            switch (vm.getRole) {
+                                case 'buyer':
+                                    $state.go('app.buyer.dashboard');
+                                    break;
+                                case 'seller':
+                                    $state.go('app.seller.dashboard');
+                                    break;
+                                case 'admin':
+                                    $state.go('app.admin.companies');
+                                    break;
+                                default:
+                                    $state.go('app.pages_auth_login');
+                                    break;
+                            }
+
+                        });
+
                         var orderByChild = $scope.FBRef.orderByChild("email").equalTo(user.email).on("child_added", function (data) {
                             $rootScope.userRole = data.val();
                             api.setRole($rootScope.userRole)
                             vm.getRole = api.getUserRole().userRole;
-                                    switch (vm.getRole) {
-                                        case 'buyer':
-                                            $state.go('app.buyer.dashboard');
-                                            break;
-                                        case 'seller':
-                                            $state.go('app.seller.dashboard');
-                                            break;
-                                        case 'admin':
-                                            $rootScope.gotoAdmin();
-                                            break;
-                                        default:
-                                            $state.go('app.pages_auth_login');
-                                            break;
-                                    }
+                            switch (vm.getRole) {
+                                case 'buyer':
+                                    $state.go('app.buyer.dashboard');
+                                    break;
+                                case 'seller':
+                                    $state.go('app.seller.dashboard');
+                                    break;
+                                case 'admin':
+                                    $state.go('app.admin.companies');
+                                    break;
+                                default:
+                                    $state.go('app.pages_auth_login');
+                                    break;
+                            }
                         });
                     } else {
                         indexService.errorMessage('Email is not verified yet.please check you email')
-                        
+
                     }
 
                 }, function (error) {

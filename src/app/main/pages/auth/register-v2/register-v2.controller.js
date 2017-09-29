@@ -6,14 +6,15 @@
         .controller('RegisterV2Controller', RegisterV2Controller);
 
     /** @ngInject */
-    function RegisterV2Controller(indexService, $scope) {
+    function RegisterV2Controller(indexService, api, $scope) {
         // Data
 
         var vm = this;
         vm.regEx = "/^[0-9]{1,10}$/;"
-        vm.form={}
+        vm.form = {}
         $scope.FBref = firebase.database().ref('usersProfile');
         vm.checkPassword = checkPassword;
+        vm.customer = customer;
 
         function checkPassword() {
             console.log('checkPassword')
@@ -21,7 +22,7 @@
                 return true
 
 
-            }else {
+            } else {
 
                 return false
             }
@@ -44,10 +45,19 @@
                         contactNumber: formData.contactnumber,
                         email: email,
                         uid: user.uid,
-                        userName:formData.username
+                        userName: formData.username
                     }
 
-                    indexService.usersProfile($scope.FBref, userProfile);
+
+
+                    api.insertUser('user', user.uid, userProfile).then(function (success) {
+                        // indexService.sucessMessage('company added success');
+                    }, function (error) {
+                        indexService.errorMessage('error while registering company');
+                        
+
+                    });
+
 
                     user.sendEmailVerification().then(function () {
                         console.log('email send');
@@ -86,6 +96,20 @@
 
 
         // Methods
+        function customer(email) {
+            api.postdata('customer', { "email": email }).then(function (success) {
+                console.log('success:', success);
+                userProfile.customerID = success.id;
+                api.insertUser('user', user.uid, userProfile).then(function (success) {
+                    // indexService.sucessMessage('company added success');
+                }, function (error) {
+                    indexService.errorMessage('error while registering company');
+
+                });
+            }, function (error) {
+                console.log('error:', error);
+            })
+        }
 
         //////////
     }

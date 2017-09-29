@@ -22,7 +22,10 @@
         $stateProvider
             .state('app.admin', {
                 abstract: true,
-                url: '/admin'
+                url: '/admin',
+                
+                role: 'admin',
+
             })
 
             // admin company categoies
@@ -34,6 +37,7 @@
                         controller: 'CompaniesController as vm'
                     }
                 },
+                role: 'admin',
 
                 bodyClass: 'admin'
             })
@@ -45,6 +49,7 @@
                         controller: 'CategoryController as vm'
                     }
                 },
+                role: 'admin',
 
                 bodyClass: 'admin'
             })
@@ -56,6 +61,8 @@
                         controller: 'CategoryController as vm'
                     }
                 },
+                role: 'admin',
+
                 bodyClass: 'admin'
             })
 
@@ -68,6 +75,8 @@
                         controller: 'PackagesController as vm'
                     }
                 },
+                role: 'admin',
+
                 bodyClass: 'admin'
             })
             .state('app.admin.packages.add', {
@@ -78,6 +87,8 @@
                         controller: 'PackageController as vm'
                     }
                 },
+                role: 'admin',
+
                 bodyClass: 'admin'
             })
             .state('app.admin.packages.detail', {
@@ -88,6 +99,7 @@
                         controller: 'PackageController as vm'
                     }
                 },
+                role: 'admin',
 
                 bodyClass: 'admin'
             })
@@ -99,6 +111,8 @@
                         controller: 'ProductCategoriesController as vm'
                     }
                 },
+                role: 'admin',
+
                 bodyClass: 'admin'
             })
             .state('app.admin.productCategories.add', {
@@ -109,6 +123,8 @@
                         controller: 'ProductCategoryController as vm'
                     }
                 },
+                role: 'admin',
+
                 bodyClass: 'e-commerce'
             })
             .state('app.admin.productCategories.detail', {
@@ -119,7 +135,7 @@
                         controller: 'ProductCategoryController as vm'
                     }
                 },
-
+                role: 'admin',
                 bodyClass: 'admin'
             })
 
@@ -129,7 +145,7 @@
         //     title: 'admin',
         //     icon: 'icon-cart',
         //     weight: 3,
-           
+
         // });
 
         // msNavigationServiceProvider.saveItem('apps.admin.company', {

@@ -24,11 +24,11 @@
             </div>
         </div>
 
-        <div>
-            <md-button class="md-raised md-background" ng-click="vm.purchasePackage($event)" ng-disabled="!vm.isFormValid('productForm')">
-                <span>Purchase</span>
+        <!--<div>
+            <md-button class="md-raised md-background" stripe-form="vm.stripeCallback" ng-disabled="!vm.isFormValid('productForm')">
+                <span>Become seller</span>
             </md-button>
-        </div>
+        </div>-->
     </div>
     <!-- / HEADER -->
 
@@ -37,58 +37,73 @@
 
         <md-tabs md-dynamic-height>
 
-            <md-tab ng-if="getRole.userRole=='seller'">
+            <md-tab>
                 <md-tab-label>
-                    <span>Update Package</span>
+                    <span>User Role</span>
                 </md-tab-label>
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
-                        <!--<pre>{{vm.formData.package}}</pre>-->
+                        <pre>{{vm.formData.package }}</pre>
+                        <form id="productForm" name="productForm" stripe:form="stripeCallback">
 
-                        <form id="productForm" name="productForm">
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
                                     <label>Select Package</label>
                                     <md-select ng-model="vm.formData.package" required>
-                                        <md-option ng-repeat="role in vm.packages  | filter:{isTrial: ! true }" ng-value="role">
+                                        <md-option ng-repeat="role in vm.packages " ng-value="role">
                                             {{role.CategoryDescription}}
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
+                            </div>
+                            <br>
+
+
+                            <div layout="column" layout-gt-xs="row">
+                                <md-input-container flex>
+                                    <label>Card Number</label>
+                                    <input ng-model="payment.card.number" placeholder="Card Number" payments-format="card" payments-validate="card" name="card"
+                                        required/>
+                                    <div ng-if="productForm.card.$invalid">
+                                        Error: invalid card number!
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>exp month</label>
+                                    <input ng-model="payment.card.exp_month" size="2" placeholder="exp month" name="exp_month" required/>
+                                    <div ng-if="productForm.exp_month.$invalid">
+                                        Error: invalid card number!
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>exp Year</label>
+                                    <input ng-model="payment.card.exp_year" size="4" placeholder="exp year" name="exp_year" required/>
+                                    <div ng-if="productForm.exp_year.$invalid">
+                                        Error: invalid card number!
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>CVC</label>
+                                    <input ng-model="payment.card.cvc" placeholder="CVC" payments-format="cvc" payments-validate="cvc" name="cvc" required/>
+                                    <div ng-if="productForm.cvc.$invalid">
+                                        Error: invalid card number!
+                                    </div>
+                                </md-input-container>
 
                             </div>
+
+                            <md-button type="submit" class="md-raised md-background"  ng-disabled="!vm.isFormValid('productForm')">
+                                <span>Become seller</span>
+                            </md-button>
+
                         </form>
                     </div>
                 </md-tab-body>
             </md-tab>
 
-            <md-tab ng-if="getRole.userRole=='buyer'">
-                <md-tab-label>
-                    <span>Become seller</span>
-                </md-tab-label>
-                <md-tab-body>
-                        <md-card>
-                            <img ng-src="{{vm.imagePath}}" class="md-card-image" >
-                            <md-card-title>
-                                <md-card-title-text>
-                                    <span class="md-headline">Action buttons</span>
-                                </md-card-title-text>
-                            </md-card-title>
-                            <md-card-content>
-                                <h2>
-                                  {{vm.trialPackage.CategoryDescription}}
-                                </h3>
-                               
-                            </md-card-content>
-                            <md-card-actions layout="row" layout-align="start center">
-                                <md-button class="md-raised md-background"  ng-click="vm.becomeSeller()">Become A seller</md-button>
-                            </md-card-actions>
-                        </md-card>
-
-                    </div>
-                </md-tab-body>
-            </md-tab>
         </md-tabs>
+
+
 
     </div>
     <!-- / CONTENT -->

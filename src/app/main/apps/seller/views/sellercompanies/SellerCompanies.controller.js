@@ -6,10 +6,11 @@
         .controller('SellerCompaniesController', SellerCompaniesController);
 
     /** @ngInject */
-    function SellerCompaniesController($state, $scope,indexService ) {
+    function SellerCompaniesController($state, api, $scope, indexService) {
         var vm = this;
+        vm.sellercompany = 'sellercompany';
 
-         vm.dtInstance = {};
+        vm.dtInstance = {};
         vm.dtOptions = {
             dom: 'rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
             columnDefs: [
@@ -61,20 +62,23 @@
                 }
             },
             pagingType: 'simple',
-            lengthMenu: [5,10, 20, 30, 50, 100],
+            lengthMenu: [5, 10, 20, 30, 50, 100],
             pageLength: 5,
             scrollY: 'auto',
             responsive: true
         };
 
+        // Methods
 
-        $scope.FBref = firebase.database().ref('seller/company')
-        var list = indexService.haveingUid('seller/company').then(function (success) {
-            console.log('vm.sellercompanies',success)
+        var list = api.userWiseData(vm.sellercompany).then(function (success) {
+            console.log('vm.sellercompanies', success)
             vm.sellerCompanies = success;
+        }, function (error) {
+            indexService.errorMessage("error while getting data");
+
         });
 
-       
+
         // Methods
         vm.gotoAddCompany = gotoAddCompany;
         vm.gotoCompanyDetail = gotoCompanyDetail;
@@ -94,8 +98,8 @@
          *
          * @param id
          */
-        function gotoCompanyDetail(id) {
-            $state.go('app.seller.sellercompanies.detail', { id: id });
+        function gotoCompanyDetail(data) {
+            $state.go('app.seller.sellercompanies.detail', { id: data.$id });
         }
     }
 })();

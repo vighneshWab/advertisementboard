@@ -6,7 +6,7 @@
     "angular-animate": "1.5.9",
     "angular-aria": "1.5.9",
     "angular-cookies": "1.5.9",
-     "angular-datatables": "0.5.4",
+    "angular-datatables": "0.5.4",
     "angular-material": "1.1.1",
     "angular-messages": "1.5.9",
     "angular-resource": "1.5.9",
@@ -22,7 +22,9 @@
     "wip-image-zoom": "^1.0.4",
     "angularfire": "^2.3.0",
     "angular-payments": "*",
-    "nvd3": "^1.8.6"
+    "nvd3": "^1.8.6",
+    "angular-stripe": "^5.0.0",
+    "stripe-angular": "^1.0.2"
   },
   "devDependencies": {
     "angular-mocks": "1.5.9"

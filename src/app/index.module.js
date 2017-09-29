@@ -13,8 +13,11 @@
             // Navigation
             'app.navigation',
             'firebase',
-            // 'angularPayments',
-            // 'angular-stripe',
+            'angularPayments',
+            // 'angularStripe',
+            'angular-stripe',
+
+
 
             // Toolbar
             'app.toolbar',

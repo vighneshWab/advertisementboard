@@ -27,6 +27,10 @@
             <md-button class="md-raised md-background" ng-click="vm.saveProduct()" ng-disabled="!vm.isFormValid('productForm')">
                 <span>SAVE</span>
             </md-button>
+
+            <md-button class="md-raised md-background" ng-if="vm.formData.disable==true" ng-click="vm.unable()">
+                <span>Unable Product</span>
+            </md-button>
         </div>
     </div>
     <!-- / HEADER -->

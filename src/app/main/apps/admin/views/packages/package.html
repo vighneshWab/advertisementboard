@@ -66,18 +66,24 @@
                                     <label>Max Product Count</label>
                                     <input type="number" name="MaxProductCount" ng-model="vm.package.MaxProductCount" required>
                                 </md-input-container>
+                                <md-input-container flex>
+                                    <label>Max Company Count</label>
+                                    <input type="number" name="MaxCompanyCount" ng-model="vm.package.MaxCompanyCount" required>
+                                </md-input-container>
 
                             </div>
 
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
-                                    <label>Max Company Count</label>
-                                    <input type="number" name="MaxCompanyCount" ng-model="vm.package.MaxCompanyCount" required>
+                                    <label>Trial Period</label>
+                                    <input type="checkbox" name="trial" ng-model="vm.package.isTrial" ng-true-value="true" ng-false-value="false">
                                 </md-input-container>
+
                                 <md-input-container flex>
                                     <label>Price</label>
                                     <input type="number" name="MaxCompanyCount" ng-model="vm.package.price" required>
                                 </md-input-container>
+
                             </div>
                         </form>
                     </div>

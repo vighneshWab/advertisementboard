@@ -2,7 +2,9 @@
   "name": "fuse",
   "version": "1.4.4",
   "dependencies": {
+    "angular": "^1.5.11",
     "angular-stripe": "^5.0.0",
+    "d3": "^4.10.2",
     "datatables": "^1.10.13",
     "nvd3": "^1.8.6"
   },

@@ -6,11 +6,11 @@
         .controller('ProductsController', ProductsController);
 
     /** @ngInject */
-    function ProductsController($state, $scope, indexService) {
+    function ProductsController($state, $scope,api, indexService) {
         var vm = this;
 
         $scope.FBref = firebase.database().ref('seller/product');
-        var list = indexService.haveingUid('seller/product').then(function (success) {
+        var list = api.userWiseData('sellerproduct').then(function (success) {
             vm.products = success;
         });
 

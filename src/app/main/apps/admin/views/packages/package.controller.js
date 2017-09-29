@@ -6,7 +6,7 @@
         .controller('PackageController', PackageController);
 
     /** @ngInject */
-    function PackageController($scope, $document, $stateParams, $firebaseArray, $state, indexService) {
+    function PackageController($scope, $document, $stateParams, $firebaseArray, $state, api, indexService) {
         var vm = this;
         // Methods
         $scope.FBref = firebase.database().ref('admin/userRoles');
@@ -27,8 +27,24 @@
         }
 
         vm.create = function (createObject) {
-            indexService.create($scope.FBref, createObject).then(function (res) {
-                console.log('packages producsr')
+            api.insertAdmin('admin/userRoles', createObject).then(function (res) {
+                console.log('packages producsr', JSON.stringify(res));
+                api.postdata('plans', res).then(function (success) {
+                    console.log('plan created :', JSON.stringify(success));
+                    indexService.sucessMessage('plan has been created On stripe account')
+
+                }, function (error) {
+                    api.admin_delete('admin/userRoles', res.id).then(function (success) {
+                        console.log('userRoles Deleted');
+
+                    }, function (error) {
+
+
+
+                    })
+                    console.log('error:', error);
+
+                })
 
             });
         }

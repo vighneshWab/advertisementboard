@@ -31,6 +31,7 @@
                     return msApi.resolve('profile.photosVideos@get');
                 }
             },
+            role:'com',
             bodyClass: 'e-commerce'
         });
 
@@ -48,6 +49,7 @@
             icon  : 'icon-account',
             state : 'app.pages_profile',
             weight: 6
+            
         });
     }
 
