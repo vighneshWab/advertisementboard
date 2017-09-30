@@ -133,8 +133,10 @@
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
             console.log('uid', uid);
-            var refD = firebaseDatabase.ref(ref).child(uid).orderByChild("abn").equalTo(abn);
+            
+            var refD = firebaseDatabase.ref('companies').orderByChild("abn").equalTo(abn);
             var list = $firebaseArray(refD).$loaded(function (success) {
+            
                 var data = success;
                 qProfile.resolve(data);
             }, function (errorObject) {
@@ -148,6 +150,26 @@
         // 
 
         api.verifyEmail = function (ref, Email) {
+            console.log('ref', ref);
+            console.log('Email', Email);
+
+            var qProfile = $q.defer();
+            var uid = api.getUserRole().uid;
+            console.log('uid', uid);
+            var refD = firebaseDatabase.ref('companies').orderByChild("Email").equalTo(Email);
+            var list = $firebaseArray(refD).$loaded(function (success) {
+                var data = success;
+                qProfile.resolve(data);
+            }, function (errorObject) {
+                qProfile.reject(errorObject);
+            });
+
+
+            return qProfile.promise;
+
+        }
+
+        api.coorectWayVerifyEmail = function (ref, Email) {
             console.log('ref', ref);
             console.log('Email', Email);
 

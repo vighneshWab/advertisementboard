@@ -51,7 +51,7 @@
                     ngModel.$setValidity('recordLoading', !bool);
                 }
                 function setAsAvailable(bool) {
-                    console.log('setAsAvail')
+                    console.log('setAsAvail',bool)
                     ngModel.$setValidity('recordAvailable', bool);
                 }
                 ngModel.$parsers.push(function (value) {
@@ -61,16 +61,17 @@
                         // var abn = parseInt(value);
                         api.verifyABN('sellercompany', value).then(function (success) {
                             var data = success[0];
+                            console.log('data',success)
                             if (data == undefined) {
-                                setAsAvailable(false);
+                                setAsAvailable(true);
 
                             } else {
-                                setAsAvailable(true);
+                                setAsAvailable(false);
 
                             }
                             console.log('api getall call from directive');
                         }, function (error) {
-                            setAsAvailable(true);
+                            // setAsAvailable(f);
                             console.log('api getall call from directive');
                         })
                     }

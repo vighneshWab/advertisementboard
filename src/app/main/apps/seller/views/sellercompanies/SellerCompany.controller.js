@@ -18,6 +18,7 @@
         vm.gotoSellerCompanies = gotoSellerCompanies;
         vm.disableCompanies = disableCompanies;
         vm.unable = unable;
+        vm.adminCompanies = adminCompanies;
 
         var list = api.getAll('admin/companycategory').then(function (success) {
             vm.companyCategories = success;
@@ -76,7 +77,9 @@
                 var childid = $stateParams.id;
                 api.update('sellercompany', childid, vm.formData).then(function (success) {
                     indexService.sucessMessage('company updated success');
-                    vm.gotoSellerCompanies()
+                    // vm.adminCompanies();
+                    
+                    vm.gotoSellerCompanies();
                 }, function (error) {
                     indexService.errorMessage('error while adding company');
 
@@ -88,7 +91,9 @@
                 vm.formData.disable = true;
                 api.insert('sellercompany', vm.formData).then(function (success) {
                     indexService.sucessMessage('company added success');
-                    vm.gotoSellerCompanies();
+
+                    // insertAdmin
+                    vm.adminCompanies();
 
                 }, function (error) {
                     indexService.errorMessage('error while adding company');
@@ -122,6 +127,31 @@
             }, function (err) {
                 console.log('error', err)
             })
+        }
+
+
+
+
+        function adminCompanies() {
+
+            var data = {
+                abn: vm.formData.abn,
+                email: vm.formData.Email,
+                uid: getUsers
+
+            }
+            console.log('companies data ', JSON.stringify(data))
+
+            api.insertAdmin('companies', data).then(function (success) {
+                indexService.sucessMessage('company added success');
+                // 
+                vm.gotoSellerCompanies();
+
+            }, function (error) {
+                indexService.errorMessage('error while adding company');
+
+            })
+
         }
 
     }
