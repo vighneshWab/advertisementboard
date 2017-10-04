@@ -14,7 +14,6 @@
             'app.navigation',
             'firebase',
             'angularPayments',
-            // 'angularStripe',
             'angular-stripe',
 
 

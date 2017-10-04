@@ -73,6 +73,11 @@
                             </th>
                             <th class="secondary-text">
                                 <div class="table-header">
+                                    <span class="column-title">Status</span>
+                                </div>
+                            </th>
+                            <th class="secondary-text">
+                                <div class="table-header">
                                     <span class="column-title">Actions</span>
                                 </div>
                             </th>
@@ -86,6 +91,7 @@
                             <td>{{product.Description}}</td>
                             <td>{{product.Website}}</td>
                             <td>{{product.Email}}</td>
+                            <td>{{product.disable}}</td>
                             <td>
                                 <md-button class="edit-button md-icon-button" ng-click="vm.gotoCompanyDetail(product)" aria-label="Product details" translate>
                                     <md-icon md-font-icon="icon-pencil" class="s16"></md-icon>

@@ -3,127 +3,61 @@
 
     angular
         .module('fuse')
-        .directive("compareTo", compareTo)
-        .directive("limitTo", limitTo)
-        .directive('abnAvailabilityValidator', abnAvailabilityValidator)
-        .directive('emailAvailabilityValidator', emailAvailabilityValidator);
+        .directive('abn', abnAvailabilityasyncValidators)
+        .directive('emailval', emailAvailabilityValidator);
 
-
-    function compareTo($resource) {
-
+    function abnAvailabilityasyncValidators(api, $q, $timeout) {
         return {
-            require: "ngModel",
-            scope: {
-                otherModelValue: "=compareTo"
-            },
-            link: function (scope, element, attributes, ngModel) {
+            require: 'ngModel',
+            link: function (scope, element, attrs, ngModel) {
 
-                ngModel.$validators.compareTo = function (modelValue) {
-                    return modelValue == scope.otherModelValue;
-                };
+                ngModel.$asyncValidators.abnValidator = function (modelvalue, viewvalue) {
+                    var deferred = $q.defer();
+                    var abn = modelvalue;
+                    if (abn.length == 11) {
+                        $timeout(function () {
+                            api.verifyABN(abn).then(function (success) {
+                                var data = success[0];
+                                console.log(data)
+                                if (data == undefined) {
+                                    deferred.resolve();
+                                } else {
+                                    deferred.reject();
 
-                scope.$watch("otherModelValue", function () {
-                    ngModel.$validate();
-                });
-            }
-        };
-
-    }
-
-    function limitTo() {
-        return {
-            restrict: "A",
-            link: function (scope, elem, attrs) {
-                var limit = parseInt(attrs.limitTo);
-                angular.element(elem).on("keypress", function (e) {
-                    if (this.value.length == limit) e.preventDefault();
-                });
+                                }
+                            })
+                        }, 500)
+                    }
+                    return deferred.promise;
+                }
             }
         }
     }
 
-    function abnAvailabilityValidator(api) {
+    function emailAvailabilityValidator(api, $timeout, $q) {
         return {
             require: 'ngModel',
             link: function (scope, element, attrs, ngModel) {
-                // var apiUrl = attrs.recordAvailabilityValidator;
-                function setAsLoading(bool) {
-                    ngModel.$setValidity('recordLoading', !bool);
-                }
-                function setAsAvailable(bool) {
-                    console.log('setAsAvail',bool)
-                    ngModel.$setValidity('recordAvailable', bool);
-                }
-                ngModel.$parsers.push(function (value) {
-                    console.log('value', value);
-                    if (!value || value.length == 0) return;
-                    if (value.length == 11) {
-                        // var abn = parseInt(value);
-                        api.verifyABN('sellercompany', value).then(function (success) {
-                            var data = success[0];
-                            console.log('data',success)
-                            if (data == undefined) {
-                                setAsAvailable(true);
+                ngModel.$validators.emailValidator = function (modelvalue, viewvalue) {
+                    var deferred = $q.defer();
+                    var email = modelvalue;
+                    var pattern = /^.+@.+\..+$/;
+                    if (pattern.test(email)) {
+                        $timeout(function () {
+                            api.verifyEmail(email).then(function (success) {
+                                var data = success[0];
+                                console.log(data)
+                                if (data == undefined) {
+                                    deferred.resolve();
+                                } else {
+                                deferred.reject();
 
-                            } else {
-                                setAsAvailable(false);
-
-                            }
-                            console.log('api getall call from directive');
-                        }, function (error) {
-                            // setAsAvailable(f);
-                            console.log('api getall call from directive');
-                        })
+                                }
+                            })
+                        }, 500)
                     }
-                    return value;
-                })
-            }
-        }
-
-
-
-    }
-
-
-
-    function emailAvailabilityValidator(api) {
-        return {
-            require: 'ngModel',
-            link: function (scope, element, attrs, ngModel) {
-                // var apiUrl = attrs.recordAvailabilityValidator;
-                function setAsLoading(bool) {
-                    ngModel.$setValidity('recordLoading', !bool);
+                    return deferred.promise;
                 }
-                function setAsAvailable(bool) {
-                    console.log('setAsAvail')
-                    ngModel.$setValidity('recordAvailable', bool);
-                }
-
-
-                ngModel.$parsers.push(function (value) {
-                    var emailP = /^.+@.+\..+$/;
-                    if (!value || value.length == 0) return;
-
-                    if (emailP.test(value)) {
-                        api.verifyEmail('sellercompany', value).then(function (success) {
-                            var data = success[0];
-                            console.log(data);
-                            if (data == undefined) {
-                                setAsAvailable(true);
-
-                            } else {
-                                setAsAvailable(false);
-
-                            }
-                            console.log('api getall call from directive');
-                        }, function (error) {
-                            setAsAvailable(false);
-                            console.log('api getall call from directive');
-                        })
-
-                    }
-                    return value;
-                })
             }
         }
 

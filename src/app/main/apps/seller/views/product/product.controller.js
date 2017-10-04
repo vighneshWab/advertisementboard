@@ -48,15 +48,16 @@
         });
 
 
-        var listproducts = api.userWiseData('sellerproduct').then(function (success) {
+        var listproducts = api.count('sellerproduct').then(function (success) {
             vm.products = success;
+            console.log(vm.products.length);
         });
 
         var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
             vm.lastTransaction = res[0];
             if (vm.products.length <= vm.lastTransaction.MaxProductCount) {
                 vm.reachedMaxLimit = false;
-                vm.disableCompanies(vm.products)
+                // vm.disableCompanies(vm.products)
             } else {
                 vm.reachedMaxLimit = true;
                 vm.disableCompanies(vm.products)
@@ -68,12 +69,17 @@
 
         if ($stateParams.id) {
             // vm.getLastTransaction();
-            var list = $scope.FBref.child($stateParams.id);
-            list.on('value', function (snap) {
-                vm.formData = snap.val();
+
+            api.userEditData('sellerproduct', $stateParams.id).then(function (success) {
+                vm.formData = success;
                 $scope.the_url = vm.formData.Image;
                 $scope.imgAvailable = true;
-            });
+                indexService.sucessMessage('company geting data success');
+            }, function (error) {
+                indexService.errorMessage('error while adding company');
+
+            })
+
         } else {
             // vm.getLastTransaction();
 
@@ -82,7 +88,7 @@
         vm.create = function (createObject) {
 
             createObject.created = indexService.createdDate;
-            createObject.disable = true;
+            createObject.disable = false;
             console.log(JSON.stringify(createObject));
             api.insert('sellerproduct', createObject).then(function (success) {
                 indexService.sucessMessage('Product added success');

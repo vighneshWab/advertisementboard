@@ -25,7 +25,7 @@
         </div>
 
         <div>
-            <md-button class="md-raised md-background" ng-click="vm.purchasePackage($event)" >
+            <md-button class="md-raised md-background" ng-click="vm.updatePackage()" >
                 <span>Purchase </span>
             </md-button>
         </div>
@@ -50,7 +50,7 @@
                                 <md-input-container flex>
                                     <label>Select Package</label>
                                     <md-select ng-model="vm.formData.package" required>
-                                        <md-option ng-repeat="role in vm.packages  | filter:{isTrial: ! true }" ng-value="role">
+                                        <md-option ng-repeat="role in vm.packages" ng-value="role">
                                             {{role.CategoryDescription}}
                                         </md-option>
                                     </md-select>

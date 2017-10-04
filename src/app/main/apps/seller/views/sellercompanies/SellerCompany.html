@@ -25,7 +25,11 @@
 
         <div>
             <md-button class="md-raised md-background" ng-click="vm.saveSellerCompany()" ng-disabled="!vm.isFormValid('productForm')">
-                <span>SAVE</span>
+                <span>SAVE  </span>
+            </md-button>
+
+            <md-button class="md-raised md-warn" ng-click="vm.remove()" ng-show="vm.editmode">
+                <span>REMOVE</span>
             </md-button>
 
 
@@ -38,7 +42,6 @@
 
     <!-- CONTENT -->
     <div class="content">
-
         <md-tabs md-dynamic-height>
             <md-tab>
                 <md-tab-label>
@@ -46,7 +49,7 @@
                 </md-tab-label>
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
-                        <div ng-show="vm.recachedMaxCount">
+                        <div ng-if="vm.reachedMaxLimit==true">
                             <h1>{{vm.message}} </h1>
                             <div>
                                 <md-button class="md-raised md-background" ng-click="vm.chagePackage()">
@@ -54,102 +57,101 @@
                                 </md-button>
                             </div>
                         </div>
-                        <form id="productForm" name="productForm" ng-show="!vm.recachedMaxCount">
-                            <div layout="column" layout-gt-xs="row">
-                                <md-input-container flex>
-                                    <label>ABN</label>
-                                    <input type="text" limit-to="11"  ng-model="vm.formData.abn" name="abn" abn-availability-validator
-                                        required>
+                        <div ng-if="vm.reachedMaxLimit==false">
+                            <form id="productForm" name="productForm">
+                                <div layout="column" layout-gt-xs="row">
+                                    <md-input-container flex>
+                                        <label>ABN</label>
+                                        <input type="text" ng-model="vm.formData.abn" name="abn" abn ng-disabled="vm.editmode" required>
                                         <div ng-messages="productForm.abn.$error" role="alert">
                                             <div ng-message="required">
                                                 <span>abn field is required</span>
                                             </div>
-                                            <div ng-message="maxlength">
-                                                <span>abn field is required</span>
+                                            <div ng-message="abnValidator">
+                                                <span>Company already exists with the abn number entered</span>
                                             </div>
-                                            <div ng-message="recordAvailable">
-                                                <span>  The ABN  is already in use...</span>
+
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="column" layout-gt-xs="row">
+                                    <md-input-container flex>
+                                        <label>Email</label>
+                                        <input type="email" ng-model="vm.formData.Email" name="email" emailval ng-pattern="/^.+@.+\..+$/" ng-disabled="vm.editmode"
+                                            required>
+                                        <div ng-messages="productForm.email.$error" role="alert">
+                                            <div ng-message="required">
+                                                <span>email field is required</span>
+                                            </div>
+                                            <div ng-message="pattern">
+                                                <span>Email must be a valid e-mail address</span>
+                                            </div>
+                                            <div ng-message="emailValidator">
+                                                <span>Company already exists with the email address entered</span>
+                                            </div>
+
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="column" layout-gt-xs="row">
+                                    <md-input-container flex>
+                                        <label>Company Category</label>
+                                        <md-select ng-model="vm.formData.CompanyCategoryID" name="CompanyCategoryID" required>
+                                            <md-option ng-repeat="role in vm.companyCategories track by $index" ng-value="role.$id">
+                                                {{role.CategoryName}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="productForm.CompanyCategoryID.$error" role="alert">
+                                            <div ng-message="required">
+                                                <span>Please select a company category</span>
                                             </div>
                                         </div>
-                                </md-input-container>
-                            </div>
-                            <div layout="column" layout-gt-xs="row">
-                                <md-input-container flex>
-                                    <label>Email</label>
-                                    <input type="email" ng-model="vm.formData.Email" name="email" ng-pattern="/^.+@.+\..+$/" email-availability-validator required>
-                                    <div ng-messages="productForm.email.$error" role="alert">
-                                        <div ng-message="required">
-                                            <span>email field is required</span>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label>Name</label>
+                                        <input type="text" ng-model="vm.formData.Name" name="Name" required>
+                                        <div ng-messages="productForm.Name.$error" role="alert">
+                                            <div ng-message="required">
+                                                <span>Name field is required</span>
+                                            </div>
                                         </div>
-                                        <div ng-message="pattern">
-                                            <span>Email must be a valid e-mail address</span>
+                                    </md-input-container>
+                                </div>
+                                <div layout="column" layout-gt-sm="row">
+                                    <md-input-container flex>
+                                        <label>Website</label>
+                                        <input type="text" ng-model="vm.formData.Website" name="Website" required>
+                                        <div ng-messages="productForm.Website.$error" role="alert">
+                                            <div ng-message="required">
+                                                <span>Website field is required</span>
+                                            </div>
                                         </div>
-                                        <div ng-message="recordAvailable">
-                                            <span>  The Email  is already in use...</span>
-                                        </div>
-                                    </div>
-                                </md-input-container>
-                            </div>
-                            <div layout="column" layout-gt-xs="row">
-                                <md-input-container flex>
-                                    <label>Company Category</label>
-                                    <md-select ng-model="vm.formData.CompanyCategoryID" name="CompanyCategoryID" required>
-                                        <md-option ng-repeat="role in vm.companyCategories track by $index" ng-value="role.$id">
-                                            {{role.CategoryName}}
-                                        </md-option>
-                                    </md-select>
-                                    <div ng-messages="productForm.CompanyCategoryID.$error" role="alert">
-                                        <div ng-message="required">
-                                            <span> Company Category field is required</span>
-                                        </div>
-                                    </div>
-                                </md-input-container>
-                                <md-input-container flex>
-                                    <label>Name</label>
-                                    <input type="text" ng-model="vm.formData.Name" name="Name" required>
-                                    <div ng-messages="productForm.Name.$error" role="alert">
-                                        <div ng-message="required">
-                                            <span>Name field is required</span>
-                                        </div>
-                                    </div>
-                                </md-input-container>
-                            </div>
-                            <div layout="column" layout-gt-sm="row">
-                                <md-input-container flex>
-                                    <label>Website</label>
-                                    <input type="text" ng-model="vm.formData.Website" name="Website" required>
-                                    <div ng-messages="productForm.Website.$error" role="alert">
-                                        <div ng-message="required">
-                                            <span>Website field is required</span>
-                                        </div>
-                                    </div>
-                                </md-input-container>
+                                    </md-input-container>
 
-                                <md-input-container flex>
-                                    <label>Telephone</label>
-                                    <input type="number" ng-model="vm.formData.Telephone" name="Telephone" required>
-                                    <div ng-messages="productForm.Telephone.$error" role="alert">
-                                        <div ng-message="required">
-                                            <span>Telephone field is required</span>
+                                    <md-input-container flex>
+                                        <label>Telephone</label>
+                                        <input type="number" ng-model="vm.formData.Telephone" name="Telephone" required>
+                                        <div ng-messages="productForm.Telephone.$error" role="alert">
+                                            <div ng-message="required">
+                                                <span>Telephone field is required</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </md-input-container>
-                            </div>
-                            <div layout="column" layout-gt-xs="row">
-                                <md-input-container flex>
-                                    <label>Description</label>
-                                    <input type="text" ng-model="vm.formData.Description" name="Description" required>
-                                    <div ng-messages="productForm.Description.$error" role="alert">
-                                        <div ng-message="required">
-                                            <span>Description field is required</span>
+                                    </md-input-container>
+                                </div>
+                                <div layout="column" layout-gt-xs="row">
+                                    <md-input-container flex>
+                                        <label>Description</label>
+                                        <input type="text" ng-model="vm.formData.Description" name="Description" required>
+                                        <div ng-messages="productForm.Description.$error" role="alert">
+                                            <div ng-message="required">
+                                                <span>Description field is required</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </md-input-container>
+                                    </md-input-container>
+                                </div>
+                            </form>
 
-
-
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </md-tab-body>
             </md-tab>

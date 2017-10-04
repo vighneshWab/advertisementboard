@@ -57,11 +57,11 @@
                             break;
                     }
                 }
-                else  {
+                else {
 
                     switch (toState.role) {
                         case 'com':
-                          
+
                             break;
 
                         default:
@@ -138,33 +138,34 @@
                 },
             });
 
-        }
-        function gotoSeller() {
-
-            msNavigationService.saveItem('apps.seller', {
-                title: 'seller',
-                icon: 'icon-cart',
-                weight: 2,
+            msNavigationService.saveItem('profile', {
+                title: 'My Account',
+                icon: 'icon-account',
+                state: 'app.pages_profile',
                 hidden: function () {
-                    return !$rootScope.isSeller; // must be a boolean value
+                    return !$rootScope.isBuyer; // must be a boolean value
                 },
 
             });
-            msNavigationService.saveItem('apps.seller.dashboard', {
+
+        }
+        function gotoSeller() {
+
+            msNavigationService.saveItem('dashboard', {
                 title: 'Dashboard',
                 state: 'app.seller.dashboard',
                 hidden: function () {
                     return !$rootScope.isSeller; // must be a boolean value
                 },
             });
-            msNavigationService.saveItem('apps.seller.SellerCompany', {
+            msNavigationService.saveItem('SellerCompany', {
                 title: 'Company',
                 state: 'app.seller.sellercompanies',
                 hidden: function () {
                     return !$rootScope.isSeller; // must be a boolean value
                 },
             });
-            msNavigationService.saveItem('apps.seller.product', {
+            msNavigationService.saveItem('product', {
                 title: 'Upload Products',
                 state: 'app.seller.products',
 
@@ -172,14 +173,29 @@
                     return !$rootScope.isSeller; // must be a boolean value
                 },
             });
-            msNavigationService.saveItem('apps.seller.UpdatePackage', {
-                title: 'Update package',
+            msNavigationService.saveItem('seller_setting', {
+                title: 'Seller Settings',
+                state: 'app.seller.seller_setting',
+                hidden: function () {
+                    return !$rootScope.isSeller; // must be a boolean value
+                },
+            });
+
+            msNavigationService.saveItem('seller_setting', {
+                title: 'Seller Settings',
+                state: 'app.seller.seller_setting',
+                hidden: function () {
+                    return !$rootScope.isSeller; // must be a boolean value
+                },
+            });
+            msNavigationService.saveItem('UpdatePackage', {
+                title: 'Seller UpdatePackage',
                 state: 'app.seller.UpdatePackage',
                 hidden: function () {
                     return !$rootScope.isSeller; // must be a boolean value
                 },
             });
-            // UpdatePackage
+
 
         }
         function gotoAdmin() {
@@ -209,6 +225,15 @@
             msNavigationService.saveItem('apps.admin.productCategory', {
                 title: 'Prodcut Category',
                 state: 'app.admin.productCategories',
+                hidden: function () {
+                    return !$rootScope.isAdmin; // must be a boolean value
+                },
+
+            });
+            msNavigationService.saveItem('profile', {
+                title: 'My Account',
+                icon: 'icon-account',
+                state: 'app.pages_profile',
                 hidden: function () {
                     return !$rootScope.isAdmin; // must be a boolean value
                 },

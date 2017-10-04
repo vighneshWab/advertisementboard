@@ -21,16 +21,14 @@
 
 
         // Methods
-        var list = api.getUserData('user', getUsers).then(function (success) {
-            vm.user = success[0];
+        // var list = api.getUserData('user', getUsers).then(function (success) {
+        //     vm.user = success[0];
 
-            console.log(JSON.stringify(vm.user))
-        });
+        //     console.log(JSON.stringify(vm.user))
+        // });
 
         function updateProfile() {
-
             var childId = vm.user.$id
-
             delete vm.user.$id;
             delete vm.user.$priority;
             api.update('user', childId, vm.user).then(function (success) {

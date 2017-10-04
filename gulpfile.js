@@ -25,7 +25,7 @@ fse.walkSync('./gulp').filter(function (file)
 
 
 /*wrench.readdirSyncRecursive('./gulp').filter(function(file) {
- return (/\.(js|coffee)$/i).test(file);
+ return (/\.(js|coffee)$/i).test(file); 
  }).map(function(file) {
  require('./gulp/' + file);
  });*/

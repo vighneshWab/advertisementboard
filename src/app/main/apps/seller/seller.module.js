@@ -125,11 +125,22 @@
                 bodyClass: 'e-commerce'
             })
 
-            .state('app.seller.UpdatePackage', {
-                url: '/updatepackage',
+            .state('app.seller.seller_setting', {
+                url: '/settings',
                 views: {
                     'content@app': {
-                        templateUrl: 'app/main/apps/seller/views/updatepackage/updatepackage.html',
+                        templateUrl: 'app/main/apps/seller/views/seller_setting/seller_setting.html',
+                        controller: 'seller_setting as vm'
+                    }
+                },
+                role: 'seller',
+                bodyClass: 'e-commerce'
+            })
+            .state('app.seller.UpdatePackage', {
+                url: '/UpdatePackage',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/seller/views/updatePackage/updatePackage.html',
                         controller: 'UpdatePackage as vm'
                     }
                 },
@@ -137,30 +148,6 @@
                 bodyClass: 'e-commerce'
             })
 
-
-        // Navigation
-
-
-
-        // msNavigationServiceProvider.saveItem('apps.seller', {
-        //     title: 'seller',
-        //     icon: 'icon-cart',
-        //     weight: 3
-        // });
-
-
-        // msNavigationServiceProvider.saveItem('apps.seller.dashboard', {
-        //     title: 'Dashboard',
-        //     state: 'app.seller.dashboard'
-        // });
-        // msNavigationServiceProvider.saveItem('apps.seller.SellerCompany', {
-        //     title: 'Company',
-        //     state: 'app.seller.sellercompanies'
-        // });
-        // msNavigationServiceProvider.saveItem('apps.seller.product', {
-        //     title: 'Upload Products',
-        //     state: 'app.seller.products'
-        // });
-
+      
     }
 })();

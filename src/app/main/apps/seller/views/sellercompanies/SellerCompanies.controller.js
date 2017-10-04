@@ -48,6 +48,14 @@
                     responsivePriority: 1,
                     filterable: false,
                     sortable: false
+                },
+                {
+                    // Target the actions column
+                    targets: 5,
+                    responsivePriority: 1,
+                    filterable: false,
+                    sortable: true,
+                   
                 }
             ],
             initComplete: function () {

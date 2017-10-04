@@ -10,7 +10,7 @@
             <div layout="row" layout-align="start center">
                 <div class="product-image" hide-xs>
                     <img ng-src="{{the_url}}">
-                </div>
+            </div>
 
                 <div layout="column" layout-align="start start">
                     <div class="h2">
@@ -25,7 +25,7 @@
 
         <div>
             <md-button class="md-raised md-background" ng-click="vm.saveProduct()" ng-disabled="!vm.isFormValid('productForm')">
-                <span>SAVE</span>
+                <span>SAVE {{!vm.isFormValid('productForm')}}</span>
             </md-button>
 
             <md-button class="md-raised md-background" ng-if="vm.formData.disable==true" ng-click="vm.unable()">
@@ -58,6 +58,8 @@
 
                         <form id="productForm" name="productForm" ng-show="!vm.recachedMaxCount">
                             <div layout="column" layout-gt-xs="row">
+
+                                <!-- <pre>{{vm.formData}}</pre> -->
                                 <md-input-container flex>
                                     <label>Company</label>
                                     <md-select ng-model="vm.formData.companyId" name="companyId" required>

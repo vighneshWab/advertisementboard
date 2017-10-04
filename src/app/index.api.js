@@ -13,7 +13,8 @@
         // Base Url
         api.baseUrl = 'app/data/';
         api.apiUrl = "http://localhost:2017/";
-        api.stripeUrl = "http://localhost:8210/";
+        // api.stripeUrl = " https://stripewebhookadv.herokuapp.com/";
+        api.stripeUrl = "http://localhost:8080/";
 
 
         api.setRole = function (users) {
@@ -35,7 +36,6 @@
                     data: snap.val()
                 }
                 qProfile.resolve(data);
-                console.log('pushed into child node', JSON.stringify(data));
             })
             return qProfile.promise;
         }
@@ -73,24 +73,26 @@
             return qProfile.promise;
         }
         api.delete = function (ref, chidid) {
+            console.log(ref);
+            console.log(chidid)
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
-            firebaseDatabase.ref(ref).child(uid).child(chidid).remove().on('value', function (snap) {
-                var data = {
-                    key: snap.key,
-                    data: snap.val()
-                }
-                qProfile.resolve(data);
-                console.log('pushed into child node', JSON.stringify(data));
-            })
+            var ref = firebaseDatabase.ref(ref).child(uid).child(chidid);
+            var obj = $firebaseObject(ref);
+            obj.$remove().then(function (ref) {
+                console.log('child removed:', chidid);
+                // data has been deleted locally and in the database
+                qProfile.resolve();
+            }, function (error) {
+                qProfile.reject();
+                console.log("Error:", error);
+            });
             return qProfile.promise;
         }
 
         api.admin_delete = function (ref, chidid) {
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
-
-
             var ref = firebaseDatabase.ref(ref).child(chidid);
             var obj = $firebaseObject(ref);
             obj.$remove().then(function (ref) {
@@ -99,13 +101,6 @@
             }, function (error) {
                 console.log("Error:", error);
             });
-
-
-            // firebaseDatabase.ref(ref).child(chidid).remove(snap,function (snap) {
-
-            //     qProfile.resolve(snap);
-            //     console.log('pushed into child node', JSON.stringify(data));
-            // })
             return qProfile.promise;
         }
 
@@ -114,7 +109,6 @@
             var refD = firebaseDatabase.ref(ref);
             var list = $firebaseArray(refD).$loaded(function (success) {
                 var data = success;
-                console.log('get All ', JSON.stringify(data));
                 qProfile.resolve(data);
             }, function (errorObject) {
                 console.log('eroror code')
@@ -126,36 +120,36 @@
 
         }
 
-        api.verifyABN = function (ref, abn) {
-            console.log('ref', ref);
-            console.log('abn', abn);
-
+        api.verifyABN = function (abn) {
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
-            console.log('uid', uid);
-            
             var refD = firebaseDatabase.ref('companies').orderByChild("abn").equalTo(abn);
             var list = $firebaseArray(refD).$loaded(function (success) {
-            
                 var data = success;
                 qProfile.resolve(data);
             }, function (errorObject) {
                 qProfile.reject(errorObject);
             });
-
-
             return qProfile.promise;
+        }
 
+        api.count = function (ref) {
+            var qProfile = $q.defer();
+            var uid = api.getUserRole().uid;
+            var refD = firebaseDatabase.ref(ref).child(uid).orderByChild("disable").equalTo(false);
+            var list = $firebaseArray(refD).$loaded(function (success) {
+                var data = success;
+                qProfile.resolve(data);
+            }, function (errorObject) {
+                qProfile.reject(errorObject);
+            });
+            return qProfile.promise;
         }
         // 
 
-        api.verifyEmail = function (ref, Email) {
-            console.log('ref', ref);
-            console.log('Email', Email);
-
+        api.verifyEmail = function (Email) {
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
-            console.log('uid', uid);
             var refD = firebaseDatabase.ref('companies').orderByChild("Email").equalTo(Email);
             var list = $firebaseArray(refD).$loaded(function (success) {
                 var data = success;
@@ -169,25 +163,6 @@
 
         }
 
-        api.coorectWayVerifyEmail = function (ref, Email) {
-            console.log('ref', ref);
-            console.log('Email', Email);
-
-            var qProfile = $q.defer();
-            var uid = api.getUserRole().uid;
-            console.log('uid', uid);
-            var refD = firebaseDatabase.ref(ref).child(uid).orderByChild("Email").equalTo(Email);
-            var list = $firebaseArray(refD).$loaded(function (success) {
-                var data = success;
-                qProfile.resolve(data);
-            }, function (errorObject) {
-                qProfile.reject(errorObject);
-            });
-
-
-            return qProfile.promise;
-
-        }
         api.userWiseData = function (ref) {
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
@@ -233,7 +208,19 @@
                 qProfile.reject(errorObject);
             });
             return qProfile.promise;
-
+        }
+        api.getUserProfile = function (ref, childId) {
+            var qProfile = $q.defer();
+            var uid = api.getUserRole().uid;
+            var refD = firebaseDatabase.ref('user').child(uid);
+            var list = $firebaseArray(refD).$loaded(function (success) {
+                var data = success;
+                qProfile.resolve(data);
+            }, function (errorObject) {
+                console.log('eroror code')
+                qProfile.reject(errorObject);
+            });
+            return qProfile.promise;
         }
         api.insertUser = function (ref, childId, user) {
             var qProfile = $q.defer();
@@ -274,18 +261,11 @@
             $http.post(api.stripeUrl + endpoint, data).then(function (response) {
                 console.log('response data:', JSON.stringify(response))
                 if (response.data.status) {
-
                     deferred.resolve(response.data.success);
-
                 } else {
-
                     deferred.reject(response.data.err);
                 }
-
-
-
             })
-
             return deferred.promise;
 
         }
