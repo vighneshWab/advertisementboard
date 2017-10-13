@@ -6,7 +6,7 @@
         .controller('ProductCategoriesController', ProductCategoriesController);
 
     /** @ngInject */
-    function ProductCategoriesController($state,$scope, indexService) {
+    function ProductCategoriesController($state, $scope, indexService) {
         var vm = this;
 
         $scope.FBref = firebase.database().ref('admin/productcategory');
@@ -30,70 +30,31 @@
                     // Target the image column
                     targets: 1,
                     filterable: false,
+                    sortable: true,
+                    width: '80px'
+                },
+                {
+                    // Target the image column
+                    targets: 2,
+                    filterable: false,
+                    sortable: true,
+                    width: '80px'
+                },
+                {
+                    // Target the image column
+                    targets: 3,
+                    filterable: false,
                     sortable: false,
                     width: '80px'
                 },
                 {
-                    // Target the price column
+                    // Target the image column
                     targets: 4,
-                    render: function (data, type) {
-                        if (type === 'display') {
-                            return '<div class="layout-align-start-start layout-row">' + '<i class="s16 icon-currency-usd"></i>' + '<span>' + data + '</span>' + '</div>';
-                        }
-
-                        return data;
-                    }
-                },
-                {
-                    // Target the quantity column
-                    targets: 5,
-                    render: function (data, type) {
-                        if (type === 'display') {
-                            if (parseInt(data) <= 5) {
-                                return '<div class="quantity-indicator md-red-500-bg"></div><div>' + data + '</div>';
-                            }
-                            else if (parseInt(data) > 5 && parseInt(data) <= 25) {
-                                return '<div class="quantity-indicator md-amber-500-bg"></div><div>' + data + '</div>';
-                            }
-                            else {
-                                return '<div class="quantity-indicator md-green-600-bg"></div><div>' + data + '</div>';
-                            }
-                        }
-
-                        return data;
-                    }
-                },
-                {
-                    // Target the status column
-                    targets: 6,
                     filterable: false,
-                    render: function (data, type) {
-                        if (type === 'display') {
-                            if (data === 'true') {
-                                return '<i class="icon-checkbox-marked-circle green-500-fg"></i>';
-                            }
-
-                            return '<i class="icon-cancel red-500-fg"></i>';
-                        }
-
-                        if (type === 'filter') {
-                            if (data) {
-                                return '1';
-                            }
-
-                            return '0';
-                        }
-
-                        return data;
-                    }
+                    sortable: false,
+                    width: '80px'
                 },
-                {
-                    // Target the actions column
-                    targets: 7,
-                    responsivePriority: 1,
-                    filterable: false,
-                    sortable: false
-                }
+
             ],
             initComplete: function () {
                 var api = this.api(),

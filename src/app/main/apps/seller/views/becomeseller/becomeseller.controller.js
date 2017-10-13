@@ -87,6 +87,9 @@
                     }
                     api.insert('transaction', transaction).then(function (response) {
                         console.log('transaction created');
+                        indexService.sucessMessage('you become a seller now');
+                        localStorage.clear();
+                        $state.go('app.pages_auth_login');
 
                     }, function (error) {
                         console.log('error while createiing transaction');

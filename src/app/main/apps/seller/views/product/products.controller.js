@@ -6,7 +6,7 @@
         .controller('ProductsController', ProductsController);
 
     /** @ngInject */
-    function ProductsController($state, $scope,api, indexService) {
+    function ProductsController($state, $scope, $mdDialog, api, indexService) {
         var vm = this;
 
         $scope.FBref = firebase.database().ref('seller/product');
@@ -28,21 +28,21 @@
                     targets: 1,
                     filterable: false,
                     sortable: true,
-                    // width: '80px'
+                    width: '200px'
                 },
                 {
                     // Target the image column
                     targets: 2,
                     filterable: false,
                     sortable: true,
-                    // width: '80px'
+                    width: '200px'
                 },
                 {
                     // Target the image column
                     targets: 3,
                     filterable: false,
                     sortable: true,
-                    // width: '80px'
+                    width: '80px'
                 },
 
                 {
@@ -50,7 +50,8 @@
                     targets: 4,
                     responsivePriority: 1,
                     filterable: false,
-                    sortable: false
+                    sortable: false,
+                    width: '100px'
                 }
             ],
             initComplete: function () {
@@ -74,17 +75,79 @@
         // Methods
         vm.gotoAddProduct = gotoAddProduct;
         vm.gotoProduct = gotoProduct;
+        vm.unable = unable;
+        vm.disable = disable;
+
+        var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
+            vm.lastTransaction = res[0];
+
+        });
+
         function gotoProduct(id) {
             $state.go('app.seller.products.detail', { id: id });
         };
 
-        //////////
 
-        /**
-         * Go to add product
-         */
         function gotoAddProduct() {
             $state.go('app.seller.products.add');
+        }
+
+
+        function showConfirm(ev) {
+            // Appending dialog to document.body to cover sidenav in docs app
+            var confirm = $mdDialog.confirm()
+                .title('You have reached max count limit')
+                .textContent('Upgrade package or diable products')
+                .ariaLabel('Lucky day')
+                .targetEvent(ev)
+                .ok('Update Package')
+                .cancel('NO');
+            if (vm.products.length <= vm.lastTransaction.MaxProductCount) {
+                vm.gotoAddProduct();
+            } else {
+                $mdDialog.show(confirm).then(function (res) {
+                    // YES pressed
+                    $state.goto('app.seller.UpdatePackage');
+
+                }, function () {
+                    // NO Pressed
+
+                });
+
+            }
+
+        };
+
+
+        function unable(id) {
+
+            if (vm.products.length <= vm.lastTransaction.MaxProductCount) {
+                var data = {};
+                var loca = id + '/disable';
+                data[loca] = false;
+                api.bulkupdate('sellerproduct', data).then(function (res) {
+                    console.log('res', res)
+                    indexService.sucessMessage('product  is now unabled');
+                }, function (err) {
+                    console.log('error', err)
+                })
+            } else {
+                vm.showConfirm();
+            }
+
+        }
+
+
+        function disable(id) {
+            var data = {};
+            var loca = id + '/disable';
+            data[loca] = true;
+            api.bulkupdate('sellerproduct', data).then(function (res) {
+                console.log('res', res)
+                indexService.sucessMessage('product  is now disable');
+            }, function (err) {
+                console.log('error', err)
+            })
         }
 
 

@@ -1,0 +1,65 @@
+<div id="e-commerce-product" class="page-layout simple tabbed" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="start center">
+        <div class="white-fg" layout="row" layout-align="start center" flex>
+            <!--<md-button class="goto-products-button md-icon-button" aria-label="Go to products" ng-click="vm.gotoProducts()" translate
+                translate-attr-aria-label="EC.GO_TO_PRODUCTS">
+                <md-icon md-font-icon="icon-arrow-left"></md-icon>
+                </md-button>-->
+
+            <div layout="row" layout-align="start center">
+                <!--<div class="product-image" hide-xs>
+                        <img ng-src="{{vm.product.images[0].url}}">
+                    </div>-->
+
+                <div layout="column" layout-align="start start">
+                    <!--<div class="h2">
+                            {{vm.product.name}}
+                        </div>-->
+                    <div class="subtitle secondary-text">
+                        <span>Cancel Subsciption </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content">
+
+        <md-tabs md-dynamic-height>
+
+            <md-tab ng-if="getRole.userRole=='seller'">
+                <md-tab-label>
+                    <span>Cancel Subsciption </span>
+                </md-tab-label>
+                <md-tab-body>
+                    <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
+
+                        Are you Sure You want to cancel subsciption ?
+
+                        <div layout="column" layout-gt-xs="row">
+                            <md-button class="md-raised md-background" ng-click="vm.updatePackage()">
+                                <span>Yes</span>
+                            </md-button>
+                        </div>
+                        <div layout="column" layout-gt-xs="row">
+                            <md-button class="md-raised md-background" ng-click="vm.gotoLogin()">
+                                <span>No</span>
+                            </md-button>
+                        </div>
+
+
+                    </div>
+                </md-tab-body>
+            </md-tab>
+
+
+        </md-tabs>
+
+    </div>
+    <!-- / CONTENT -->
+
+</div>

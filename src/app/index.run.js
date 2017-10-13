@@ -110,18 +110,7 @@
 
         // function to menu configuration
         function gotoBuyer(role) {
-
-            msNavigationService.saveItem('apps.buyer', {
-                title: 'buyer',
-                icon: 'icon-cart',
-                weight: 3,
-                hidden: function () {
-                    return !$rootScope.isBuyer; // must be a boolean value
-                },
-            });
-
-
-            msNavigationService.saveItem('apps.buyer.dashboard', {
+            msNavigationService.saveItem('dashboard', {
                 title: 'Dashboard',
                 state: 'app.buyer.dashboard',
                 hidden: function () {
@@ -138,16 +127,6 @@
                 },
             });
 
-            msNavigationService.saveItem('profile', {
-                title: 'My Account',
-                icon: 'icon-account',
-                state: 'app.pages_profile',
-                hidden: function () {
-                    return !$rootScope.isBuyer; // must be a boolean value
-                },
-
-            });
-
         }
         function gotoSeller() {
 
@@ -157,6 +136,15 @@
                 hidden: function () {
                     return !$rootScope.isSeller; // must be a boolean value
                 },
+            });
+
+            msNavigationService.saveItem('productCategory', {
+                title: 'Prodcut Category',
+                state: 'app.admin.productCategories',
+                hidden: function () {
+                    return !$rootScope.isSeller; // must be a boolean value
+                },
+
             });
             msNavigationService.saveItem('SellerCompany', {
                 title: 'Company',
@@ -200,45 +188,29 @@
         }
         function gotoAdmin() {
             // Navigation
-            msNavigationService.saveItem('apps.admin', {
-                title: 'admin',
-                icon: 'icon-cart',
-                weight: 1,
-                hidden: function () {
-                    return !$rootScope.isAdmin; // must be a boolean value
-                },
-            });
-            msNavigationService.saveItem('apps.admin.company', {
+            msNavigationService.saveItem('company', {
                 title: 'Company Categories',
                 state: 'app.admin.companies',
                 hidden: function () {
                     return !$rootScope.isAdmin; // must be a boolean value
                 },
             });
-            msNavigationService.saveItem('apps.admin.package', {
+            msNavigationService.saveItem('package', {
                 title: 'User Role',
                 state: 'app.admin.packages',
                 hidden: function () {
                     return !$rootScope.isAdmin; // must be a boolean value
                 },
             });
-            msNavigationService.saveItem('apps.admin.productCategory', {
-                title: 'Prodcut Category',
-                state: 'app.admin.productCategories',
-                hidden: function () {
-                    return !$rootScope.isAdmin; // must be a boolean value
-                },
+            // msNavigationService.saveItem('productCategory', {
+            //     title: 'Prodcut Category',
+            //     state: 'app.admin.productCategories',
+            //     hidden: function () {
+            //         return !$rootScope.isAdmin; // must be a boolean value
+            //     },
 
-            });
-            msNavigationService.saveItem('profile', {
-                title: 'My Account',
-                icon: 'icon-account',
-                state: 'app.pages_profile',
-                hidden: function () {
-                    return !$rootScope.isAdmin; // must be a boolean value
-                },
+            // });
 
-            });
         }
 
 

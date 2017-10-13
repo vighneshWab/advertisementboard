@@ -22,7 +22,7 @@
 
             <div class="search" layout="row" layout-align="start center" flex>
                 <md-icon md-font-icon="icon-magnify" class="white-text icon search-icon"></md-icon>
-                <input id="e-commerce-products-search" class="search-input" type="text" placeholder="Search" flex>
+                <input id="e-commerce-products-search" class="search-input" type="text" ng-model="search" placeholder="Search" flex>
             </div>
 
             <div>
@@ -74,9 +74,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="product in ::vm.productCategories">
+                        <tr ng-repeat="product in ::vm.productCategories    ">
                             <td>{{$index + 1}}</td>
-                            <td>{{product.CategoryName}}</td>
+                            <td>{{product.CategoryName | capitalize}}</td>
                             <td>{{product.CategoryDescription}}</td>
                             <!--<td>{{product.Image}}</td>-->
                             <td><img class="product-image1" ng-src="{{product.Image}}"></td>

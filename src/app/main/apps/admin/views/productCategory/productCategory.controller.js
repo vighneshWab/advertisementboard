@@ -22,13 +22,16 @@
             });
         }
         vm.create = function (createObject) {
+            createObject.CategoryName.toLowerCase();
             indexService.create($scope.FBref, createObject).then(function (res) {
                 console.log('produst cate producsr')
+                vm.productCategory={}
 
             });
         }
 
         vm.update = function (createObject) {
+            createObject.CategoryName.toLowerCase();
             indexService.update($scope.FBref, $stateParams.id, createObject).then(function (res) {
                 console.log('package category updated')
             });

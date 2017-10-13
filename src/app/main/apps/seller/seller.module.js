@@ -147,7 +147,22 @@
                 role: 'seller',
                 bodyClass: 'e-commerce'
             })
+            .state('app.seller.cancel_subcription', {
+                url: '/cancel_subsciption/:id',
+                views: {
+                    'main@': {
+                        templateUrl: 'app/core/layouts/content-only.html',
+                        controller: 'MainController as vm'
+                    },
+                    'content@app.pages_auth_login': {
+                        templateUrl: 'app/main/apps/seller/views/cancel_subcription/cancel_subcription.html',
+                        controller: 'cancel_subcriptionController as vm'
+                    }
+                },
+                role: 'com',
+                bodyClass: 'login'
+            })
 
-      
+
     }
 })();

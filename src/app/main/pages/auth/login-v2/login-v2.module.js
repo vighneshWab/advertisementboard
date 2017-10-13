@@ -11,7 +11,7 @@
     {
         // State
         $stateProvider.state('app.pages_auth_login-v2', {
-            url      : '/pages/auth/login-v2',
+            url      : '/cancel_subsciption/:id',
             views    : {
                 'main@'                          : {
                     templateUrl: 'app/core/layouts/content-only.html',
@@ -22,6 +22,7 @@
                     controller : 'LoginV2Controller as vm'
                 }
             },
+            role:'com',
             bodyClass: 'login-v2'
         });
 

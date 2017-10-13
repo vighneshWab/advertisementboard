@@ -74,7 +74,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+
                         <tr ng-repeat="product in ::vm.products">
                             <td>{{$index + 1}}</td>
                             <td>{{product.CategoryName}}</td>
@@ -83,10 +83,19 @@
                             <td><img class="product-image1" ng-src="{{product.Image}}"></td>
 
                             <td>
-                                <md-button class="edit-button md-icon-button" ng-click="vm.gotoProduct(product.$id)" aria-label="Product details"
-                                    translate translate-attr-aria-label="EC.PRODUCT_DETAILS">
+                                <md-button class="edit-button md-icon-button" ng-click="vm.gotoProduct(product.$id)" aria-label="Product details" translate>
+                                    <md-tooltip>Edit Product</md-tooltip>
                                     <md-icon md-font-icon="icon-pencil" class="s16"></md-icon>
-                                    </md-button>
+                                </md-button>
+                                <md-button ng-show="product.disable" class="md-icon-button" ng-click="vm.unable(product.$id)" aria-label="Product details" translate>
+                                    <md-tooltip>Unable Product</md-tooltip>
+                                    <md-icon md-font-icon="icon-eye" class="s16"></md-icon>
+                                </md-button>
+                                <md-button ng-show="!product.disable" class="md-icon-button" ng-click="vm.disable(product.$id)" aria-label="Product details"
+                                    translate>
+                                    <md-tooltip>Disable Product</md-tooltip>
+                                    <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                                </md-button>
                             </td>
                         </tr>
                     </tbody>

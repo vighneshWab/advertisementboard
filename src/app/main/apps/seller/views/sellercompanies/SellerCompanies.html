@@ -93,8 +93,19 @@
                             <td>{{product.Email}}</td>
                             <td>{{product.disable}}</td>
                             <td>
-                                <md-button class="edit-button md-icon-button" ng-click="vm.gotoCompanyDetail(product)" aria-label="Product details" translate>
+                                <md-button class="edit-button md-icon-button" ng-click="vm.gotoCompanyDetail(product.$id)" aria-label="Product details" translate>
+                                    <md-tooltip>Edit Company</md-tooltip>
                                     <md-icon md-font-icon="icon-pencil" class="s16"></md-icon>
+                                </md-button>
+                                <md-button ng-show="product.disable" class="md-icon-button" ng-click="vm.unable(product.$id)" aria-label="Product details"
+                                    translate>
+                                    <md-tooltip>Unable Company</md-tooltip>
+                                    <md-icon md-font-icon="icon-eye" class="s16"></md-icon>
+                                </md-button>
+                                <md-button ng-show="!product.disable" class="md-icon-button" ng-click="vm.disable(product.$id)" aria-label="Product details"
+                                    translate>
+                                    <md-tooltip>Disable Company</md-tooltip>
+                                    <md-icon md-font-icon="icon-home" class="s16"></md-icon>
                                 </md-button>
                             </td>
                         </tr>

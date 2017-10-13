@@ -135,7 +135,7 @@
 
                     console.log('create Package', JSON.stringify(res));
                     qProfile.resolve(data);
-                    services.sucessMessage('Record added succfully');
+                    services.sucessMessage('Record added successfully ');
                 } else {
                     console.log('error:', res)
                     qProfile.reject(errorObject);

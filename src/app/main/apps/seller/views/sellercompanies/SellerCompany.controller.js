@@ -23,7 +23,6 @@
         vm.editmode = false;
         vm.adminCompanies = adminCompanies;
         vm.remove = remove;
-
         var list = api.getAll('admin/companycategory').then(function (success) {
             vm.companyCategories = success;
         }, function (error) {
@@ -31,10 +30,19 @@
 
         });
 
+
         if ($stateParams.id) {
             vm.editmode = true;
             api.userEditData('sellercompany', $stateParams.id).then(function (success) {
-                vm.formData = success;
+                console.log(success);
+                if (success == null) {
+
+                    vm.gotoSellerCompanies();
+                } else {
+                    vm.formData = success;
+
+                }
+
                 indexService.sucessMessage('company geting data success');
             }, function (error) {
                 indexService.errorMessage('No company exists with the ID provided');
@@ -58,7 +66,7 @@
             } else {
                 vm.reachedMaxLimit = true;
                 vm.message = "You have reached the maximum company count. Please update your seller category";
-                vm.disableCompanies(vm.sellerCompanies)
+                // vm.disableCompanies(vm.sellerCompanies)
             }
         });
 
@@ -83,7 +91,6 @@
                 api.update('sellercompany', childid, vm.formData).then(function (success) {
                     indexService.sucessMessage('company updated success');
                     // vm.adminCompanies();
-
                     vm.gotoSellerCompanies();
                 }, function (error) {
                     indexService.errorMessage('error while adding company');
@@ -95,8 +102,9 @@
                 vm.formData.created = indexService.createdDate;
                 vm.formData.disable = false;
                 api.insert('sellercompany', vm.formData).then(function (success) {
-                    indexService.sucessMessage('You have successfully created a new company');
-
+                    // You have successfully created a new company
+                    indexService.sucessMessage('created a new company');
+                    vm.formData = {}
                     // insertAdmin
                     vm.adminCompanies();
 
@@ -152,7 +160,7 @@
             api.insertAdmin('companies', data).then(function (success) {
                 indexService.sucessMessage('company added success');
 
-                vm.gotoSellerCompanies();
+                // vm.gotoSellerCompanies();
 
             }, function (error) {
                 indexService.errorMessage('error while adding company');
@@ -163,14 +171,49 @@
 
         function remove() {
 
-            api.delete('sellercompany', $stateParams.id).then(function (res) {
-                console.log('remove', res)
+            var removeProduct = [];
+            // bul remove start
+            var list = api.bulkRemove('sellerproduct', $stateParams.id).then(function (success) {
+                console.log('bulkRemove', JSON.stringify(success))
+                var data = success;
+                console.log('length:', data.length)
+                if (data.length == 0) {
+                    api.delete('sellercompany', $stateParams.id).then(function (res) {
+                        if ($stateParams.id == res) {
+                            indexService.sucessMessage('company removed success');
+                            vm.gotoSellerCompanies();
+                        } else {
+                            indexService.errorMessage('error while removing company');
+                        }
+                    })
 
+                } else {
+                    for (var i = 0; i < data.length; i++) {
+                        var key = data[i].$id;
+                        api.delete('sellerproduct', key).then(function (res) {
+                            removeProduct.push(res);
+                            console.log(removeProduct.length);
+                        }, function (err) {
+                            console.log('error', err)
+                        })
+                        if (removeProduct.length == data.length) {
+                            console.log('length matched');
+                            api.delete('sellercompany', $stateParams.id).then(function (res) {
+                                console.log('remove', res)
+                                if ($stateParams.id == res) {
+                                    indexService.sucessMessage('company removed success');
+                                    vm.gotoSellerCompanies();
 
-
-
-            })
+                                } else {
+                                    indexService.errorMessage('error while removing company');
+                                }
+                            })
+                        }
+                    }
+                }
+            }, function (error) {
+                indexService.errorMessage("error while getting data");
+            });
         }
-
     }
 })();

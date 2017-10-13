@@ -111,7 +111,7 @@
                         controller: 'ProductCategoriesController as vm'
                     }
                 },
-                role: 'admin',
+                role: 'seller',
 
                 bodyClass: 'admin'
             })
@@ -123,7 +123,7 @@
                         controller: 'ProductCategoryController as vm'
                     }
                 },
-                role: 'admin',
+                role: 'seller',
 
                 bodyClass: 'e-commerce'
             })
@@ -135,7 +135,7 @@
                         controller: 'ProductCategoryController as vm'
                     }
                 },
-                role: 'admin',
+                role: 'seller',
                 bodyClass: 'admin'
             })
 

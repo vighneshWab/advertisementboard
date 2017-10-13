@@ -6,28 +6,31 @@
             <md-button class="goto-products-button md-icon-button" aria-label="Go to products" ng-click="vm.gotoProducts()" translate
                 translate-attr-aria-label="EC.GO_TO_PRODUCTS">
                 <md-icon md-font-icon="icon-arrow-left"></md-icon>
-                </md-button>
+            </md-button>
 
-                <div layout="row" layout-align="start center">
-                    <div class="product-image" hide-xs>
-                        <img ng-src="{{the_url}}">
+            <div layout="row" layout-align="start center">
+                <div class="product-image" hide-xs>
+                    <img ng-src="{{the_url}}">
+                </div>
+
+                <div layout="column" layout-align="start start">
+                    <div class="h2">
+                        {{vm.product.name}}
                     </div>
-
-                    <div layout="column" layout-align="start start">
-                        <div class="h2">
-                            {{vm.product.name}}
-                        </div>
-                        <div class="subtitle secondary-text">
-                            <span> Company Categories</span>
-                        </div>
+                    <div class="subtitle secondary-text">
+                        <span> Company Categories</span>
                     </div>
                 </div>
+            </div>
         </div>
 
         <div>
             <md-button class="md-raised md-background" ng-click="vm.saveCompanyCategory(vm.companyCategory)" ng-disabled="productForm.$invalid">
                 <span>SAVE</span>
             </md-button>
+            <!-- <md-button class="md-raised md-warn" ng-show="vm.editMode" ng-disabled="!vm.isFormValid('productForm')" ng-click="vm.showConfirm($event)">
+                Remove
+            </md-button> -->
         </div>
     </div>
     <!-- / HEADER -->
@@ -43,6 +46,34 @@
                 </md-tab-label>
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
+                        {{sellercompanies123.length}}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>thing</td>
+                                    <td>price</td>
+                                    <td>amount</td>
+                                </tr>
+                            </thead>
+                            <tbody ng-repeat="obj in sellercompanies123">
+                                <tr ng-repeat="data in obj">
+                                    <td>{{data.Name}}</td>
+                                   
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+
+
+                        <div>
+                            <div ng-repeat="obj in sellercompanies123">
+                                <div ng-repeat=" data in obj">
+                                    data {{data}}
+                                </div>
+                            </div>
+                        </div>
+
                         <form id="productForm" name="productForm" novalidate>
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
@@ -70,6 +101,9 @@
                                 </md-button>-->
                             </div>
                         </form>
+
+
+
                     </div>
                 </md-tab-body>
             </md-tab>

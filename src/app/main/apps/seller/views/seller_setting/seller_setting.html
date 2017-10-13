@@ -100,7 +100,7 @@
                             <md-card md-theme="dark-purple" md-theme-watch>
                                 <md-card-title>
                                     <md-card-title-text>
-                                        <span class="md-headline">Card : <span class="md-subhead">**** **** **** </span> <span class="md-subhead">{{card.last4}}</span></span>
+                                        <span class="md-headline">Card : <span class="md-subhead">**** **** **** </span>                                        <span class="md-subhead">{{card.last4}}</span></span>
                                         <span class="md-headline">Month :  <span class="md-subhead">{{card.exp_month}}</span></span>
                                         <span class="md-headline">Year :  <span class="md-subhead">{{card.exp_year}}</span></span>
                                     </md-card-title-text>
@@ -115,34 +115,22 @@
                 </md-tab-body>
             </md-tab>
 
-            <!-- <md-tab>
+            <md-tab>
                 <md-tab-label>
-                    <span>Plan</span>
+                    <span>Stop Become a Seller</span>
                 </md-tab-label>
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
-                        <form id="productForm" name="productForm">
-                            <div layout="column" layout-gt-xs="row">
-                                <md-input-container flex>
-                                    <label>Select Package</label>
-                                    <md-select ng-model="vm.formData.package" required>
-                                        <md-option ng-repeat="role in vm.packages" ng-value="role">
-                                            {{role.CategoryDescription}}
-                                        </md-option>
-                                    </md-select>
-                                </md-input-container>
 
-                            </div>
+                        <md-button class="md-raised md-background" ng-click="vm.stopbecomeseller()">
+                            <span>Stop</span>
+                        </md-button>
 
-                            <div layout="column" layout-gt-xs="row">
-                                <md-button class="md-raised md-background" ng-click="vm.updatePackage()">
-                                    <span>Update Plan </span>
-                                </md-button>
-                            </div>
-                        </form>
+                        
+
                     </div>
                 </md-tab-body>
-            </md-tab> -->
+            </md-tab>
 
 
         </md-tabs>

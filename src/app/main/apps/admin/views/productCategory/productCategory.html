@@ -46,16 +46,33 @@
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
                                     <label>Category Name</label>
-                                    <input type="text" ng-model="vm.productCategory.CategoryName" required>
+                                    <input type="text" name="CategoryName" ng-model="vm.productCategory.CategoryName" unique-name required>
+                                    <div ng-messages="productForm.CategoryName.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>email field is required</span>
+                                        </div>
+                                        <div ng-message="uniqueName">
+                                            <span>product Category already exists </span>
+                                        </div>
+
+                                    </div>
                                 </md-input-container>
+
 
                             </div>
 
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
                                     <label>Category Description</label>
-                                    <input type="text" ng-model="vm.productCategory.CategoryDescription" required>
+                                    <input type="text" ng-model="vm.productCategory.CategoryDescription" name="CategoryDescription" required>
+                                    <div ng-messages="productForm.CategoryDescription.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>email field is required</span>
+                                        </div>
+
+                                    </div>
                                 </md-input-container>
+
 
                             </div>
 

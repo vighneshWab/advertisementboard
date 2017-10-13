@@ -27,6 +27,9 @@
             <md-button class="md-raised md-background" ng-click="vm.savePackage(vm.package)" ng-disabled="!vm.isFormValid('productForm')">
                 <span>SAVE</span>
             </md-button>
+            <md-button class="md-raised md-warn" ng-show="vm.editMode" ng-disabled="!vm.isFormValid('productForm')" ng-click="vm.showConfirm($event)">
+                Remove
+            </md-button>
         </div>
     </div>
     <!-- / HEADER -->

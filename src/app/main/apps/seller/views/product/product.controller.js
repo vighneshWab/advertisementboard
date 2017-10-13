@@ -27,8 +27,13 @@
         vm.loadCompanyCategory = loadCompanyCategory;
         $scope.img = $scope.vid = {};
         vm.unable = unable;
+        vm.remove = remove;
+        vm.editmode = false;
 
         vm.message = ''
+
+
+
 
         //  company dropdown
         var list = api.userWiseData('sellercompany').then(function (success) {
@@ -60,7 +65,7 @@
                 // vm.disableCompanies(vm.products)
             } else {
                 vm.reachedMaxLimit = true;
-                vm.disableCompanies(vm.products)
+                // vm.disableCompanies(vm.products)
 
 
             }
@@ -69,7 +74,7 @@
 
         if ($stateParams.id) {
             // vm.getLastTransaction();
-
+            vm.editmode = true;
             api.userEditData('sellerproduct', $stateParams.id).then(function (success) {
                 vm.formData = success;
                 $scope.the_url = vm.formData.Image;
@@ -91,7 +96,8 @@
             createObject.disable = false;
             console.log(JSON.stringify(createObject));
             api.insert('sellerproduct', createObject).then(function (success) {
-                indexService.sucessMessage('Product added success');
+                indexService.sucessMessage('product added successfully');
+                vm.formData = {};
             }, function (error) {
                 indexService.errorMessage('error while adding products');
 
@@ -190,12 +196,31 @@
             var data = {};
             var loca = $stateParams.id + '/disable';
             data[loca] = false;
-            api.bulkupdate('sellercompany', data).then(function (res) {
+            api.bulkupdate('sellerproduct', data).then(function (res) {
                 console.log('res', res)
-                indexService.sucessMessage('company is now unabled');
+                indexService.sucessMessage('product  is now unabled');
                 vm.gotoSellerCompanies();
             }, function (err) {
                 console.log('error', err)
+            })
+        }
+
+
+        function remove() {
+
+            api.delete('sellerproduct', $stateParams.id).then(function (res) {
+                console.log('remove', res)
+                if ($stateParams.id == res) {
+                    indexService.sucessMessage(' product removed successfully');
+                    vm.gotoProductCategories();
+
+                } else {
+                    indexService.errorMessage('error while removing product');
+
+                }
+
+
+
             })
         }
 

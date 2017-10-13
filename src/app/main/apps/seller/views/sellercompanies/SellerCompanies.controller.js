@@ -6,7 +6,7 @@
         .controller('SellerCompaniesController', SellerCompaniesController);
 
     /** @ngInject */
-    function SellerCompaniesController($state, api, $scope, indexService) {
+    function SellerCompaniesController($state, api, $mdDialog, $scope, indexService) {
         var vm = this;
         vm.sellercompany = 'sellercompany';
 
@@ -55,7 +55,7 @@
                     responsivePriority: 1,
                     filterable: false,
                     sortable: true,
-                   
+
                 }
             ],
             initComplete: function () {
@@ -90,8 +90,18 @@
         // Methods
         vm.gotoAddCompany = gotoAddCompany;
         vm.gotoCompanyDetail = gotoCompanyDetail;
+        vm.unable = unable;
+        vm.disable = disable;
 
         //////////
+
+        var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
+            vm.lastTransaction = res[0];
+            if (vm.sellerCompanies.length <= vm.lastTransaction.MaxCompanyCount) {
+                vm.reachedMaxLimit = false;
+
+            }
+        });
 
         /**
          * Go to add product
@@ -106,8 +116,81 @@
          *
          * @param id
          */
-        function gotoCompanyDetail(data) {
-            $state.go('app.seller.sellercompanies.detail', { id: data.$id });
+        function gotoCompanyDetail(id) {
+            $state.go('app.seller.sellercompanies.detail', { id: id });
         }
+
+        function unable(id) {
+            if (vm.sellerCompanies.length <= vm.lastTransaction.MaxCompanyCount) {
+                var data = {};
+                var loca = id + '/disable';
+                data[loca] = false;
+                api.bulkupdate('sellercompany', data).then(function (res) {
+                    console.log('res', res)
+                    indexService.sucessMessage('company is now unabled');
+                }, function (err) {
+                    console.log('error', err)
+                })
+            } else {
+                vm.showConfirm();
+            }
+
+        }
+
+
+        function disable(id) {
+            api.bulkRemove('sellerproduct', id).then(function (res) {
+                console.log('res', res)
+                var products = res;
+                var bulkdisbleupdate = {};
+                for (var i = 0; i < products.length; i++) {
+                    var loca = products[i].$id + '/disable';
+                    bulkdisbleupdate[loca] = true;
+                }
+                api.bulkupdate('sellerproduct', bulkdisbleupdate).then(function (res) {
+                    console.log('res', res)
+                    var data = {};
+                    var loca = id + '/disable';
+                    data[loca] = true;
+                    api.bulkupdate('sellercompany', data).then(function (res) {
+                        console.log('res', res)
+                        indexService.sucessMessage('company  is now unabled');
+                    }, function (err) {
+                        console.log('error', err)
+                    })
+
+                }, function (err) {
+                    console.log('error', err)
+                })
+
+
+
+            }, function (err) {
+            })
+        }
+        function showConfirm(ev) {
+            // Appending dialog to document.body to cover sidenav in docs app
+            var confirm = $mdDialog.confirm()
+                .title('You have reached max count limit')
+                .textContent('Upgrade package or diable companies')
+                .ariaLabel('Lucky day')
+                .targetEvent(ev)
+                .ok('Update Package')
+                .cancel('NO');
+            if (vm.sellerCompanies.length <= vm.lastTransaction.MaxCompanyCount) {
+                vm.gotoAddCompany();
+            } else {
+                $mdDialog.show(confirm).then(function (res) {
+                    // YES pressed
+                    $state.goto('app.seller.UpdatePackage');
+
+                }, function () {
+                    // NO Pressed
+
+                });
+
+            }
+
+        };
     }
 })();

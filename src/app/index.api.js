@@ -13,8 +13,8 @@
         // Base Url
         api.baseUrl = 'app/data/';
         api.apiUrl = "http://localhost:2017/";
-        // api.stripeUrl = " https://stripewebhookadv.herokuapp.com/";
-        api.stripeUrl = "http://localhost:8080/";
+        api.stripeUrl = " https://stripewebhookadv.herokuapp.com/";
+        // api.stripeUrl = "http://localhost:8080/";
 
 
         api.setRole = function (users) {
@@ -30,6 +30,7 @@
             console.log('insert', JSON.stringify(data));
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
+            // uid = 'sUrycnhF7IgFEHcOjaiKfg5awUr1'
             firebaseDatabase.ref(ref).child(uid).push(data).on('value', function (snap) {
                 var data = {
                     key: snap.key,
@@ -82,9 +83,9 @@
             obj.$remove().then(function (ref) {
                 console.log('child removed:', chidid);
                 // data has been deleted locally and in the database
-                qProfile.resolve();
+                qProfile.resolve(chidid);
             }, function (error) {
-                qProfile.reject();
+                qProfile.reject(error);
                 console.log("Error:", error);
             });
             return qProfile.promise;
@@ -96,7 +97,7 @@
             var ref = firebaseDatabase.ref(ref).child(chidid);
             var obj = $firebaseObject(ref);
             obj.$remove().then(function (ref) {
-                console.log('child not removed:', chidid);
+                console.log('child not removed:', ref);
                 // data has been deleted locally and in the database
             }, function (error) {
                 console.log("Error:", error);
@@ -125,6 +126,19 @@
             var uid = api.getUserRole().uid;
             var refD = firebaseDatabase.ref('companies').orderByChild("abn").equalTo(abn);
             var list = $firebaseArray(refD).$loaded(function (success) {
+                var data = success;
+                qProfile.resolve(data);
+            }, function (errorObject) {
+                qProfile.reject(errorObject);
+            });
+            return qProfile.promise;
+        }
+        api.verifyName = function (name) {
+            var qProfile = $q.defer();
+            var uid = api.getUserRole().uid;
+            var refD = firebaseDatabase.ref('admin/productcategory').orderByChild("CategoryName").equalTo("Fridges");
+            var list = $firebaseArray(refD).$loaded(function (success) {
+                console.log(JSON.stringify(success))
                 var data = success;
                 qProfile.resolve(data);
             }, function (errorObject) {
@@ -169,7 +183,6 @@
             var refD = firebaseDatabase.ref(ref).child(uid);
             var list = $firebaseArray(refD).$loaded(function (success) {
                 var data = success;
-                console.log('get userWiseData ', JSON.stringify(data));
                 qProfile.resolve(data);
             }, function (errorObject) {
                 console.log('eroror code')
@@ -269,6 +282,52 @@
             return deferred.promise;
 
         }
+
+        api.getdata = function (endpoint, data) {
+            var deferred = $q.defer();
+            $http.get(api.stripeUrl + endpoint).then(function (response) {
+                console.log('response data:', JSON.stringify(response))
+                if (response.data.status) {
+                    deferred.resolve(response.data.success);
+                } else {
+                    deferred.reject(response.data.err);
+                }
+            })
+            return deferred.promise;
+
+        }
+        api.bulkRemove = function (ref, companyid) {
+            var qProfile = $q.defer();
+            var uid = api.getUserRole().uid;
+
+            var refD = firebaseDatabase.ref(ref).child(uid).orderByChild('companyId').equalTo(companyid);
+            var list = $firebaseArray(refD).$loaded(function (success) {
+                var data = success;
+
+                qProfile.resolve(data);
+            }, function (errorObject) {
+                console.log('eroror code')
+                qProfile.reject(errorObject);
+            });
+            return qProfile.promise;
+        }
+
+        api.deletedata = function (endpoint, data) {
+            var deferred = $q.defer();
+            var deleteUrl = endpoint + '/' + data;
+            $http.delete(api.stripeUrl + deleteUrl).then(function (response) {
+                console.log('response data:', JSON.stringify(response))
+                if (response.data.status) {
+                    deferred.resolve(response.data.success);
+                } else {
+                    deferred.reject(response.data.err);
+                }
+            })
+            return deferred.promise;
+
+        }
+
+
 
 
 

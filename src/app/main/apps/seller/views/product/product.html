@@ -10,7 +10,7 @@
             <div layout="row" layout-align="start center">
                 <div class="product-image" hide-xs>
                     <img ng-src="{{the_url}}">
-            </div>
+                </div>
 
                 <div layout="column" layout-align="start start">
                     <div class="h2">
@@ -25,12 +25,16 @@
 
         <div>
             <md-button class="md-raised md-background" ng-click="vm.saveProduct()" ng-disabled="!vm.isFormValid('productForm')">
-                <span>SAVE {{!vm.isFormValid('productForm')}}</span>
+                <span>SAVE</span>
             </md-button>
 
-            <md-button class="md-raised md-background" ng-if="vm.formData.disable==true" ng-click="vm.unable()">
+            <md-button class="md-raised md-background" ng-if="vm.formData.disable==true" ng-disabled="!vm.isFormValid('productForm')" ng-click="vm.unable()">
                 <span>Unable Product</span>
             </md-button>
+            <md-button class="md-raised md-danger" ng-show="vm.editmode"  ng-click="vm.remove()">
+                <span>Remove </span>
+            </md-button>
+
         </div>
     </div>
     <!-- / HEADER -->
