@@ -13,7 +13,10 @@
         vm.isFormValid = isFormValid;
         vm.stripe_subscription = stripe_subscription;
         vm.user = api.getUserRole();
+        console.log(JSON.stringify(vm.user));
+
         var userid = vm.user.$id;
+        console.log(vm.user.uid)
         $scope.stripeCallback = stripeCallback;
         var list = api.getAll('admin/userRoles').then(function (success) {
             vm.packages = success;
@@ -66,8 +69,9 @@
                 console.log('trial periode created');
                 vm.user.userRole = 'seller';
                 vm.user.subcription = response.id;
-                vm.user.customerID=response.customer;
+                vm.user.customerID = response.customer;
                 var user = vm.user;
+
                 delete user.$id;
                 delete user.$priority;
 
@@ -75,9 +79,9 @@
                 api.update('user', userid, user).then(function (response) {
                     console.log('update  user role', response);
                     api.setRole(vm.user);
+                    localStorage.clear();
                     delete vm.formData.package.$id;
                     delete vm.formData.package.$priority;
-                    // { "CategoryDescription":"Can add 50 Products and 10 comapnies", "MaxCompanyCount":10, "MaxProductCount":50, "MaxSellCount":100, "UserRole":"Bronze", "isTrial":false, "price":10 }
                     var transaction = {
                         MaxCompanyCount: vm.formData.package.MaxCompanyCount,
                         MaxProductCount: vm.formData.package.MaxProductCount,
@@ -85,9 +89,9 @@
                         created: indexService.createdDate,
                         expired: indexService.expireDate30
                     }
-                    api.insert('transaction', transaction).then(function (response) {
+                    api.insert_transaction('transaction', user.uid, transaction).then(function (response) {
                         console.log('transaction created');
-                        indexService.sucessMessage('you become a seller now');
+                        indexService.sucessMessage('you become a seller now');  
                         localStorage.clear();
                         $state.go('app.pages_auth_login');
 

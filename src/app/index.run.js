@@ -146,13 +146,20 @@
                 },
 
             });
-            msNavigationService.saveItem('SellerCompany', {
+            msNavigationService.saveItem('SellerCompany1', {
                 title: 'Company',
                 state: 'app.seller.sellercompanies',
                 hidden: function () {
                     return !$rootScope.isSeller; // must be a boolean value
                 },
             });
+            // msNavigationService.saveItem('SellerCompany', {
+            //     title: 'Add existing Company',
+            //     state: 'app.seller.sellercompanies.addexistingcompany',
+            //     hidden: function () {
+            //         return !$rootScope.isSeller; // must be a boolean value
+            //     },
+            // });
             msNavigationService.saveItem('product', {
                 title: 'Upload Products',
                 state: 'app.seller.products',
@@ -202,14 +209,14 @@
                     return !$rootScope.isAdmin; // must be a boolean value
                 },
             });
-            // msNavigationService.saveItem('productCategory', {
-            //     title: 'Prodcut Category',
-            //     state: 'app.admin.productCategories',
-            //     hidden: function () {
-            //         return !$rootScope.isAdmin; // must be a boolean value
-            //     },
+            msNavigationService.saveItem('users', {
+                title: 'Users',
+                state: 'app.admin.users',
+                hidden: function () {
+                    return !$rootScope.isAdmin; // must be a boolean value
+                },
 
-            // });
+            });
 
         }
 

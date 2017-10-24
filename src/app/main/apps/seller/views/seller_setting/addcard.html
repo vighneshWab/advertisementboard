@@ -1,0 +1,65 @@
+<md-dialog aria-label="Mango (Fruit)">
+    <form ng-cloak id="productForm" name="productForm" stripe:form="answer">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Add Exsiting company</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <div layout="column" layout-gt-xs="row">
+                    <md-input-container flex>
+                        <label>Card Number</label>
+                        <input ng-model="payment.card.number" placeholder="Card Number" payments-format="card" payments-validate="card" name="card"
+                            required/>
+                        <div ng-if="productForm.card.$invalid">
+                            Error: invalid card number!
+                        </div>
+                    </md-input-container>
+                </div>
+                <div layout="column" layout-gt-xs="row">
+                    <md-input-container flex>
+                        <label>exp month</label>
+                        <input ng-model="payment.card.exp_month" size="2" placeholder="exp month" name="exp_month" required/>
+                        <div ng-if="productForm.exp_month.$invalid">
+                            Error: invalid card number!
+                        </div>
+                    </md-input-container>
+
+                </div>
+                <div layout="column" layout-gt-xs="row">
+                    <md-input-container flex>
+                        <label>exp Year</label>
+                        <input ng-model="payment.card.exp_year" size="4" placeholder="exp year" name="exp_year" required/>
+                        <div ng-if="productForm.exp_year.$invalid">
+                            Error: invalid card number!
+                        </div>
+                    </md-input-container>
+
+                </div>
+                <div layout="column" layout-gt-xs="row">
+                    <md-input-container flex>
+                        <label>CVC</label>
+                        <input ng-model="payment.card.cvc" placeholder="CVC" payments-format="cvc" payments-validate="cvc" name="cvc" required/>
+                        <div ng-if="productForm.cvc.$invalid">
+                            Error: invalid card number!
+                        </div>
+                    </md-input-container>
+
+                </div>
+            </div>
+            <md-button type="submit" class="md-raised md-background">
+                <span>Add</span>
+            </md-button>
+        </md-dialog-content>
+        <!-- <md-dialog-actions layout="row">
+            <md-button type="submit" class="md-raised md-background">
+                <span>Add</span>
+            </md-button>
+        </md-dialog-actions> -->
+    </form>
+</md-dialog>

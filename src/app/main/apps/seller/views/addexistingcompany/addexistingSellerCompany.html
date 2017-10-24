@@ -38,16 +38,16 @@
             </md-button>
 
 
-            <!-- <md-button ng-show="vm.formData.disable && vm.editmode && vm.adde" class="md-raised md-background" ng-click="vm.unable()" ng-disabled="!vm.isFormValid('productForm')"
+            <md-button ng-show="vm.formData.disable && vm.editmode" class="md-raised md-background" ng-click="vm.unable()" ng-disabled="!vm.isFormValid('productForm')"
                 aria-label="Product details" translate>
                 <md-tooltip>Unable Company</md-tooltip>
                 <span>Unable </span>
             </md-button>
-            <md-button ng-show="!vm.formData.disable && vm.editmode && vm.adde" class="md-raised md-background" ng-click="vm.disable()" ng-disabled="!vm.isFormValid('productForm')"
+            <md-button ng-show="!vm.formData.disable && vm.editmode" class="md-raised md-background" ng-click="vm.disable()" ng-disabled="!vm.isFormValid('productForm')"
                 aria-label="Product details" translate>
                 <md-tooltip>Disable Company</md-tooltip>
                 <span>Disable </span>
-            </md-button> -->
+            </md-button>
 
 
             <!-- <md-button class="md-raised md-warn" ng-click="vm.remove()" ng-show="vm.editmode">
@@ -82,6 +82,25 @@
                         <div ng-show="!vm.reachedMaxLimit">
                             <!-- <pre>{{vm.formData}}</pre> -->
                             <form id="productForm" name="productForm">
+                                <div layout="column" layout-gt-xs="row">
+                                    <md-input-container flex>
+                                        <label>ABN</label>
+                                        <input type="text" numbers-only limit-to="11" ng-minlength="11" ng-maxlength="11" ng-model="vm.formData.abn" name="abn" abn
+                                            ng-disabled="vm.editmode" required>
+                                        <div ng-messages="productForm.abn.$error" role="alert">
+                                            <div ng-message="required">
+                                                <span>abn field is required</span>
+                                            </div>
+                                            <div ng-message="minlength">should have 11 numbers</div>
+                                            <div ng-message="maxlength">Your field is too long</div>
+                                            <div ng-message="abnValidator">
+                                                <span>Company already exists with the abn number entered</span>
+                                            </div>
+
+                                        </div>
+                                    </md-input-container>
+                                </div>
+
                                 <div layout="column" layout-gt-xs="row">
                                     <md-input-container flex>
                                         <label>ABN</label>
@@ -194,74 +213,7 @@
 
 
 
-            <md-tab ng-if="vm.editmode">
-                <md-tab-label>
-                    <span>Products</span>
-                </md-tab-label>
-                <md-tab-body>
-                    <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
 
-                        <table class="dataTable row-border hover" datatable="ng" dt-instance="vm.dtInstance" dt-options="vm.dtOptions">
-                            <thead>
-                                <tr>
-                                    <th class="secondary-text">
-                                        <div class="table-header">
-                                            <span class="column-title">ID</span>
-                                        </div>
-                                    </th>
-                                    <th class="secondary-text">
-                                        <div class="table-header">
-                                            <span class="column-title">Name</span>
-                                        </div>
-                                    </th>
-                                    <th class="secondary-text">
-                                        <div class="table-header">
-                                            <span class="column-title">Description</span>
-                                        </div>
-                                    </th>
-                                    <th class="secondary-text">
-                                        <div class="table-header">
-                                            <span class="column-title">Image</span>
-                                        </div>
-                                    </th>
-                                    <th class="secondary-text">
-                                        <div class="table-header">
-                                            <span class="column-title">Actions</span>
-                                        </div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <tr ng-repeat="product in ::vm.products">
-                                    <td>{{$index + 1}}</td>
-                                    <td>{{product.CategoryName}}</td>
-                                    <td>{{product.CategoryDescription}}</td>
-                                    <!--<td>{{product.Image}}</td>-->
-                                    <td><img class="product-image1" ng-src="{{product.Image}}"></td>
-
-                                    <td>
-                                        <md-button class="edit-button md-icon-button" ng-click="vm.gotoProduct(product.$id)" aria-label="Product details" translate>
-                                            <md-tooltip>Edit Product</md-tooltip>
-                                            <md-icon md-font-icon="icon-pencil" class="s16"></md-icon>
-                                        </md-button>
-                                        <md-button ng-show="product.disable" class="md-icon-button" ng-click="vm.unableProduct(product.$id)" aria-label="Product details"
-                                            translate>
-                                            <md-tooltip>Unable Product</md-tooltip>
-                                            <md-icon md-font-icon="icon-check" class="s16"></md-icon>
-                                        </md-button>
-                                        <md-button ng-show="!product.disable" class="md-icon-button" ng-click="vm.disableProduct(product.$id)" aria-label="Product details"
-                                            translate>
-                                            <md-tooltip>Disable Product</md-tooltip>
-                                            <md-icon md-font-icon="icon-block-helper" class="s16"></md-icon>
-                                        </md-button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </md-tab-body>
-            </md-tab>
         </md-tabs>
 
     </div>

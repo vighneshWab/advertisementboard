@@ -13,8 +13,8 @@
         // Base Url
         api.baseUrl = 'app/data/';
         api.apiUrl = "http://localhost:2017/";
-        api.stripeUrl = " https://stripewebhookadv.herokuapp.com/";
-        // api.stripeUrl = "http://localhost:8080/";
+        // api.stripeUrl = " https://stripewebhookadv.herokuapp.com/";
+        api.stripeUrl = "http://localhost:8080/";
 
 
         api.setRole = function (users) {
@@ -30,8 +30,7 @@
             console.log('insert', JSON.stringify(data));
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
-            // uid = 'sUrycnhF7IgFEHcOjaiKfg5awUr1'
-            firebaseDatabase.ref(ref).child(uid).push(data).on('value', function (snap) {
+            firebaseDatabase.ref(ref).push(data).on('value', function (snap) {
                 var data = {
                     key: snap.key,
                     data: snap.val()
@@ -47,7 +46,7 @@
             console.log('data', JSON.stringify(data));
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
-            firebaseDatabase.ref(ref).child(uid).child(chidid).update(data, function (snap) {
+            firebaseDatabase.ref(ref).child(chidid).update(data, function (snap) {
                 if (snap) {
                     console.log(erorr)
                     qProfile.reject(data);
@@ -62,7 +61,7 @@
             console.log('data', JSON.stringify(bulkdata));
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
-            firebaseDatabase.ref(ref).child(uid).update(bulkdata, function (snap) {
+            firebaseDatabase.ref(ref).update(bulkdata, function (snap) {
                 if (snap) {
                     console.log('bulkdata', snap)
                     qProfile.reject(snap);
@@ -115,16 +114,25 @@
                 console.log('eroror code')
                 qProfile.reject(errorObject);
             });
-
-
             return qProfile.promise;
 
         }
-
+        api.getRoleWiseData = function (ref, role) {
+            var qProfile = $q.defer();
+            var refD = firebaseDatabase.ref(ref).equalTo(role);
+            var list = $firebaseArray(refD).$loaded(function (success) {
+                var data = success;
+                qProfile.resolve(data);
+            }, function (errorObject) {
+                console.log('eroror code')
+                qProfile.reject(errorObject);
+            });
+            return qProfile.promise;
+        }
         api.verifyABN = function (abn) {
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
-            var refD = firebaseDatabase.ref('companies').orderByChild("abn").equalTo(abn);
+            var refD = firebaseDatabase.ref('sellercompany').orderByChild("abn").equalTo(abn);
             var list = $firebaseArray(refD).$loaded(function (success) {
                 var data = success;
                 qProfile.resolve(data);
@@ -150,7 +158,8 @@
         api.count = function (ref) {
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
-            var refD = firebaseDatabase.ref(ref).child(uid).orderByChild("disable").equalTo(false);
+            var equ = uid + "_" + false;
+            var refD = firebaseDatabase.ref(ref).orderByChild("uid_disable").equalTo(equ);
             var list = $firebaseArray(refD).$loaded(function (success) {
                 var data = success;
                 qProfile.resolve(data);
@@ -164,7 +173,7 @@
         api.verifyEmail = function (Email) {
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
-            var refD = firebaseDatabase.ref('companies').orderByChild("Email").equalTo(Email);
+            var refD = firebaseDatabase.ref('sellercompany').orderByChild("Email").equalTo(Email);
             var list = $firebaseArray(refD).$loaded(function (success) {
                 var data = success;
                 qProfile.resolve(data);
@@ -180,7 +189,7 @@
         api.userWiseData = function (ref) {
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
-            var refD = firebaseDatabase.ref(ref).child(uid);
+            var refD = firebaseDatabase.ref(ref).orderByChild('uid').equalTo(uid);
             var list = $firebaseArray(refD).$loaded(function (success) {
                 var data = success;
                 qProfile.resolve(data);
@@ -188,19 +197,13 @@
                 console.log('eroror code')
                 qProfile.reject(errorObject);
             });
-
-            // firebaseDatabase.ref(ref).on('value', function (snap) {
-            //     var response = snap.val();
-            //     console.log('pushed into child node', JSON.stringify(response));
-            // })
             return qProfile.promise;
 
         }
         api.userEditData = function (ref, childId) {
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
-            var refD = firebaseDatabase.ref(ref).child(uid).child(childId);
-
+            var refD = firebaseDatabase.ref(ref).child(childId);
             refD.on('value', function (snap) {
                 var data = snap.val();
 
@@ -211,7 +214,7 @@
         }
         api.getUserData = function (ref, childId) {
             var qProfile = $q.defer();
-            var refD = firebaseDatabase.ref(ref).child(childId);
+            var refD = firebaseDatabase.ref(ref).orderByChild('uid').equalTo(childId);
             var list = $firebaseArray(refD).$loaded(function (success) {
                 var data = success;
                 console.log('get userWiseData ', JSON.stringify(data));
@@ -225,7 +228,7 @@
         api.getUserProfile = function (ref, childId) {
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
-            var refD = firebaseDatabase.ref('user').child(uid);
+            var refD = firebaseDatabase.ref('user').child(childId);
             var list = $firebaseArray(refD).$loaded(function (success) {
                 var data = success;
                 qProfile.resolve(data);
@@ -235,10 +238,11 @@
             });
             return qProfile.promise;
         }
+
+
         api.insertUser = function (ref, childId, user) {
             var qProfile = $q.defer();
-            var refD = firebaseDatabase.ref(ref).child(childId).push(user);
-
+            var refD = firebaseDatabase.ref(ref).push(user);
             refD.on('value', function (snap) {
                 var data = snap.val();
 
@@ -257,11 +261,37 @@
                     id: snap.key,
                     data: snap.val(),
                 }
-                // data = snap.val();
-                // data.id = snap.key;
-
                 qProfile.resolve(data);
-                console.log('pushed into child node', JSON.stringify(data));
+            })
+            return qProfile.promise;
+        }
+
+
+        api.bulkRemove = function (ref, companyid) {
+            var qProfile = $q.defer();
+            var uid = api.getUserRole().uid;
+            var refD = firebaseDatabase.ref(ref).orderByChild('companyId').equalTo(companyid);
+            var list = $firebaseArray(refD).$loaded(function (success) {
+                var data = success;
+                qProfile.resolve(data);
+            }, function (errorObject) {
+                console.log('eroror code')
+                qProfile.reject(errorObject);
+            });
+            return qProfile.promise;
+        }
+
+
+
+        api.insert_transaction = function (ref, uid, data) {
+            var qProfile = $q.defer();
+
+            firebaseDatabase.ref(ref).child(uid).push(data).on('value', function (snap) {
+                var data = {
+                    key: snap.key,
+                    data: snap.val()
+                }
+                qProfile.resolve(data);
             })
             return qProfile.promise;
         }
@@ -272,7 +302,6 @@
         api.postdata = function (endpoint, data) {
             var deferred = $q.defer();
             $http.post(api.stripeUrl + endpoint, data).then(function (response) {
-                console.log('response data:', JSON.stringify(response))
                 if (response.data.status) {
                     deferred.resolve(response.data.success);
                 } else {
@@ -296,21 +325,6 @@
             return deferred.promise;
 
         }
-        api.bulkRemove = function (ref, companyid) {
-            var qProfile = $q.defer();
-            var uid = api.getUserRole().uid;
-
-            var refD = firebaseDatabase.ref(ref).child(uid).orderByChild('companyId').equalTo(companyid);
-            var list = $firebaseArray(refD).$loaded(function (success) {
-                var data = success;
-
-                qProfile.resolve(data);
-            }, function (errorObject) {
-                console.log('eroror code')
-                qProfile.reject(errorObject);
-            });
-            return qProfile.promise;
-        }
 
         api.deletedata = function (endpoint, data) {
             var deferred = $q.defer();
@@ -326,6 +340,8 @@
             return deferred.promise;
 
         }
+
+
 
 
 

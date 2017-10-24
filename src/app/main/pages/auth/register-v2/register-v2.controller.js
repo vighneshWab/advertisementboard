@@ -48,13 +48,21 @@
                         userName: formData.username
                     }
 
+                    // api.insertAdmin('user', userProfile).then(function (success) {
+                    //     // indexService.sucessMessage('company added success');
+                    // }, function (error) {
+                    //     indexService.errorMessage('error while registering company');
+
+
+                    // });
+
 
 
                     api.insertUser('user', user.uid, userProfile).then(function (success) {
                         // indexService.sucessMessage('company added success');
                     }, function (error) {
                         indexService.errorMessage('error while registering company');
-                        
+
 
                     });
 
@@ -109,6 +117,29 @@
             }, function (error) {
                 console.log('error:', error);
             })
+        }
+
+
+
+
+        vm.confirm = function (form) {
+
+            console.log(form)
+            if (vm.form.password == undefined) {
+
+
+            } else {
+
+                if (vm.form.password == vm.form.passwordConfirm) {
+
+                    form.passwordConfirm.$setValidity('match', true);
+                    console.log('paswordmatched')
+
+                } else {
+                    form.passwordConfirm.$setValidity('match', false);
+                    console.log('not mached paswordmatched')
+                }
+            }
         }
 
         //////////

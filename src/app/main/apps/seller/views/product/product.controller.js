@@ -26,9 +26,12 @@
         vm.disableCompanies = disableCompanies;
         vm.loadCompanyCategory = loadCompanyCategory;
         $scope.img = $scope.vid = {};
+        vm.disable = disable;
         vm.unable = unable;
         vm.remove = remove;
         vm.editmode = false;
+        vm.removeImage = removeImage;
+        vm.saveProduct = saveWithUpload;
 
         vm.message = ''
 
@@ -38,7 +41,6 @@
         //  company dropdown
         var list = api.userWiseData('sellercompany').then(function (success) {
             vm.companies = success;
-            console.log(vm.companies);
         }, function (error) {
             indexService.errorMessage("error while getting data");
 
@@ -55,7 +57,7 @@
 
         var listproducts = api.count('sellerproduct').then(function (success) {
             vm.products = success;
-            console.log(vm.products.length);
+            console.log(JSON.stringify(vm.products));
         });
 
         var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
@@ -76,28 +78,34 @@
             // vm.getLastTransaction();
             vm.editmode = true;
             api.userEditData('sellerproduct', $stateParams.id).then(function (success) {
-                vm.formData = success;
-                $scope.the_url = vm.formData.Image;
-                $scope.imgAvailable = true;
-                indexService.sucessMessage('company geting data success');
+                if (success == null) {
+                    vm.gotoProductCategories();
+                } else {
+                    vm.formData = success;
+                    $scope.the_url = vm.formData.Image;
+                    $scope.imgAvailable = true;
+                    indexService.sucessMessage('company geting data success');
+
+                }
+
+
             }, function (error) {
                 indexService.errorMessage('error while adding company');
 
             })
 
-        } else {
-            // vm.getLastTransaction();
-
-
         }
         vm.create = function (createObject) {
-
             createObject.created = indexService.createdDate;
             createObject.disable = false;
+            createObject.updated = indexService.createdDate;
+            createObject.uid_disable = getUsers + "_" + false;
             console.log(JSON.stringify(createObject));
             api.insert('sellerproduct', createObject).then(function (success) {
                 indexService.sucessMessage('product added successfully');
-                vm.formData = {};
+                vm.gotoProductCategories();
+                $scope.the_url = null;
+                $scope.imgAvailable = false;
             }, function (error) {
                 indexService.errorMessage('error while adding products');
 
@@ -108,13 +116,15 @@
             createObject.updated = indexService.createdDate;
             api.update('sellerproduct', $stateParams.id, createObject).then(function (success) {
                 indexService.sucessMessage('Product updated success');
+                vm.gotoProductCategories();
+
             }, function (error) {
                 indexService.errorMessage('error while adding Product');
 
             })
         }
 
-        vm.saveProduct = saveWithUpload;
+
         function save1() {
             if ($stateParams.id) {
                 vm.update(vm.formData);
@@ -192,18 +202,18 @@
 
 
         }
-        function unable() {
-            var data = {};
-            var loca = $stateParams.id + '/disable';
-            data[loca] = false;
-            api.bulkupdate('sellerproduct', data).then(function (res) {
-                console.log('res', res)
-                indexService.sucessMessage('product  is now unabled');
-                vm.gotoSellerCompanies();
-            }, function (err) {
-                console.log('error', err)
-            })
-        }
+        // function unable() {
+        //     var data = {};
+        //     var loca = $stateParams.id + '/disable';
+        //     data[loca] = false;
+        //     api.bulkupdate('sellerproduct', data).then(function (res) {
+        //         console.log('res', res)
+        //         indexService.sucessMessage('product  is now unabled');
+        //         vm.gotoSellerCompanies();
+        //     }, function (err) {
+        //         console.log('error', err)
+        //     })
+        // }
 
 
         function remove() {
@@ -229,13 +239,87 @@
 
 
         // check exprire date is less than today
-
+        function removeImage() {
+            delete vm.formData.Image;
+            $scope.the_url = undefined
+            console.log('removeImage', $scope.the_url);
+        }
 
 
 
         function chagePackage() {
             console.log('chagePackage');
         }
+
+
+
+        // unable and disbale products
+
+        function unable(id) {
+            var id = $stateParams.id;
+            if (vm.products.length <= vm.lastTransaction.MaxProductCount) {
+                var data = {};
+                var loca = id + '/disable';
+                data[loca] = false;
+                var uid_disable = id + '/uid_disable';
+                data[uid_disable] = getUsers + "_" + false;
+                api.bulkupdate('sellerproduct', data).then(function (res) {
+                    console.log('res', res)
+                    indexService.sucessMessage('product  is now unabled');
+                    vm.gotoProductCategories()
+                }, function (err) {
+                    console.log('error', err)
+                })
+            } else {
+                vm.showConfirm();
+            }
+
+        }
+
+
+        function disable(id) {
+            var id = $stateParams.id;
+            var data = {};
+            var loca = id + '/disable';
+            data[loca] = true;
+            var uid_disable = id + '/uid_disable';
+            data[uid_disable] = getUsers + "_" + true;
+            api.bulkupdate('sellerproduct', data).then(function (res) {
+                console.log('res', res)
+                indexService.sucessMessage('product  is now disable');
+                vm.gotoProductCategories()
+
+            }, function (err) {
+                console.log('error', err)
+            })
+        }
+
+
+
+        function showConfirm(ev) {
+            // Appending dialog to document.body to cover sidenav in docs app
+            var confirm = $mdDialog.confirm()
+                .title('You have reached max count limit')
+                .textContent('Upgrade package or diable products')
+                .ariaLabel('Lucky day')
+                .targetEvent(ev)
+                .ok('Update Package')
+                .cancel('NO');
+            if (vm.products.length <= vm.lastTransaction.MaxProductCount) {
+                vm.gotoAddProduct();
+            } else {
+                $mdDialog.show(confirm).then(function (res) {
+                    // YES pressed
+                    $state.goto('app.seller.UpdatePackage');
+
+                }, function () {
+                    // NO Pressed
+
+                });
+
+            }
+
+        };
 
     }
 })();

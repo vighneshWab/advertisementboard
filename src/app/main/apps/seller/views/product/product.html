@@ -8,8 +8,16 @@
             </md-button>
 
             <div layout="row" layout-align="start center">
-                <div class="product-image" hide-xs>
+                <md-button class="edit-button md-icon-button" ng-show="the_url" ng-click="vm.removeImage()" aria-label="Product details"
+                    translate>
+                    <md-tooltip>Remove Image</md-tooltip>
+                    <md-icon md-font-icon="icon-close" class="s24"></md-icon>
+                </md-button>
+                <div class="product-image" hide-xs ng-show="the_url">
                     <img ng-src="{{the_url}}">
+                </div>
+                <div class="product-image" hide-xs ng-hide="the_url">
+                    <img ng-src="{{the_url1}}">
                 </div>
 
                 <div layout="column" layout-align="start start">
@@ -27,12 +35,15 @@
             <md-button class="md-raised md-background" ng-click="vm.saveProduct()" ng-disabled="!vm.isFormValid('productForm')">
                 <span>SAVE</span>
             </md-button>
-
-            <md-button class="md-raised md-background" ng-if="vm.formData.disable==true" ng-disabled="!vm.isFormValid('productForm')" ng-click="vm.unable()">
-                <span>Unable Product</span>
+            <md-button ng-show="vm.formData.disable && vm.editmode" class="md-raised md-background" ng-click="vm.unable()" ng-disabled="!vm.isFormValid('productForm')"
+                aria-label="Product details" translate>
+                <md-tooltip>Unable Product</md-tooltip>
+                <span>Unable </span>
             </md-button>
-            <md-button class="md-raised md-danger" ng-show="vm.editmode"  ng-click="vm.remove()">
-                <span>Remove </span>
+            <md-button ng-show="!vm.formData.disable && vm.editmode" class="md-raised md-background" ng-click="vm.disable()" ng-disabled="!vm.isFormValid('productForm')"
+                aria-label="Product details" translate>
+                <md-tooltip>Disable Product</md-tooltip>
+                <span>Disable </span>
             </md-button>
 
         </div>
@@ -117,7 +128,7 @@
 
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
-                                    <label>Category Description</label>
+                                    <label>Product Description</label>
                                     <input type="text" ng-model="vm.formData.CategoryDescription" name="CategoryDescription" required>
                                     <div ng-messages="productForm.CategoryDescription.$error" role="alert">
                                         <div ng-message="required">
@@ -130,15 +141,13 @@
 
                             <div layout="column" layout-gt-xs="row">
                                 <input type="file" file-model="myFile" filelist-bind name="file" required />
-                                <div class="product-image1" ng-show="imgAvailable" id="preview" hide-xs>
-                                    <img ng-src="{{ the_url }}">
-                                </div>
                                 <div ng-messages="productForm.file.$error" role="alert">
                                     <div ng-message="required">
                                         <span>Image field is required</span>
                                     </div>
                                 </div>
                             </div>
+
                         </form>
                     </div>
                 </md-tab-body>

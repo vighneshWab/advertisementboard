@@ -4,7 +4,7 @@
             <span>F</span>
         </div>
         <div class="title" translate="REGISTER_V2.INTRO_TITLE">
-            Welcome to the FUSE!
+            Welcome to the Advertisment Board
         </div>
         <div class="description" translate="REGISTER_V2.INTRO_DESCRIPTION">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ullamcorper nisl erat, vel convallis elit fermentum pellentesque.
@@ -60,7 +60,7 @@
                 </md-input-container>
 
                 <md-input-container class="md-block" md-no-float>
-                    <input type="password" name="password" ng-model="vm.form.password" placeholder="Password" translate translate-attr-placeholder="REGISTER_V2.PASSWORD"
+                    <input type="password" name="password" ng-model="vm.form.password"  placeholder="Password" translate translate-attr-placeholder="REGISTER_V2.PASSWORD"
                         required>
                         <div ng-messages="registerForm.password.$error" role="alert">
                             <div ng-message="required">
@@ -68,20 +68,17 @@
                             </div>
                         </div>
                 </md-input-container>
-<!--
+
                 <md-input-container class="md-block" md-no-float>
-                    <input type="password" name="passwordConfirm" ng-model="vm.form.passwordConfirm" placeholder="Password (Confirm)" translate
+                    <input type="password"  name="passwordConfirm"  ng-model="vm.form.passwordConfirm" ng-change=" vm.confirm(registerForm)"placeholder="Password (Confirm)" translate
                           required >
                         <div ng-messages="registerForm.passwordConfirm.$error" role="alert">
                             <div ng-message="required">
                                 <span translate="REGISTER_V2.ERRORS.PASSWORD_CONFIRM_REQUIRED">Password (Confirm) field is required</span>
                             </div>
-                            <div ng-message-exp="[vm.form.password,vm.form.passwordConfirm]">
-                                <span >Password Does not matched</span>
-                            </div>
-
+                            <div ng-message="match"> <span>Password did not matched</span></div>
                         </div>
-                </md-input-container>-->
+                </md-input-container>
 
                 <div class="terms" layout="row" layout-align="center center">
                     <md-checkbox name="terms" ng-model="data.cb1" aria-label="I read and accept" required></md-checkbox>

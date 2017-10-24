@@ -8,6 +8,8 @@
         .directive('uniqueEmail', uniqueEmail)
         .directive('numbersOnly', numbersOnly)
         .directive("limitTo", limitTo)
+        .directive("companyDetails", companyDetails)
+        .directive('compareTo', compareTo)
         .filter('capitalize', function () {
             return function (input) {
                 return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
@@ -20,48 +22,46 @@
             require: 'ngModel',
             restrict: 'A',
             link: function (scope, el, attrs, ctrl) {
+                ctrl.$parsers.push(function (viewValue) {
+                    if (viewValue) {
+                        console.log('viewvalue:', viewValue)
+                        var email = viewValue;
+                        var pattern = /^.+@.+\..+$/;
+                        if (pattern.test(email)) {
+                            $timeout(function () {
+                                api.verifyEmail(email).then(function (success) {
+                                    console.log('verifyEmail');
+                                    var data = success[0];
+                                    console.log(data)
+                                    if (data == undefined) {
+                                        ctrl.$setValidity('uniqueEmail', true);
+                                    } else {
 
+                                        // if (data.uid == false) {
+                                        //     ctrl.$setValidity('uniqueEmail', true);
+                                        // } else {
+                                        //     // deferred.reject();
+                                        //     ctrl.$setValidity('uniqueEmail', false);
+                                        // }
+                                        ctrl.$setValidity('uniqueEmail', false);
 
-                ctrl.$viewChangeListeners.push(function () {
-                    console.log(ctrl.$modelValue);
-
-                    ctrl.$parsers.push(function (viewValue) {
-                        if (viewValue) {
-                            var email = viewValue;
-                            var pattern = /^.+@.+\..+$/;
-                            if (pattern.test(email)) {
-                                $timeout(function () {
-                                    api.verifyEmail(email).then(function (success) {
-                                        var data = success[0];
-                                        console.log(data)
-                                        if (data == undefined) {
-                                            ctrl.$setValidity('uniqueEmail', true);
-                                        } else {
-                                            ctrl.$setValidity('uniqueEmail', false);
-
-                                        }
-                                    })
-                                }, 200)
-                            }
-                            return viewValue;
+                                    }
+                                })
+                            }, 200)
                         }
-                    });
+                        return viewValue;
+                    }
                 });
-
-
-
             }
         };
     }
 
-    function abnAvailabilityasyncValidators(api, $q, $timeout) {
+    function abnAvailabilityasyncValidators(api, $q, $rootScope, $timeout) {
         return {
             require: 'ngModel',
             link: function (scope, element, attrs, ngModel) {
-
                 ngModel.$viewChangeListeners.push(function () {
                     console.log(ngModel.$modelValue);
-
                     ngModel.$asyncValidators.abnValidator = function (modelvalue, viewvalue) {
                         var deferred = $q.defer();
                         var abn = modelvalue;
@@ -73,9 +73,15 @@
                                     if (data == undefined) {
                                         deferred.resolve();
                                     } else {
+                                        // if (data.uid == false) {
+                                        //     deferred.resolve();
+                                        // } else {
+                                        //     deferred.reject();
+                                        // }
                                         deferred.reject();
-
                                     }
+
+
                                 })
                             }, 500)
                         }
@@ -172,6 +178,33 @@
     }
 
 
+    function companyDetails() {
+
+
+    }
+
+
+    function compareTo() {
+
+        return {
+            // require: "ngModel",
+            scope: {
+                otherModelValue: "=compareTo"
+            },
+            link: function (scope, element, attributes, ngModel) {
+
+                // ngModel.$validators.compareTo = function (modelValue) {
+                //     return modelValue == scope.otherModelValue;
+                // };
+
+                // scope.$watch("otherModelValue", function () {
+                //     ngModel.$validate();
+                // });
+            }
+        };
+
+
+    }
 
 
 })();

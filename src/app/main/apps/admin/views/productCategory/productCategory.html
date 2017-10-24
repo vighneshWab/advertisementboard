@@ -8,8 +8,16 @@
             </md-button>
 
             <div layout="row" layout-align="start center">
-                <div class="product-image" hide-xs>
+                <md-button class="edit-button md-icon-button" ng-show="the_url" ng-click="vm.removeImage()" aria-label="Product details"
+                    translate>
+                    <md-tooltip>Remove Image</md-tooltip>
+                    <md-icon md-font-icon="icon-close" class="s24"></md-icon>
+                </md-button>
+                <div class="product-image" hide-xs ng-show="the_url">
                     <img ng-src="{{the_url}}">
+                </div>
+                <div class="product-image" hide-xs ng-hide="the_url">
+                    <img ng-src="{{the_url1}}">
                 </div>
 
                 <div layout="column" layout-align="start start">
@@ -78,9 +86,7 @@
 
                             <div layout="column" layout-gt-xs="row">
                                 <input type="file" file-model="myFile" filelist-bind required />
-                                <div class="product-image1" ng-show="imgAvailable" id="preview" hide-xs>
-                                    <img ng-src="{{ the_url }}">
-                                </div>
+                                
                             </div>
                         </form>
                     </div>

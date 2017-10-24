@@ -1,0 +1,67 @@
+<md-dialog aria-label="Mango (Fruit)">
+    <form ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Add Exsiting company</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <form id="productForm" name="productForm">
+                    <div layout="column" layout-gt-xs="row">
+                        <md-input-container flex>
+                            <label>Key</label>
+                            <input type="text" limit-to="20" ng-minlength="20" ng-maxlength="20" ng-model="vm.adde.key" ng-change="vm.addexsiting(vm.adde.key)"
+                                name="key" required>
+                            <div ng-messages="productForm.key.$error" role="alert">
+                                <div ng-message="required">
+                                    <span>abn field is required</span>
+                                </div>
+                                <div ng-message="minlength">should have 20 characters</div>
+                                <div ng-message="maxlength">Your field is too long</div>
+                                <div ng-message="abnValidator">
+                                    <span>Company already exists with the abn number entered</span>
+                                </div>
+
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="column" layout-gt-xs="row">
+                        <md-input-container flex>
+                            <label>Email</label>
+                            <input type="email" ng-model="vm.adde.Email" name="email" ng-disabled="vm.getting" ng-change="vm.verifyemail(vm.adde.Email)"
+                                ng-pattern="/^.+@.+\..+$/" required>
+                            <div ng-messages="productForm.email.$error" role="alert">
+                                <div ng-message="required">
+                                    <span>email field is required</span>
+                                </div>
+                                <div ng-message="pattern">
+                                    <span>Email must be a valid e-mail address</span>
+                                </div>
+                                <div ng-message="uniqueEmail">
+                                    <span>Company already exists with the email address entered</span>
+                                </div>
+
+                            </div>
+                        </md-input-container>
+                    </div>
+                </form>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="answer(vm.adde.key)" ng-disabled="!vm.emailmatched">
+                confirm
+            </md-button>
+            <span flex></span>
+            <md-button ng-click="answer('no')">
+                No
+            </md-button>
+
+        </md-dialog-actions>
+    </form>
+</md-dialog>

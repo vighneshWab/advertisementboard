@@ -13,6 +13,7 @@
         $scope.vidAvailable = false;
         $scope.img = $scope.vid = {};
         vm.productCategory = {};
+        vm.removeImage = removeImage;
         if ($stateParams.id) {
             var list = $scope.FBref.child($stateParams.id);
             list.on('value', function (snap) {
@@ -25,7 +26,9 @@
             createObject.CategoryName.toLowerCase();
             indexService.create($scope.FBref, createObject).then(function (res) {
                 console.log('produst cate producsr')
-                vm.productCategory={}
+                vm.productCategory = {}
+                $scope.the_url = null;
+                $scope.imgAvailable = false;
 
             });
         }
@@ -83,6 +86,20 @@
                 }
 
             });
+
+        }
+
+
+        // check exprire date is less than today
+        function removeImage() {
+            if ($scope.myFile == undefined) {
+                console.log('not uploaded yet!')
+            } else {
+                delete vm.formData.Image;
+                $scope.the_url = undefined
+                console.log('removeImage', $scope.the_url);
+
+            }
 
         }
 

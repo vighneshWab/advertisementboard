@@ -9,6 +9,13 @@
     function SellerCompaniesController($state, api, $mdDialog, $scope, indexService) {
         var vm = this;
         vm.sellercompany = 'sellercompany';
+        vm.gotoAddCompany = gotoAddCompany;
+        vm.gotoAddCompany = showAdvanced;
+        vm.gotoCompanyDetail = gotoCompanyDetail;
+        vm.unable = unable;
+        vm.disable = disable;
+        var getUsers = indexService.getUser();
+
 
         vm.dtInstance = {};
         vm.dtOptions = {
@@ -87,21 +94,20 @@
         });
 
 
-        // Methods
-        vm.gotoAddCompany = gotoAddCompany;
-        vm.gotoCompanyDetail = gotoCompanyDetail;
-        vm.unable = unable;
-        vm.disable = disable;
 
-        //////////
 
         var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
             vm.lastTransaction = res[0];
-            if (vm.sellerCompanies.length <= vm.lastTransaction.MaxCompanyCount) {
-                vm.reachedMaxLimit = false;
+            // vm.lastTransaction.MaxCompanyCount=-1;
 
-            }
         });
+
+        // Methods
+
+
+        //////////
+
+
 
         /**
          * Go to add product
@@ -124,7 +130,10 @@
             if (vm.sellerCompanies.length <= vm.lastTransaction.MaxCompanyCount) {
                 var data = {};
                 var loca = id + '/disable';
+
                 data[loca] = false;
+                var uid_disable = id + '/uid_disable';
+                data[uid_disable] = getUsers + "_" + false;
                 api.bulkupdate('sellercompany', data).then(function (res) {
                     console.log('res', res)
                     indexService.sucessMessage('company is now unabled');
@@ -146,12 +155,17 @@
                 for (var i = 0; i < products.length; i++) {
                     var loca = products[i].$id + '/disable';
                     bulkdisbleupdate[loca] = true;
+                    var uid_disable = products[i].$id + '/uid_disable';
+                    bulkdisbleupdate[uid_disable] = getUsers + "_" + true;
+
                 }
                 api.bulkupdate('sellerproduct', bulkdisbleupdate).then(function (res) {
                     console.log('res', res)
                     var data = {};
                     var loca = id + '/disable';
                     data[loca] = true;
+                    var uid_disable = id + '/uid_disable';
+                    data[uid_disable] = getUsers + "_" + true;
                     api.bulkupdate('sellercompany', data).then(function (res) {
                         console.log('res', res)
                         indexService.sucessMessage('company  is now unabled');
@@ -191,6 +205,34 @@
 
             }
 
+        };
+
+
+
+        // add existing company
+
+        function showAdvanced(ev) {
+            console.log('showAdvanced')
+            $mdDialog.show({
+                controller: 'SellerCompanyController as vm',
+                templateUrl: 'app/main/apps/seller/views/sellercompanies/addexistingcompany.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                fullscreen: true // Only for -xs, -sm breakpoints.
+            })
+                .then(function (answer) {
+                    console.log(answer)
+                    if (answer == 'no') {
+                        vm.gotoAddCompany()
+                    } else {
+                        vm.gotoCompanyDetail(answer)
+
+                    }
+                }, function () {
+                    console.log('no');
+                    $scope.status = 'You cancelled the dialog.';
+                });
         };
     }
 })();

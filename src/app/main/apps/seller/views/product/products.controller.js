@@ -13,6 +13,7 @@
         var list = api.userWiseData('sellerproduct').then(function (success) {
             vm.products = success;
         });
+        var getUsers = indexService.getUser();
 
         vm.dtInstance = {};
         vm.dtOptions = {
@@ -125,6 +126,8 @@
                 var data = {};
                 var loca = id + '/disable';
                 data[loca] = false;
+                var uid_disable = id + '/uid_disable';
+                data[uid_disable] = getUsers + "_" + false;
                 api.bulkupdate('sellerproduct', data).then(function (res) {
                     console.log('res', res)
                     indexService.sucessMessage('product  is now unabled');
@@ -142,6 +145,8 @@
             var data = {};
             var loca = id + '/disable';
             data[loca] = true;
+            var uid_disable = id + '/uid_disable';
+            data[uid_disable] = getUsers + "_" + true;
             api.bulkupdate('sellerproduct', data).then(function (res) {
                 console.log('res', res)
                 indexService.sucessMessage('product  is now disable');

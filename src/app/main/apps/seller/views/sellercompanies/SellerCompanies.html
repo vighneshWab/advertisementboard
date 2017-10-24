@@ -24,12 +24,18 @@
                 <md-icon md-font-icon="icon-magnify" class="white-text icon search-icon"></md-icon>
                 <input id="e-commerce-products-search" class="search-input" type="text" placeholder="Search" flex>
             </div>
-
+            <!-- showAdvanced -->
             <div>
                 <md-button class="md-raised md-background" ng-click="vm.gotoAddCompany()">
                     <span>Add Company </span>
                 </md-button>
             </div>
+
+            <!-- <div>
+                <md-button class="md-raised md-background" ng-click="vm.showAdvanced($event)">
+                    <span>Existing </span>
+                </md-button>
+            </div> -->
         </div>
         <!-- / CONTENT HEADER -->
 
@@ -100,12 +106,12 @@
                                 <md-button ng-show="product.disable" class="md-icon-button" ng-click="vm.unable(product.$id)" aria-label="Product details"
                                     translate>
                                     <md-tooltip>Unable Company</md-tooltip>
-                                    <md-icon md-font-icon="icon-eye" class="s16"></md-icon>
+                                    <md-icon md-font-icon="icon-check" class="s16"></md-icon>
                                 </md-button>
                                 <md-button ng-show="!product.disable" class="md-icon-button" ng-click="vm.disable(product.$id)" aria-label="Product details"
                                     translate>
                                     <md-tooltip>Disable Company</md-tooltip>
-                                    <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                                    <md-icon md-font-icon="icon-block-helper" class="s16"></md-icon>
                                 </md-button>
                             </td>
                         </tr>

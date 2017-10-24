@@ -3,11 +3,11 @@
 
     angular
         .module('app.seller')
-        .controller('SellerCompanyController', SellerCompanyController)
+        .controller('SelleraddexistingcompanyController', SelleraddexistingcompanyController)
 
 
     /** @ngInject */
-    function SellerCompanyController($scope, $document, $stateParams, api, $mdDialog, indexService, $state) {
+    function SelleraddexistingcompanyController($scope, $document, $stateParams, api, $mdDialog, indexService, $state) {
 
         //data
         var vm = this;
@@ -15,6 +15,7 @@
         vm.isFormValid = isFormValid;
         vm.sellercompany = 'sellercompany';
         vm.formData = {};
+        console.log(vm.formData);
         vm.reachedMaxLimit = false;
         // vm.saveSellerCompany = saveWithUpload;
         vm.saveSellerCompany = saveWithUpload; // for testing add existing companies 
@@ -29,7 +30,6 @@
         vm.editmode = false;
         vm.adminCompanies = adminCompanies;
         vm.remove = remove;
-        vm.getting = true;
         var list = api.getAll('admin/companycategory').then(function (success) {
             vm.companyCategories = success;
         }, function (error) {
@@ -47,12 +47,14 @@
             api.userEditData('sellercompany', $stateParams.id).then(function (success) {
                 console.log(success);
                 if (success == null) {
+
                     vm.gotoSellerCompanies();
                 } else {
                     vm.formData = success;
                     $scope.the_url = vm.formData.Image;
 
                 }
+
                 var list = api.bulkRemove('sellerproduct', $stateParams.id).then(function (success) {
                     vm.products = success;
                 });
@@ -75,14 +77,14 @@
         var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
             vm.lastTransaction = res[0];
             // vm.lastTransaction.MaxCompanyCount=-1;
-            // if (vm.sellerCompanies.length <= vm.lastTransaction.MaxCompanyCount) {
-            //     vm.reachedMaxLimit = false;
+            if (vm.sellerCompanies.length <= vm.lastTransaction.MaxCompanyCount) {
+                vm.reachedMaxLimit = false;
 
-            // } else {
-            //     vm.reachedMaxLimit = true;
-            //     vm.message = "You have reached the maximum company count. Please update your seller category";
-            //     // vm.disableCompanies(vm.sellerCompanies)
-            // }
+            } else {
+                vm.reachedMaxLimit = true;
+                vm.message = "You have reached the maximum company count. Please update your seller category";
+                // vm.disableCompanies(vm.sellerCompanies)
+            }
         });
 
         // methods
@@ -116,7 +118,6 @@
                 console.log('formData:', JSON.stringify(vm.formData));
                 vm.formData.created = indexService.createdDate;
                 vm.formData.disable = false;
-                vm.formData.uid = getUsers;
                 api.insert('sellercompany', vm.formData).then(function (success) {
                     // You have successfully created a new company
                     indexService.sucessMessage('created a new company');
@@ -133,6 +134,18 @@
 
 
         }
+        // function unable() {
+        //     var data = {};
+        //     var loca = $stateParams.id + '/disable';
+        //     data[loca] = false;
+        //     api.bulkupdate('sellercompany', data).then(function (res) {
+        //         console.log('res', res)
+        //         indexService.sucessMessage('company is now unable');
+        //         vm.gotoSellerCompanies();
+        //     }, function (err) {
+        //         console.log('error', err)
+        //     })
+        // }
 
         function disableCompanies(comapanies) {
             var bulkUpdate = {};
@@ -267,8 +280,6 @@
             createObject.created = indexService.createdDate;
             createObject.updated = indexService.createdDate;
             createObject.disable = false;
-            createObject.uid = getUsers;
-            createObject.uid_disable = getUsers + "_" + false;
             console.log(JSON.stringify(createObject));
             api.insert('sellercompany', createObject).then(function (success) {
                 indexService.sucessMessage('company added successfully');
@@ -284,11 +295,6 @@
 
         vm.update = function (createObject) {
             createObject.updated = indexService.createdDate;
-            if (createObject.uid == false) {
-                createObject.uid = getUsers;
-                createObject.uid_disable = getUsers + "_" + false;
-
-            }
             api.update('sellercompany', $stateParams.id, createObject).then(function (success) {
                 indexService.sucessMessage('company updated success');
                 vm.gotoSellerCompanies();
@@ -309,8 +315,6 @@
                 var data = {};
                 var loca = id + '/disable';
                 data[loca] = false;
-                var uid_disable = id + '/uid_disable';
-                data[uid_disable] = getUsers + "_" + false;
                 api.bulkupdate('sellercompany', data).then(function (res) {
                     console.log('res', res)
                     indexService.sucessMessage('company is now unabled');
@@ -336,16 +340,12 @@
                 for (var i = 0; i < products.length; i++) {
                     var loca = products[i].$id + '/disable';
                     bulkdisbleupdate[loca] = true;
-                    var uid_disable = products[i].$id + '/uid_disable';
-                    bulkdisbleupdate[uid_disable] = getUsers + "_" + true;
                 }
                 api.bulkupdate('sellerproduct', bulkdisbleupdate).then(function (res) {
                     console.log('res', res)
                     var data = {};
                     var loca = id + '/disable';
                     data[loca] = true;
-                    var uid_disable = id + '/uid_disable';
-                    data[uid_disable] = getUsers + "_" + true;
                     api.bulkupdate('sellercompany', data).then(function (res) {
                         console.log('res', res)
                         indexService.sucessMessage('company  is now unabled');
@@ -374,8 +374,6 @@
                 var data = {};
                 var loca = id + '/disable';
                 data[loca] = false;
-                var uid_disable = id + '/uid_disable';
-                data[uid_disable] = getUsers + "_" + false;
                 api.bulkupdate('sellerproduct', data).then(function (res) {
                     console.log('res', res)
                     indexService.sucessMessage('product  is now unabled');
@@ -393,8 +391,6 @@
             var data = {};
             var loca = id + '/disable';
             data[loca] = true;
-            var uid_disable = id + '/uid_disable';
-            data[uid_disable] = getUsers + "_" + true;
             api.bulkupdate('sellerproduct', data).then(function (res) {
                 console.log('res', res)
                 indexService.sucessMessage('product  is now disable');
@@ -416,50 +412,6 @@
             $mdDialog.hide(answer);
         };
 
-
-        // add exsting company
-
-        vm.addexsiting = function (key) {
-           
-            vm.emailmatched = false;
-            if (key.length == 20) {
-                api.userEditData('sellercompany', key).then(function (success) {
-                    if (success == null) {
-                        indexService.sucessMessage('Invalid key');
-                    } else {
-                        vm.exsitingcompanydata = success;
-                        vm.getting = false;
-                        console.log(vm.exsitingcompanydata);
-                    }
-                    indexService.sucessMessage('company geting data success');
-
-                }, function (error) {
-                    indexService.errorMessage('No company exists with the ID provided');
-                })
-
-
-            }
-
-        }
-
-
-        vm.verifyemail = function (viewValue) {
-
-            var email = viewValue;
-            var pattern = /^.+@.+\..+$/;
-            if (pattern.test(email)) {
-                if (email === vm.exsitingcompanydata.Email) {
-                    vm.emailmatched = true;
-
-                }
-
-
-
-            }
-
-
-
-        }
 
 
 

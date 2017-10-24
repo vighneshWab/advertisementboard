@@ -12,24 +12,14 @@
             <div class="white-fg" layout="column" layout-align="start start">
                 <div class="h1" layout="row" layout-align="start center">
                     <md-icon md-font-icon="icon-cube-outline"></md-icon>
-                    <span>Products</span>
+                    <span>users</span>
                 </div>
                 <div class="product-count secondary-text">
-                    <span>Total Product Categories:</span>
-                    <span>{{vm.packages.length}}</span>
+                    <span>Total users:</span>
+                    <span>{{vm.users.length}}</span>
                 </div>
             </div>
-
-            <div class="search" layout="row" layout-align="start center" flex>
-                <md-icon md-font-icon="icon-magnify" class="white-text icon search-icon"></md-icon>
-                <input id="e-commerce-products-search" class="search-input" type="text" placeholder="Search" flex>
-            </div>
-
-            <div>
-                <md-button class="md-raised md-background" ng-click="vm.gotoAddProduct()">
-                    <span>Add Product </span>
-                </md-button>
-            </div>
+          
         </div>
         <!-- / CONTENT HEADER -->
 
@@ -41,6 +31,8 @@
             <!-- / CONTENT TOOLBAR -->
 
             <!-- CONTENT -->
+
+
             <div class="content fullpage-datatable" layout="column" flex>
 
                 <table class="dataTable row-border hover" datatable="ng" dt-instance="vm.dtInstance" dt-options="vm.dtOptions">
@@ -58,12 +50,17 @@
                             </th>
                             <th class="secondary-text">
                                 <div class="table-header">
-                                    <span class="column-title">Description</span>
+                                    <span class="column-title">Email</span>
                                 </div>
                             </th>
                             <th class="secondary-text">
                                 <div class="table-header">
-                                    <span class="column-title">Image</span>
+                                    <span class="column-title">Contact number</span>
+                                </div>
+                            </th>
+                            <th class="secondary-text">
+                                <div class="table-header">
+                                    <span class="column-title">Role</span>
                                 </div>
                             </th>
                             <th class="secondary-text">
@@ -73,33 +70,27 @@
                             </th>
                         </tr>
                     </thead>
+
+
                     <tbody>
-
-                        <tr ng-repeat="product in ::vm.products">
+                        <tr ng-repeat="product in ::vm.users">
                             <td>{{$index + 1}}</td>
-                            <td>{{product.CategoryName}}</td>
-                            <td>{{product.CategoryDescription}}</td>
-                            <!--<td>{{product.Image}}</td>-->
-                            <td><img class="product-image1" ng-src="{{product.Image}}"></td>
-
+                            <td>{{product.userName}}</td>
+                            <td>{{product.email}}</td>
+                            <td>{{product.contactNumber}}</td>
+                            <td>{{product.userRole}}</td>
                             <td>
-                                <md-button class="edit-button md-icon-button" ng-click="vm.gotoProduct(product.$id)" aria-label="Product details" translate>
-                                    <md-tooltip>Edit Product</md-tooltip>
+                                <md-button class="edit-button md-icon-button" ng-click="vm.gotoProductDetail(product.$id)" aria-label="Product details" translate
+                                    translate-attr-aria-label="EC.PRODUCT_DETAILS">
+                                    <md-tooltip>Edit Company</md-tooltip>
                                     <md-icon md-font-icon="icon-pencil" class="s16"></md-icon>
                                 </md-button>
-                                <md-button ng-show="product.disable" class="md-icon-button" ng-click="vm.unable(product.$id)" aria-label="Product details" translate>
-                                    <md-tooltip>Unable Product</md-tooltip>
-                                    <md-icon md-font-icon="icon-check" class="s16"></md-icon>
-                                </md-button>
-                                <md-button ng-show="!product.disable" class="md-icon-button" ng-click="vm.disable(product.$id)" aria-label="Product details"
-                                    translate>
-                                    <md-tooltip>Disable Product</md-tooltip>
-                                    <md-icon md-font-icon="icon-block-helper" class="s16"></md-icon>
-                                </md-button>
+
                             </td>
                         </tr>
                     </tbody>
                 </table>
+
             </div>
             <!-- / CONTENT -->
 

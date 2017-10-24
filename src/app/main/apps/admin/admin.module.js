@@ -23,9 +23,30 @@
             .state('app.admin', {
                 abstract: true,
                 url: '/admin',
-                
                 role: 'admin',
 
+            })
+            .state('app.admin.dashboard', {
+                url: '/dashboard',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/admin/views/dashboard/admindashboard.html',
+                        controller: 'AdminDashboardController as vm'
+                    }
+                },
+                role: 'admin',
+                bodyClass: 'e-commerce'
+            })
+            .state('app.admin.users', {
+                url: '/users',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/admin/views/users/adminusers.html',
+                        controller: 'AdminUsersController as vm'
+                    }
+                },
+                role: 'admin',
+                bodyClass: 'e-commerce'
             })
 
             // admin company categoies

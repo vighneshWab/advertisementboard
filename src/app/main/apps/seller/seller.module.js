@@ -56,12 +56,24 @@
                 role: 'seller',
                 bodyClass: 'e-commerce'
             })
+        
             .state('app.seller.sellercompanies.SellerCompany', {
                 url: '/SellerCompany',
                 views: {
                     'content@app': {
                         templateUrl: 'app/main/apps/seller/views/sellercompanies/SellerCompany.html',
                         controller: 'SellerCompanyController as vm'
+                    }
+                },
+                role: 'seller',
+                bodyClass: 'e-commerce'
+            })
+            .state('app.seller.sellercompanies.addexistingcompany', {
+                url: '/SellerCompany',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/seller/views/addexistingcompany/addexistingSellerCompany.html',
+                        controller: 'SelleraddexistingcompanyController as vm'
                     }
                 },
                 role: 'seller',
@@ -140,7 +152,7 @@
                 url: '/UpdatePackage',
                 views: {
                     'content@app': {
-                        templateUrl: 'app/main/apps/seller/views/updatePackage/updatePackage.html',
+                        templateUrl: 'app/main/apps/seller/views/updatepackage/updatepackage.html',
                         controller: 'UpdatePackage as vm'
                     }
                 },

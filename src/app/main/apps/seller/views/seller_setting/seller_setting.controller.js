@@ -3,10 +3,12 @@
 
     angular
         .module('app.seller')
-        .controller('seller_setting', seller_setting);
+        .controller('seller_setting', seller_setting)
+    // .controller('addCardController', addCardController)
+
 
     /** @ngInject */
-    function seller_setting(indexService, $scope, api, $state) {
+    function seller_setting(indexService, $scope, stripe, $mdDialog, api, $state) {
         var vm = this;
         vm.isFormValid = isFormValid;
         vm.updatePackage = updatePackage;
@@ -14,7 +16,16 @@
         vm.updateProfile = updateProfile;
         vm.getPaymentDetails = getPaymentDetails;
         vm.stopbecomeseller = stopbecomeseller;
+
         vm.getRole = api.getUserRole();
+        var userid = vm.getRole.$id;
+        var getUsers = indexService.getUser();
+        $scope.stripeCallback = stripeCallback;
+        vm.mulipleSource = mulipleSource;
+        vm.defult_scource = defult_scource;
+        vm.defult_scource_card = defult_scource_card
+
+
         var list = api.getAll('admin/userRoles').then(function (success) {
             vm.packages = success;
         }, function (error) {
@@ -28,10 +39,6 @@
                 return $scope[formName].$valid;
             }
         }
-
-
-
-
         function updatePackage() {
             var subcription = {
                 customer: vm.getRole.customerID,
@@ -63,9 +70,10 @@
         }
 
         function getProfile() {
-            api.getUserProfile().then(function (success) {
-                console.log(success)
+            var getUsers = indexService.getUser();
 
+            api.getUserData('user', getUsers).then(function (success) {
+                console.log(success)
                 vm.user = success[0]
                 if (vm.user) {
                     vm.getPaymentDetails()
@@ -88,38 +96,23 @@
             })
 
         }
-
-
         function getPaymentDetails() {
             console.log('getPaymentDetails')
-
             var data = {
                 customer: vm.user.customerID
             }
-
             api.postdata('customer_details', data).then(function (response) {
-                vm.payment = response;
-                // vm.sources = vm.payment.sources.data;
-                vm.subscriptions = vm.payment.subscriptions.data[0].items.data[0].plan.id;
-
-                console.log('customer_details', response);
-
+                vm.sources = response.sources.data;
+                // vm.subscriptions = vm.payment.subscriptions.data[0].items.data[0].plan.id;
             }, function (error) {
                 console.log('error while createiing customer');
             });
-
-
-
         }
-
         // sellercompany
 
         function stopbecomeseller() {
             api.deletedata('customer', vm.getRole.customerID).then(function (response) {
                 console.log(response);
-
-                // diable all products and comanies of user
-
                 api.userWiseData('sellerproduct').then(function (res) {
                     console.log('res', res)
                     var products = res;
@@ -127,6 +120,8 @@
                     for (var i = 0; i < products.length; i++) {
                         var loca = products[i].$id + '/disable';
                         bulkdisbleupdate[loca] = true;
+                        var uid_disable = products[i].$id + '/uid_disable';
+                        bulkdisbleupdate[uid_disable] = getUsers + "_" + true;
                     }
                     api.bulkupdate('sellerproduct', bulkdisbleupdate).then(function (res) {
                         console.log('res', res)
@@ -139,22 +134,31 @@
                             for (var i = 0; i < companies.length; i++) {
                                 var loca = companies[i].$id + '/disable';
                                 bulkdisbleupdate[loca] = true;
+                                var uid_disable = companies[i].$id + '/uid_disable';
+                                bulkdisbleupdate[uid_disable] = getUsers + "_" + true;
                             }
                             api.bulkupdate('sellercompany', bulkdisbleupdate).then(function (res) {
                                 console.log('res', res)
 
-                                var userdata = vm.getRole;
-                                userdata.role = 'buyer';
-                                delete userdata.customerID;
-                                delete userdata.subcription;
-                                delete userdata.$id;
-                                delete userdata.$priority;
+                                api.getUserData('user', getUsers).then(function (success) {
+                                    console.log(success)
+                                    vm.user = success[0];
+                                    var id = vm.user.$id;
+                                    var userdata = vm.getRole;
+                                    userdata.role = 'buyer';
+                                    delete userdata.customerID;
+                                    delete userdata.subcription;
+                                    delete userdata.$id;
+                                    delete userdata.$priority;
+                                    api.update('user', id, userdata).then(function (res) {
+                                        console.log('user', res)
+                                        $state.go('app.buyer.dashboard');
+                                    }, function (err) {
+                                        console.log('error', err)
+                                    })
 
-                                api.bulkupdate('user', userdata).then(function (res) {
-                                    console.log('user', res)
+                                }, function (error) {
 
-                                }, function (err) {
-                                    console.log('error', err)
                                 })
 
                             }, function (err) {
@@ -165,10 +169,6 @@
                             console.log('error', err)
                         })
 
-
-
-
-
                     }, function (err) {
                         console.log('error', err)
                     })
@@ -177,12 +177,6 @@
                     console.log('error', err)
                 })
 
-
-
-
-
-
-
             }, function (error) {
                 indexService.sucessMessage('error while')
             });
@@ -190,9 +184,79 @@
         }
 
 
+        function stripeCallback() {
+            console.log('stripeCallback');
+            stripe.card.createToken($scope.payment.card)
+                .then(function (response) {
+                    console.log('token created for card ending in ');
+                    var card = {
+                        customer: vm.getRole.customerID,
+                        source: response.id
+                    }
+                    vm.mulipleSource(card);
+                })
+                .catch(function (err) {
+                    if (err.type && /^Stripe/.test(err.type)) {
+                        console.log('Stripe error: ', err.message)
+                    }
+                    else {
+                        console.log('Other error occurred, possibly with your API', err.message)
+                    }
+                })
+
+        };
 
 
+        function mulipleSource(customer) {
+            api.postdata('create_source', customer).then(function (response) {
+                console.log('customer ID', response.id);
 
+
+                vm.defult_scource(sourcId);
+
+            }, function (error) {
+                console.log('error while createiing customer');
+            });
+
+        }
+
+        function defult_scource(id) {
+            console.log('defult_scource')
+            var defultS = {
+                customer: vm.getRole.customerID,
+                source: id
+            }
+
+            api.postdata('defult_source', defultS).then(function (response) {
+                console.log('customer ID', response);
+                vm.getPaymentDetails();
+                $scope.payment = {}
+            }, function (error) {
+                console.log('error while createiing customer');
+
+            });
+
+        }
+
+        function defult_scource_card(id) {
+            console.log('defult_scource')
+            var defultS = {
+                customer: vm.getRole.customerID,
+                source: id
+            }
+
+            api.postdata('defult_source', defultS).then(function (response) {
+                console.log('customer ID', response);
+                // vm.getPaymentDetails();
+                $scope.payment = {}
+            }, function (error) {
+                console.log('error while createiing customer');
+
+            });
+
+        }
 
     }
+
+
 })();
