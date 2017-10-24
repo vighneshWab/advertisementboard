@@ -24,7 +24,15 @@
             indexService.errorMessage("error while getting data");
         });
         function stripeCallback() {
-            console.log('stripeCallback');
+
+            var seprate = $scope.payment.card.expiry.split("/");
+            $scope.payment.card.exp_month = seprate[0];
+            $scope.payment.card.exp_year = seprate[1];
+            delete $scope.payment.card.expiry
+
+            console.log('stripeCallback', JSON.stringify($scope.payment));
+
+
             stripe.card.createToken($scope.payment.card)
                 .then(function (response) {
                     console.log('token created for card ending in ');
@@ -32,7 +40,8 @@
                         email: vm.user.email,
                         source: response.id
                     }
-                    vm.createCustomer(customer);
+                    $scope.payment = {}
+                    // vm.createCustomer(customer);
                 })
                 .catch(function (err) {
                     if (err.type && /^Stripe/.test(err.type)) {
@@ -91,7 +100,7 @@
                     }
                     api.insert_transaction('transaction', user.uid, transaction).then(function (response) {
                         console.log('transaction created');
-                        indexService.sucessMessage('you become a seller now');  
+                        indexService.sucessMessage('you become a seller now');
                         localStorage.clear();
                         $state.go('app.pages_auth_login');
 

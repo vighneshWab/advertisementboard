@@ -1,5 +1,4 @@
-(function ()
-{
+(function () {
     'use strict';
 
     angular
@@ -7,21 +6,21 @@
         .config(config);
 
     /** @ngInject */
-    function config($stateProvider, $translatePartialLoaderProvider, msNavigationServiceProvider)
-    {
+    function config($stateProvider, $translatePartialLoaderProvider, msNavigationServiceProvider) {
         // State
         $stateProvider.state('app.pages_auth_forgot-password', {
-            url      : '/pages/auth/forgot-password',
-            views    : {
-                'main@'                                 : {
+            url: '/pages/auth/forgot-password',
+            views: {
+                'main@': {
                     templateUrl: 'app/core/layouts/content-only.html',
-                    controller : 'MainController as vm'
+                    controller: 'MainController as vm'
                 },
                 'content@app.pages_auth_forgot-password': {
                     templateUrl: 'app/main/pages/auth/forgot-password/forgot-password.html',
-                    controller : 'ForgotPasswordController as vm'
+                    controller: 'ForgotPasswordController as vm'
                 }
             },
+            role: 'com',
             bodyClass: 'forgot-password'
         });
 

@@ -186,6 +186,12 @@
 
         function stripeCallback() {
             console.log('stripeCallback');
+
+            var seprate = $scope.payment.card.expiry.split("/");
+            $scope.payment.card.exp_month = seprate[0];
+            $scope.payment.card.exp_year = seprate[1];
+            delete $scope.payment.card.expiry
+
             stripe.card.createToken($scope.payment.card)
                 .then(function (response) {
                     console.log('token created for card ending in ');
@@ -193,6 +199,7 @@
                         customer: vm.getRole.customerID,
                         source: response.id
                     }
+                    $scope.payment = {}
                     vm.mulipleSource(card);
                 })
                 .catch(function (err) {
@@ -209,11 +216,7 @@
 
         function mulipleSource(customer) {
             api.postdata('create_source', customer).then(function (response) {
-                console.log('customer ID', response.id);
-
-
                 vm.defult_scource(sourcId);
-
             }, function (error) {
                 console.log('error while createiing customer');
             });
@@ -221,14 +224,13 @@
         }
 
         function defult_scource(id) {
-            console.log('defult_scource')
             var defultS = {
                 customer: vm.getRole.customerID,
                 source: id
             }
 
             api.postdata('defult_source', defultS).then(function (response) {
-                console.log('customer ID', response);
+                indexService.sucessMessage("Card Inserted successfully")
                 vm.getPaymentDetails();
                 $scope.payment = {}
             }, function (error) {
@@ -247,6 +249,7 @@
 
             api.postdata('defult_source', defultS).then(function (response) {
                 console.log('customer ID', response);
+                indexService.sucessMessage("Card Updated successfully")
                 // vm.getPaymentDetails();
                 $scope.payment = {}
             }, function (error) {

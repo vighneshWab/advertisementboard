@@ -224,7 +224,8 @@
                 .then(function (answer) {
                     console.log(answer)
                     if (answer == 'no') {
-                        vm.gotoAddCompany()
+                        $state.go('app.seller.sellercompanies.SellerCompany');
+
                     } else {
                         vm.gotoCompanyDetail(answer)
 
