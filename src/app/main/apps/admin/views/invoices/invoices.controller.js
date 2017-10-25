@@ -3,11 +3,11 @@
 
     angular
         .module('app.admin')
-        .controller('AdminUsersController', AdminUsersController);
+        .controller('AdminInvoicesController', AdminInvoicesController);
 
     /** @ngInject */
-    function AdminUsersController(indexService, $scope, api, $q, $state, DTOptionsBuilder, DTColumnBuilder, DTColumnDefBuilder) {
-        console.log('AdminUsersController');
+    function AdminInvoicesController(indexService, $scope, api, $q, $state, DTOptionsBuilder, DTColumnBuilder, DTColumnDefBuilder) {
+        console.log('AdminInvoicesController');
         var vm = this;
         vm.gotoUsers = gotoUsers;
         var list = api.getAll('user').then(function (success) {
@@ -17,7 +17,13 @@
 
         });
 
-       
+        var list = api.postdata('upcoming_invoice',{"limit":3}).then(function (success) {
+            vm.invoices = success.data;
+            console.log(JSON.stringify(vm.invoices));
+        }, function (error) {
+
+        });
+
 
 
 

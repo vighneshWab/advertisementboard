@@ -19,10 +19,8 @@
             $rootScope.isSeller = false;
             $rootScope.isAdmin = false;
             $rootScope.getRole = api.getUserRole();
+            console.log($rootScope.getRole.uid)
             $rootScope.userName = $rootScope.getRole.userName;
-            // console.log($rootScope.getRole)
-            // api.insert('plan',{"test":123});
-            // api.getAll('plan');
 
 
             if ($rootScope.getRole.userRole == undefined) {
@@ -212,6 +210,15 @@
             msNavigationService.saveItem('users', {
                 title: 'Users',
                 state: 'app.admin.users',
+                hidden: function () {
+                    return !$rootScope.isAdmin; // must be a boolean value
+                },
+
+            });
+            // app.admin.invoices
+            msNavigationService.saveItem('invoices', {
+                title: 'Invoices',
+                state: 'app.admin.invoices',
                 hidden: function () {
                     return !$rootScope.isAdmin; // must be a boolean value
                 },

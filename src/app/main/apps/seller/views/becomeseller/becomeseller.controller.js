@@ -41,7 +41,7 @@
                         source: response.id
                     }
                     $scope.payment = {}
-                    // vm.createCustomer(customer);
+                    vm.createCustomer(customer);
                 })
                 .catch(function (err) {
                     if (err.type && /^Stripe/.test(err.type)) {

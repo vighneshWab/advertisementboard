@@ -37,12 +37,25 @@
                 role: 'admin',
                 bodyClass: 'e-commerce'
             })
+            // 
             .state('app.admin.users', {
                 url: '/users',
                 views: {
                     'content@app': {
                         templateUrl: 'app/main/apps/admin/views/users/adminusers.html',
                         controller: 'AdminUsersController as vm'
+                    }
+                },
+                role: 'admin',
+                bodyClass: 'e-commerce'
+            })
+
+            .state('app.admin.invoices', {
+                url: '/invoices',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/admin/views/invoices/invoices.html',
+                        controller: 'AdminInvoicesController as vm'
                     }
                 },
                 role: 'admin',

@@ -34,7 +34,6 @@
 
         // Methods
         function isFormValid(formName) {
-            console.log('isFormValid')
             if ($scope[formName] && $scope[formName].$valid) {
                 return $scope[formName].$valid;
             }
@@ -97,7 +96,6 @@
 
         }
         function getPaymentDetails() {
-            console.log('getPaymentDetails')
             var data = {
                 customer: vm.user.customerID
             }
@@ -114,7 +112,6 @@
             api.deletedata('customer', vm.getRole.customerID).then(function (response) {
                 console.log(response);
                 api.userWiseData('sellerproduct').then(function (res) {
-                    console.log('res', res)
                     var products = res;
                     var bulkdisbleupdate = {};
                     for (var i = 0; i < products.length; i++) {
@@ -124,11 +121,8 @@
                         bulkdisbleupdate[uid_disable] = getUsers + "_" + true;
                     }
                     api.bulkupdate('sellerproduct', bulkdisbleupdate).then(function (res) {
-                        console.log('res', res)
-
                         // disable comapnies
                         api.userWiseData('sellercompany').then(function (res) {
-                            console.log('res', res)
                             var companies = res;
                             var bulkdisbleupdate = {};
                             for (var i = 0; i < companies.length; i++) {
@@ -138,21 +132,19 @@
                                 bulkdisbleupdate[uid_disable] = getUsers + "_" + true;
                             }
                             api.bulkupdate('sellercompany', bulkdisbleupdate).then(function (res) {
-                                console.log('res', res)
-
                                 api.getUserData('user', getUsers).then(function (success) {
-                                    console.log(success)
                                     vm.user = success[0];
                                     var id = vm.user.$id;
                                     var userdata = vm.getRole;
-                                    userdata.role = 'buyer';
+                                    userdata.userRole = 'buyer';
                                     delete userdata.customerID;
                                     delete userdata.subcription;
                                     delete userdata.$id;
                                     delete userdata.$priority;
+
                                     api.update('user', id, userdata).then(function (res) {
-                                        console.log('user', res)
-                                        $state.go('app.buyer.dashboard');
+                                        $state.go('app.pages_auth_login');
+                                        
                                     }, function (err) {
                                         console.log('error', err)
                                     })
