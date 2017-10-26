@@ -7,7 +7,7 @@
 
 
     /** @ngInject */
-    function SellerCompanyController($scope, $document, $stateParams, api, $mdDialog, indexService, $state) {
+    function SellerCompanyController($scope, $document, $stateParams, $rootScope, api, $mdDialog, indexService, $state) {
 
         //data
         var vm = this;
@@ -15,8 +15,6 @@
         vm.isFormValid = isFormValid;
         vm.sellercompany = 'sellercompany';
         vm.formData = {};
-        vm.reachedMaxLimit = false;
-        // vm.saveSellerCompany = saveWithUpload;
         vm.saveSellerCompany = saveWithUpload; // for testing add existing companies 
         vm.gotoSellerCompanies = gotoSellerCompanies;
         vm.disableCompanies = disableCompanies;
@@ -27,9 +25,9 @@
         vm.unableProduct = unableProduct;
         vm.gotoProduct = gotoProduct;
         vm.editmode = false;
-        vm.adminCompanies = adminCompanies;
-        vm.remove = remove;
         vm.getting = true;
+
+        // geting companycategory dropdown 
         var list = api.getAll('admin/companycategory').then(function (success) {
             vm.companyCategories = success;
         }, function (error) {
@@ -37,8 +35,16 @@
 
         });
 
+        var list = api.count('sellercompany').then(function (success) {
+            vm.sellerCompanies = success;
+            console.log(vm.sellerCompanies.length)
+            if (vm.sellerCompanies.length > 0) {
+                $rootScope.checkCompany(vm.sellerCompanies.length)
+            }
+        }, function (error) {
+            indexService.errorMessage("error while getting data");
 
-
+        });
 
 
 
@@ -65,25 +71,6 @@
 
         }
 
-        var list = api.count('sellercompany').then(function (success) {
-            vm.sellerCompanies = success;
-            console.log(vm.sellerCompanies.length)
-        }, function (error) {
-            indexService.errorMessage("error while getting data");
-
-        });
-        var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
-            vm.lastTransaction = res[0];
-            // vm.lastTransaction.MaxCompanyCount=-1;
-            // if (vm.sellerCompanies.length <= vm.lastTransaction.MaxCompanyCount) {
-            //     vm.reachedMaxLimit = false;
-
-            // } else {
-            //     vm.reachedMaxLimit = true;
-            //     vm.message = "You have reached the maximum company count. Please update your seller category";
-            //     // vm.disableCompanies(vm.sellerCompanies)
-            // }
-        });
 
         // methods
 
@@ -97,42 +84,6 @@
             $state.go('app.seller.sellercompanies')
         }
 
-        function saveSellerCompany() {
-
-            if ($stateParams.id) {
-                vm.formData.updated = indexService.createdDate;
-                console.log('formData:', JSON.stringify(vm.formData));
-                var childid = $stateParams.id;
-                api.update('sellercompany', childid, vm.formData).then(function (success) {
-                    indexService.sucessMessage('company updated successfully');
-                    // vm.adminCompanies();
-                    vm.gotoSellerCompanies();
-                }, function (error) {
-                    indexService.errorMessage('error while adding company');
-
-                })
-
-            } else {
-                console.log('formData:', JSON.stringify(vm.formData));
-                vm.formData.created = indexService.createdDate;
-                vm.formData.disable = false;
-                vm.formData.uid = getUsers;
-                api.insert('sellercompany', vm.formData).then(function (success) {
-                    // You have successfully created a new company
-                    indexService.sucessMessage('created a new company');
-                    vm.formData = {}
-                    // insertAdmin
-                    vm.adminCompanies();
-
-                }, function (error) {
-                    indexService.errorMessage('Incorrect details entered');
-
-                })
-
-            }
-
-
-        }
 
         function disableCompanies(comapanies) {
             var bulkUpdate = {};
@@ -153,71 +104,6 @@
         }
 
 
-        function adminCompanies() {
-            vm.formData.uid = false;
-            var data = vm.formData;
-
-
-            console.log('companies data ', JSON.stringify(data))
-
-            api.insertAdmin('companies', data).then(function (success) {
-                indexService.sucessMessage('company added success');
-                vm.formData = {}
-                // vm.gotoSellerCompanies();
-
-            }, function (error) {
-                indexService.errorMessage('error while adding company');
-
-            })
-
-        }
-
-        function remove() {
-
-            var removeProduct = [];
-            // bul remove start
-            var list = api.bulkRemove('sellerproduct', $stateParams.id).then(function (success) {
-                console.log('bulkRemove', JSON.stringify(success))
-                var data = success;
-                console.log('length:', data.length)
-                if (data.length == 0) {
-                    api.delete('sellercompany', $stateParams.id).then(function (res) {
-                        if ($stateParams.id == res) {
-                            indexService.sucessMessage('company removed success');
-                            vm.gotoSellerCompanies();
-                        } else {
-                            indexService.errorMessage('error while removing company');
-                        }
-                    })
-
-                } else {
-                    for (var i = 0; i < data.length; i++) {
-                        var key = data[i].$id;
-                        api.delete('sellerproduct', key).then(function (res) {
-                            removeProduct.push(res);
-                            console.log(removeProduct.length);
-                        }, function (err) {
-                            console.log('error', err)
-                        })
-                        if (removeProduct.length == data.length) {
-                            console.log('length matched');
-                            api.delete('sellercompany', $stateParams.id).then(function (res) {
-                                console.log('remove', res)
-                                if ($stateParams.id == res) {
-                                    indexService.sucessMessage('company removed success');
-                                    vm.gotoSellerCompanies();
-
-                                } else {
-                                    indexService.errorMessage('error while removing company');
-                                }
-                            })
-                        }
-                    }
-                }
-            }, function (error) {
-                indexService.errorMessage("error while getting data");
-            });
-        }
 
 
 
@@ -266,9 +152,9 @@
         vm.create = function (createObject) {
             createObject.created = indexService.createdDate;
             createObject.updated = indexService.createdDate;
-            createObject.disable = false;
+            createObject.disable = true;
             createObject.uid = getUsers;
-            createObject.uid_disable = getUsers + "_" + false;
+            createObject.uid_disable = getUsers + "_" + true;
             console.log(JSON.stringify(createObject));
             api.insert('sellercompany', createObject).then(function (success) {
                 indexService.sucessMessage('company added successfully');
@@ -419,8 +305,10 @@
 
         // add exsting company
 
+        // adding exting compnaies
+
         vm.addexsiting = function (key) {
-           
+
             vm.emailmatched = false;
             if (key.length == 20) {
                 api.userEditData('sellercompany', key).then(function (success) {
@@ -442,9 +330,8 @@
 
         }
 
-
+        // verify email is valide for key
         vm.verifyemail = function (viewValue) {
-
             var email = viewValue;
             var pattern = /^.+@.+\..+$/;
             if (pattern.test(email)) {
@@ -453,15 +340,118 @@
 
                 }
 
-
-
             }
-
-
-
         }
 
 
+
+
+
+        ///
+
+
+        // function saveSellerCompany() {
+
+        //     if ($stateParams.id) {
+        //         vm.formData.updated = indexService.createdDate;
+        //         console.log('formData:', JSON.stringify(vm.formData));
+        //         var childid = $stateParams.id;
+        //         api.update('sellercompany', childid, vm.formData).then(function (success) {
+        //             indexService.sucessMessage('company updated successfully');
+        //             // vm.adminCompanies();
+        //             vm.gotoSellerCompanies();
+        //         }, function (error) {
+        //             indexService.errorMessage('error while adding company');
+
+        //         })
+
+        //     } else {
+        //         console.log('formData:', JSON.stringify(vm.formData));
+        //         vm.formData.created = indexService.createdDate;
+        //         vm.formData.disable = false;
+        //         vm.formData.uid = getUsers;
+        //         api.insert('sellercompany', vm.formData).then(function (success) {
+        //             // You have successfully created a new company
+        //             indexService.sucessMessage('created a new company');
+        //             vm.formData = {}
+        //             // insertAdmin
+        //             vm.adminCompanies();
+
+        //         }, function (error) {
+        //             indexService.errorMessage('Incorrect details entered');
+
+        //         })
+
+        //     }
+
+
+        // }
+
+
+        // function adminCompanies() {
+        //     vm.formData.uid = false;
+        //     var data = vm.formData;
+
+        //     console.log('companies data ', JSON.stringify(data))
+
+        //     api.insertAdmin('companies', data).then(function (success) {
+        //         indexService.sucessMessage('company added success');
+        //         vm.formData = {}
+        //         // vm.gotoSellerCompanies();
+
+        //     }, function (error) {
+        //         indexService.errorMessage('error while adding company');
+
+        //     })
+
+        // }
+
+        // function remove() {
+
+        //     var removeProduct = [];
+        //     // bul remove start
+        //     var list = api.bulkRemove('sellerproduct', $stateParams.id).then(function (success) {
+        //         console.log('bulkRemove', JSON.stringify(success))
+        //         var data = success;
+        //         console.log('length:', data.length)
+        //         if (data.length == 0) {
+        //             api.delete('sellercompany', $stateParams.id).then(function (res) {
+        //                 if ($stateParams.id == res) {
+        //                     indexService.sucessMessage('company removed success');
+        //                     vm.gotoSellerCompanies();
+        //                 } else {
+        //                     indexService.errorMessage('error while removing company');
+        //                 }
+        //             })
+
+        //         } else {
+        //             for (var i = 0; i < data.length; i++) {
+        //                 var key = data[i].$id;
+        //                 api.delete('sellerproduct', key).then(function (res) {
+        //                     removeProduct.push(res);
+        //                     console.log(removeProduct.length);
+        //                 }, function (err) {
+        //                     console.log('error', err)
+        //                 })
+        //                 if (removeProduct.length == data.length) {
+        //                     console.log('length matched');
+        //                     api.delete('sellercompany', $stateParams.id).then(function (res) {
+        //                         console.log('remove', res)
+        //                         if ($stateParams.id == res) {
+        //                             indexService.sucessMessage('company removed success');
+        //                             vm.gotoSellerCompanies();
+
+        //                         } else {
+        //                             indexService.errorMessage('error while removing company');
+        //                         }
+        //                     })
+        //                 }
+        //             }
+        //         }
+        //     }, function (error) {
+        //         indexService.errorMessage("error while getting data");
+        //     });
+        // }
 
     }
 

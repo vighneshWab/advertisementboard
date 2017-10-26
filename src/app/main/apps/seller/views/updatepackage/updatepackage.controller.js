@@ -6,13 +6,20 @@
         .controller('UpdatePackage', UpdatePackage);
 
     /** @ngInject */
-    function UpdatePackage(indexService, $scope, api, $mdDialog, $state) {
+    function UpdatePackage(indexService, $scope, $filter, api, $mdDialog, $state) {
         var vm = this;
         vm.isFormValid = isFormValid;
         vm.updatePackage = validateCount;
         vm.getRole = api.getUserRole();
+        vm.formData = {}
+
+        var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
+            vm.lastTransaction = res[0];
+            vm.packageId = vm.lastTransaction.packageId
+        });
         var list = api.getAll('admin/userRoles').then(function (success) {
             vm.packages = success;
+          
         }, function (error) {
             indexService.errorMessage("error while getting data");
         });
@@ -26,15 +33,6 @@
             }
         }
 
-
-
-
-
-        var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
-            vm.lastTransaction = res[0];
-            console.log(vm.lastTransaction)
-
-        });
 
         var listproducts = api.count('sellerproduct').then(function (success) {
             vm.enabledProducts = success;
@@ -139,10 +137,9 @@
                 plan: vm.formData.package.$id,
                 subcription: vm.getRole.subcription
             }
-            console.log('subsciptions', JSON.stringify(subcription))
             api.postdata('update_subsciption', subcription).then(function (response) {
-                console.log('update_subsciption', response.id);
                 var transaction = {
+                    packageId: vm.formData.package.$id,
                     MaxCompanyCount: vm.formData.package.MaxCompanyCount,
                     MaxProductCount: vm.formData.package.MaxProductCount,
                     MaxSellCount: vm.formData.package.MaxSellCount,
@@ -152,13 +149,13 @@
                 var getUsers = indexService.getUser();
                 api.insert_transaction('transaction', getUsers, transaction).then(function (response) {
                     console.log('transaction created');
-                    $state.go('app.seller.dashboard');
+                    indexService.errorMessage('Package has been updated successfully')
 
                 }, function (error) {
                     console.log('error while createiing transaction');
                 });
             }, function (error) {
-                console.log('error while createiing customer');
+                console.log(' error while update_subsciption');
             });
 
 

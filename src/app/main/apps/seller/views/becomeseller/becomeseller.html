@@ -71,7 +71,7 @@
 
                                 <md-input-container flex>
                                     <label>expire </label>
-                                    <input ng-model="payment.card.expiry" name="expiry" payments-validate="expiry" payments-format="expiry" required/>
+                                    <input ng-model="expiry" name="expiry" payments-validate="expiry" payments-format="expiry" required/>
                                     <div ng-if="productForm.expiry.$invalid">
                                         Error: invalid card number!
                                     </div>

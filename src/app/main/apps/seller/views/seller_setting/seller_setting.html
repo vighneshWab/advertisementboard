@@ -98,8 +98,6 @@
                 </md-tab-label>
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
-
-
                         <form id="productForm" name="productForm" stripe:form="stripeCallback">
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>
@@ -114,7 +112,7 @@
 
                                 <md-input-container flex>
                                     <label>expire </label>
-                                    <input ng-model="payment.card.expiry" name="expiry" payments-validate="expiry" payments-format="expiry" required/>
+                                    <input ng-model="expiry" name="expiry" payments-validate="expiry" payments-format="expiry" required/>
                                     <div ng-if="productForm.expiry.$invalid">
                                         Error: invalid card number!
                                     </div>
@@ -139,9 +137,16 @@
                             <md-card md-theme="dark-purple" md-theme-watch>
                                 <md-card-title>
                                     <md-card-title-text>
-                                        <span class="md-headline">Card : <span class="md-subhead">**** **** **** </span>                                        <span class="md-subhead">{{card.last4}}</span></span>
-                                        <span class="md-headline">Month :  <span class="md-subhead">{{card.exp_month}}</span></span>
-                                        <span class="md-headline">Year :  <span class="md-subhead">{{card.exp_year}}</span></span>
+                                        <span class="md-headline">Card :
+                                            <span class="md-subhead">**** **** **** </span>
+                                            <span class="md-subhead">{{card.last4}}</span>
+                                        </span>
+                                        <span class="md-headline">Month :
+                                            <span class="md-subhead">{{card.exp_month}}</span>
+                                        </span>
+                                        <span class="md-headline">Year :
+                                            <span class="md-subhead">{{card.exp_year}}</span>
+                                        </span>
                                     </md-card-title-text>
                                 </md-card-title>
                                 <md-card-actions layout="row" layout-align="end center" ng-click="vm.defult_scource_card(card.id)">
@@ -159,17 +164,46 @@
                 </md-tab-label>
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
-
                         <md-button class="md-raised md-background" ng-click="vm.stopbecomeseller()">
                             <span>Stop</span>
                         </md-button>
-
-
-
                     </div>
                 </md-tab-body>
             </md-tab>
 
+            <div ng-controller="UpdatePackage as vm">
+
+
+                <md-tab ng-if="getRole.userRole=='seller'">
+                    <md-tab-label>
+                        <span>Update Package</span>
+                    </md-tab-label>
+                    <md-tab-body>
+                        <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
+                            <form id="productForm" name="productForm">
+                                <div layout="column" layout-gt-xs="row">
+                                    <md-input-container flex>
+                                        <label>Select Package</label>
+                                        <md-select ng-model="vm.formData.package" required>
+                                            <md-option ng-repeat="role in vm.packages" ng-disabled="role.$id== vm.packageId" ng-value="role">
+                                                {{role.CategoryDescription}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+
+                                </div>
+                                <div layout="column" layout-gt-xs="row">
+                                    <md-button class="md-raised md-background" ng-disabled="!productForm.$valid" ng-click="vm.updatePackage($event)">
+                                        <span>Purchase </span>
+                                    </md-button>
+                                </div>
+                            </form>
+                        </div>
+                    </md-tab-body>
+                </md-tab>
+
+
+            </div>
 
         </md-tabs>
 

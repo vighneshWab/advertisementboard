@@ -60,34 +60,31 @@
         return {
             require: 'ngModel',
             link: function (scope, element, attrs, ngModel) {
-                ngModel.$viewChangeListeners.push(function () {
-                    console.log(ngModel.$modelValue);
-                    ngModel.$asyncValidators.abnValidator = function (modelvalue, viewvalue) {
-                        var deferred = $q.defer();
-                        var abn = modelvalue;
-                        if (abn.length == 11) {
-                            $timeout(function () {
-                                api.verifyABN(abn).then(function (success) {
-                                    var data = success[0];
-                                    console.log(data)
-                                    if (data == undefined) {
-                                        deferred.resolve();
-                                    } else {
-                                        // if (data.uid == false) {
-                                        //     deferred.resolve();
-                                        // } else {
-                                        //     deferred.reject();
-                                        // }
-                                        deferred.reject();
-                                    }
+                // ngModel.$viewChangeListeners.push(function () {
+                ngModel.$asyncValidators.abnValidator = function (modelvalue, viewvalue) {
+                    var deferred = $q.defer();
+                    var abn = modelvalue;
+                    if (abn.length == 11) {
+                        api.verifyABN(abn).then(function (success) {
+                            var data = success[0];
+                            console.log(data)
+                            if (data == undefined) {
+                                deferred.resolve();
+                            } else {
+                                // if (data.uid == false) {
+                                //     deferred.resolve();
+                                // } else {
+                                //     deferred.reject();
+                                // }
+                                deferred.reject();
+                            }
 
+                        })
 
-                                })
-                            }, 500)
-                        }
-                        return deferred.promise;
                     }
-                });
+                    return deferred.promise;
+                }
+                // });
 
 
             }

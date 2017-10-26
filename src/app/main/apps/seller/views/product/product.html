@@ -35,16 +35,7 @@
             <md-button class="md-raised md-background" ng-click="vm.saveProduct()" ng-disabled="!vm.isFormValid('productForm')">
                 <span>SAVE</span>
             </md-button>
-            <md-button ng-show="vm.formData.disable && vm.editmode" class="md-raised md-background" ng-click="vm.unable()" ng-disabled="!vm.isFormValid('productForm')"
-                aria-label="Product details" translate>
-                <md-tooltip>Unable Product</md-tooltip>
-                <span>Unable </span>
-            </md-button>
-            <md-button ng-show="!vm.formData.disable && vm.editmode" class="md-raised md-background" ng-click="vm.disable()" ng-disabled="!vm.isFormValid('productForm')"
-                aria-label="Product details" translate>
-                <md-tooltip>Disable Product</md-tooltip>
-                <span>Disable </span>
-            </md-button>
+           
 
         </div>
     </div>
@@ -61,8 +52,8 @@
                 </md-tab-label>
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
-                        <div ng-show="vm.recachedMaxCount">
-                            <h1>{{vm.message}} </h1>
+                        <div ng-show="rMaxProduct">
+                            <h1>You have Reached Max Product Count Limit </h1>
                             <div>
                                 <md-button class="md-raised md-background" ng-click="vm.chagePackage()">
                                     <span>Change Package</span>
@@ -71,10 +62,9 @@
                         </div>
 
 
-                        <form id="productForm" name="productForm" ng-show="!vm.recachedMaxCount">
+                        <form id="productForm" name="productForm" ng-show="!rMaxProduct">
                             <div layout="column" layout-gt-xs="row">
 
-                                <!-- <pre>{{vm.formData}}</pre> -->
                                 <md-input-container flex>
                                     <label>Company</label>
                                     <md-select ng-model="vm.formData.companyId" name="companyId" required>

@@ -25,7 +25,7 @@
         });
         function stripeCallback() {
 
-            var seprate = $scope.payment.card.expiry.split("/");
+            var seprate = $scope.expiry.split("/");
             $scope.payment.card.exp_month = seprate[0];
             $scope.payment.card.exp_year = seprate[1];
             delete $scope.payment.card.expiry
@@ -40,7 +40,7 @@
                         email: vm.user.email,
                         source: response.id
                     }
-                    $scope.payment = {}
+                    // $scope.payment = {}
                     vm.createCustomer(customer);
                 })
                 .catch(function (err) {
@@ -86,18 +86,21 @@
 
                 // update user userRoles
                 api.update('user', userid, user).then(function (response) {
-                    console.log('update  user role', response);
                     api.setRole(vm.user);
                     localStorage.clear();
-                    delete vm.formData.package.$id;
-                    delete vm.formData.package.$priority;
+                    // delete vm.formData.package.$id;
+                    // delete vm.formData.package.$priority;
                     var transaction = {
+                        packageId: vm.formData.package.$id,
                         MaxCompanyCount: vm.formData.package.MaxCompanyCount,
                         MaxProductCount: vm.formData.package.MaxProductCount,
                         MaxSellCount: vm.formData.package.MaxSellCount,
                         created: indexService.createdDate,
                         expired: indexService.expireDate30
                     }
+                    console.log('update  user role', transaction);
+                    
+
                     api.insert_transaction('transaction', user.uid, transaction).then(function (response) {
                         console.log('transaction created');
                         indexService.sucessMessage('you become a seller now');

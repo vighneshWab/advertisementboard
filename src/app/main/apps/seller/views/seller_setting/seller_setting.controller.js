@@ -179,7 +179,7 @@
         function stripeCallback() {
             console.log('stripeCallback');
 
-            var seprate = $scope.payment.card.expiry.split("/");
+            var seprate = $scope.expiry.split("/");
             $scope.payment.card.exp_month = seprate[0];
             $scope.payment.card.exp_year = seprate[1];
             delete $scope.payment.card.expiry

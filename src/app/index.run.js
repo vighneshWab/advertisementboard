@@ -76,16 +76,6 @@
 
             }
 
-
-            // if()
-
-
-
-            // if(toState.role!=$rootScope.getRole.userRole){
-            //     console.log('not access')
-            //     $location.path('/pages/errors/error-404')
-            // }
-
         });
 
         // De-activate loading indicator
@@ -226,6 +216,11 @@
             });
 
         }
+
+
+       
+
+
 
 
     }

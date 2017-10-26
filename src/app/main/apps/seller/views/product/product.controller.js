@@ -6,8 +6,9 @@
         .controller('ProductController', ProductController);
 
     /** @ngInject */
-    function ProductController($scope, $document, api, $stateParams, indexService, $state) {
+    function ProductController($scope, $document,$rootScope, api, $stateParams, indexService, $state) {
         var vm = this;
+        $rootScope.checkProduct();
         var getUsers = indexService.getUser();
         vm.formData = {
             uid: getUsers,
@@ -32,10 +33,7 @@
         vm.editmode = false;
         vm.removeImage = removeImage;
         vm.saveProduct = saveWithUpload;
-
         vm.message = ''
-
-
 
 
         //  company dropdown
@@ -54,28 +52,7 @@
 
         });
 
-
-        var listproducts = api.count('sellerproduct').then(function (success) {
-            vm.products = success;
-            console.log(JSON.stringify(vm.products));
-        });
-
-        var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
-            vm.lastTransaction = res[0];
-            if (vm.products.length <= vm.lastTransaction.MaxProductCount) {
-                vm.reachedMaxLimit = false;
-                // vm.disableCompanies(vm.products)
-            } else {
-                vm.reachedMaxLimit = true;
-                // vm.disableCompanies(vm.products)
-
-
-            }
-        });
-
-
         if ($stateParams.id) {
-            // vm.getLastTransaction();
             vm.editmode = true;
             api.userEditData('sellerproduct', $stateParams.id).then(function (success) {
                 if (success == null) {
@@ -85,9 +62,7 @@
                     $scope.the_url = vm.formData.Image;
                     $scope.imgAvailable = true;
                     indexService.sucessMessage('company geting data success');
-
                 }
-
 
             }, function (error) {
                 indexService.errorMessage('error while adding company');
@@ -97,9 +72,9 @@
         }
         vm.create = function (createObject) {
             createObject.created = indexService.createdDate;
-            createObject.disable = false;
+            createObject.disable = true;
             createObject.updated = indexService.createdDate;
-            createObject.uid_disable = getUsers + "_" + false;
+            createObject.uid_disable = getUsers + "_" + true;
             console.log(JSON.stringify(createObject));
             api.insert('sellerproduct', createObject).then(function (success) {
                 indexService.sucessMessage('product added successfully');

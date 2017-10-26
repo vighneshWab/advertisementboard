@@ -13,8 +13,8 @@
         // Base Url
         api.baseUrl = 'app/data/';
         api.apiUrl = "http://localhost:2017/";
-        // api.stripeUrl = " https://stripewebhookadv.herokuapp.com/";
-        api.stripeUrl = "http://localhost:8080/";
+        api.stripeUrl = " https://stripewebhookadv.herokuapp.com/";
+        // api.stripeUrl = "http://localhost:8080/";
 
 
         api.setRole = function (users) {
@@ -158,7 +158,7 @@
         api.count = function (ref) {
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
-            var equ = uid + "_" + false;
+            var equ = uid + "_" + true;
             var refD = firebaseDatabase.ref(ref).orderByChild("uid_disable").equalTo(equ);
             var list = $firebaseArray(refD).$loaded(function (success) {
                 var data = success;

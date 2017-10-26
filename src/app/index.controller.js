@@ -6,109 +6,77 @@
         .controller('IndexController', IndexController);
 
     /** @ngInject */
-    function IndexController(fuseTheming, indexService, msNavigationService, $rootScope) {
+    function IndexController(fuseTheming, indexService, msNavigationService, api, $rootScope) {
         var vm = this;
 
         // Data
         vm.themes = fuseTheming.themes;
+        $rootScope.checkCompany = checkCompany;
+        $rootScope.checkProduct = checkProduct;
 
-
-        // vm.getRole = indexService.getUserRole();
-        // vm.gotoBuyer = gotoBuyer;
-        // vm.gotoSeller = gotoSeller;
-        // vm.gotoAdmin = gotoAdmin;
-        // console.log(vm.getRole);
+        var obj = { "MaxCompanyCount": 2, "MaxProductCount": 3, "MaxSellCount": 10 }
 
 
 
-        // switch (vm.getRole) {
+        var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
+            vm.lastTransaction = res[0];
+            console.log(JSON.stringify(vm.lastTransaction))
 
-        //     case 'buyer':
+        });
 
-        //         vm.gotoBuyer();
+        function checkCompany(MaxCompanyCount) {
+            var list = api.count('sellercompany').then(function (success) {
+                vm.sellerCompanies = success;
+                if (vm.sellerCompanies.length > 0) {
+                    if (vm.lastTransaction.MaxCompanyCount == vm.sellerCompanies.length) {
+                        $rootScope.rMaxCompany = true;
+                    } else {
+                        $rootScope.rMaxCompany = false;
 
-        //         break;
+                    }
+                }
 
-        //     case 'seller':
+                else {
+                    $rootScope.rMaxCompany = false;
+                    console.log(' $rootScope.MaxCompanyCount', $rootScope.rMaxCompany)
 
-        //         vm.gotoSeller()
+                }
+            }, function (error) {
 
-        //         break;
+            });
+        }
 
-        //     case 'admin':
+        function checkProduct() {
+            console.log('checkProduct')
+            var list = api.count('sellerproduct').then(function (success) {
+                vm.sellerProducts = success;
+                console.log(vm.sellerProducts.length)
+                if (vm.sellerProducts.length > 0) {
+                    if (vm.lastTransaction.MaxProductCount == vm.sellerProducts.length) {
+                        $rootScope.rMaxProduct = true;
+                        console.log(' $rootScope.rMaxProduct', $rootScope.rMaxProduct)
 
-        //         vm.gotoAdmin()
-
-        //         break;
-
-
-
-        // }
-        // function gotoBuyer() {
-
-
-        // }
-        // function gotoSeller() {
-
-        //     msNavigationService.saveItem('apps.seller', {
-        //         title: 'seller',
-        //         icon: 'icon-cart',
-        //         weight: 2
-        //     });
-
-
-        //     msNavigationService.saveItem('apps.seller.dashboard', {
-        //         title: 'Dashboard',
-        //         state: 'app.seller.dashboard'
-        //     });
-        //     msNavigationService.saveItem('apps.seller.SellerCompany', {
-        //         title: 'Company',
-        //         state: 'app.seller.sellercompanies'
-        //     });
-        //     msNavigationService.saveItem('apps.seller.product', {
-        //         title: 'Upload Products',
-        //         state: 'app.seller.products'
-        //     });
+                    } else {
+                        $rootScope.rMaxProduct = false;
+                        console.log(' $rootScope.rMaxProduct', $rootScope.rMaxProduct)
 
 
-        // }
+                    }
+                }
+                else {
+                    $rootScope.rMaxProduct = false;
+                    console.log(' $rootScope.rMaxProduct', $rootScope.rMaxProduct)
 
+                }
 
+            }, function (error) {
+                console.log('error geting')
 
-        // function gotoAdmin() {
+            });
 
-        //     // Navigation
-        //     msNavigationService.saveItem('apps.admin', {
-        //         title: 'admin',
-        //         icon: 'icon-cart',
-        //         weight: 1,
-
-        //     });
-
-        //     msNavigationService.saveItem('apps.admin.company', {
-        //         title: 'Company Categories',
-        //         state: 'app.admin.companies'
-        //     });
-        //     msNavigationService.saveItem('apps.admin.package', {
-        //         title: 'User Role',
-        //         state: 'app.admin.packages'
-        //     });
-        //     msNavigationService.saveItem('apps.admin.productCategory', {
-        //         title: 'Prodcut Category',
-        //         state: 'app.admin.productCategories'
-        //     });
-
-
-        // }
+        }
 
 
 
-
-
-
-
-
-
-        //////////
     }
 })();

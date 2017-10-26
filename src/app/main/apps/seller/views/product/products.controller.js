@@ -6,13 +6,12 @@
         .controller('ProductsController', ProductsController);
 
     /** @ngInject */
-    function ProductsController($state, $scope, $mdDialog, api, indexService) {
+    function ProductsController($state, $scope, $rootScope, $timeout, $mdDialog, api, indexService) {
         var vm = this;
-
-        $scope.FBref = firebase.database().ref('seller/product');
         var list = api.userWiseData('sellerproduct').then(function (success) {
             vm.products = success;
         });
+
         var getUsers = indexService.getUser();
 
         vm.dtInstance = {};
@@ -78,11 +77,7 @@
         vm.gotoProduct = gotoProduct;
         vm.unable = unable;
         vm.disable = disable;
-
-        var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
-            vm.lastTransaction = res[0];
-
-        });
+        vm.showConfirm = showConfirm;
 
         function gotoProduct(id) {
             $state.go('app.seller.products.detail', { id: id });
@@ -103,40 +98,42 @@
                 .targetEvent(ev)
                 .ok('Update Package')
                 .cancel('NO');
-            if (vm.products.length <= vm.lastTransaction.MaxProductCount) {
-                vm.gotoAddProduct();
-            } else {
-                $mdDialog.show(confirm).then(function (res) {
-                    // YES pressed
-                    $state.goto('app.seller.UpdatePackage');
+            $mdDialog.show(confirm).then(function (res) {
+                // YES pressed
+                $state.go('app.seller.UpdatePackage');
 
-                }, function () {
-                    // NO Pressed
+            }, function () {
+                // NO Pressed
 
-                });
-
-            }
+            });
 
         };
 
 
         function unable(id) {
+            $rootScope.checkProduct();
+            console.log($rootScope.rMaxProduct)
+            $timeout(function () {
+                if (!$rootScope.rMaxProduct) {
+                    var data = {};
+                    var loca = id + '/disable';
+                    data[loca] = true;
+                    var uid_disable = id + '/uid_disable';
+                    data[uid_disable] = getUsers + "_" + true;
+                    api.bulkupdate('sellerproduct', data).then(function (res) {
+                        console.log('res', res)
+                        indexService.sucessMessage('product  is now enable');
+                    }, function (err) {
+                        console.log('error', err)
+                    })
+                } else {
+                    vm.showConfirm();
+                    console.log($rootScope.rMaxProduct)
 
-            if (vm.products.length <= vm.lastTransaction.MaxProductCount) {
-                var data = {};
-                var loca = id + '/disable';
-                data[loca] = false;
-                var uid_disable = id + '/uid_disable';
-                data[uid_disable] = getUsers + "_" + false;
-                api.bulkupdate('sellerproduct', data).then(function (res) {
-                    console.log('res', res)
-                    indexService.sucessMessage('product  is now unabled');
-                }, function (err) {
-                    console.log('error', err)
-                })
-            } else {
-                vm.showConfirm();
-            }
+                }
+
+            }, 2000)
+
 
         }
 
@@ -144,12 +141,12 @@
         function disable(id) {
             var data = {};
             var loca = id + '/disable';
-            data[loca] = true;
+            data[loca] = false;
             var uid_disable = id + '/uid_disable';
-            data[uid_disable] = getUsers + "_" + true;
+            data[uid_disable] = getUsers + "_" + false;
             api.bulkupdate('sellerproduct', data).then(function (res) {
                 console.log('res', res)
-                indexService.sucessMessage('product  is now disable');
+                indexService.sucessMessage('product is now Disable');
             }, function (err) {
                 console.log('error', err)
             })

@@ -71,16 +71,15 @@
                 </md-tab-label>
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
-                        <div ng-show="vm.reachedMaxLimit">
-                            <h1>{{vm.message}} </h1>
+                        <div ng-show="rMaxCompany">
+                            <h1>You have Reached Max limit </h1>
                             <div>
                                 <md-button class="md-raised md-background" ng-click="vm.chagePackage()">
                                     <span>Change Package</span>
                                 </md-button>
                             </div>
                         </div>
-                        <div ng-show="!vm.reachedMaxLimit">
-                            <!-- <pre>{{vm.formData}}</pre> -->
+                        <div ng-show="!rMaxCompany">
                             <form id="productForm" name="productForm">
                                 <div layout="column" layout-gt-xs="row">
                                     <md-input-container flex>

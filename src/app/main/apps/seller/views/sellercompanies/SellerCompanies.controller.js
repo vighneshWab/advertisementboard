@@ -6,7 +6,7 @@
         .controller('SellerCompaniesController', SellerCompaniesController);
 
     /** @ngInject */
-    function SellerCompaniesController($state, api, $mdDialog, $scope, indexService) {
+    function SellerCompaniesController($state, api, $mdDialog, $timeout, $scope, $rootScope, indexService) {
         var vm = this;
         vm.sellercompany = 'sellercompany';
         vm.gotoAddCompany = gotoAddCompany;
@@ -15,6 +15,7 @@
         vm.unable = unable;
         vm.disable = disable;
         var getUsers = indexService.getUser();
+        vm.showConfirm = showConfirm;
 
 
         vm.dtInstance = {};
@@ -93,12 +94,14 @@
 
         });
 
-
-
-
-        var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
-            vm.lastTransaction = res[0];
-            // vm.lastTransaction.MaxCompanyCount=-1;
+        var list = api.count('sellercompany').then(function (success) {
+            vm.sellerCompanies = success;
+            console.log(vm.sellerCompanies.length > 0)
+            if (vm.sellerCompanies.length > 0) {
+                $rootScope.checkCompany(vm.sellerCompanies.MaxCompanyCount)
+            }
+        }, function (error) {
+            indexService.errorMessage("error while getting data");
 
         });
 
@@ -127,40 +130,11 @@
         }
 
         function unable(id) {
-            if (vm.sellerCompanies.length <= vm.lastTransaction.MaxCompanyCount) {
-                var data = {};
-                var loca = id + '/disable';
+            $rootScope.checkCompany();
+            $timeout(function () {
+                console.log($rootScope.rMaxCompany)
 
-                data[loca] = false;
-                var uid_disable = id + '/uid_disable';
-                data[uid_disable] = getUsers + "_" + false;
-                api.bulkupdate('sellercompany', data).then(function (res) {
-                    console.log('res', res)
-                    indexService.sucessMessage('company is now unabled');
-                }, function (err) {
-                    console.log('error', err)
-                })
-            } else {
-                vm.showConfirm();
-            }
-
-        }
-
-
-        function disable(id) {
-            api.bulkRemove('sellerproduct', id).then(function (res) {
-                console.log('res', res)
-                var products = res;
-                var bulkdisbleupdate = {};
-                for (var i = 0; i < products.length; i++) {
-                    var loca = products[i].$id + '/disable';
-                    bulkdisbleupdate[loca] = true;
-                    var uid_disable = products[i].$id + '/uid_disable';
-                    bulkdisbleupdate[uid_disable] = getUsers + "_" + true;
-
-                }
-                api.bulkupdate('sellerproduct', bulkdisbleupdate).then(function (res) {
-                    console.log('res', res)
+                if (!$rootScope.rMaxCompany) {
                     var data = {};
                     var loca = id + '/disable';
                     data[loca] = true;
@@ -168,7 +142,42 @@
                     data[uid_disable] = getUsers + "_" + true;
                     api.bulkupdate('sellercompany', data).then(function (res) {
                         console.log('res', res)
-                        indexService.sucessMessage('company  is now unabled');
+                        indexService.sucessMessage('company  is now enable');
+                    }, function (err) {
+                        console.log('error', err)
+                    })
+                } else {
+                    vm.showConfirm();
+
+                }
+
+            }, 2000)
+
+
+        }
+
+
+        function disable(id) {
+            api.bulkRemove('sellerproduct', id).then(function (res) {
+                var products = res;
+                var bulkdisbleupdate = {};
+                for (var i = 0; i < products.length; i++) {
+                    var loca = products[i].$id + '/disable';
+                    bulkdisbleupdate[loca] = false;
+                    var uid_disable = products[i].$id + '/uid_disable';
+                    bulkdisbleupdate[uid_disable] = getUsers + "_" + false;
+
+                }
+                api.bulkupdate('sellerproduct', bulkdisbleupdate).then(function (res) {
+                    console.log('res', JSON.stringify(res))
+                    var data = {};
+                    var loca = id + '/disable';
+                    data[loca] = false;
+                    var uid_disable = id + '/uid_disable';
+                    data[uid_disable] = getUsers + "_" + false;
+                    api.bulkupdate('sellercompany', data).then(function (res) {
+                        console.log('res', res)
+                        indexService.sucessMessage('company  is now disabled');
                     }, function (err) {
                         console.log('error', err)
                     })
@@ -191,19 +200,16 @@
                 .targetEvent(ev)
                 .ok('Update Package')
                 .cancel('NO');
-            if (vm.sellerCompanies.length <= vm.lastTransaction.MaxCompanyCount) {
-                vm.gotoAddCompany();
-            } else {
-                $mdDialog.show(confirm).then(function (res) {
-                    // YES pressed
-                    $state.goto('app.seller.UpdatePackage');
+            $mdDialog.show(confirm).then(function (res) {
+                // YES pressed
+                $state.goto('app.seller.UpdatePackage');
 
-                }, function () {
-                    // NO Pressed
+            }, function () {
+                // NO Pressed
 
-                });
+            });
 
-            }
+
 
         };
 
