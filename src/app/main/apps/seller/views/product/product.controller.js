@@ -6,7 +6,7 @@
         .controller('ProductController', ProductController);
 
     /** @ngInject */
-    function ProductController($scope, $document,$rootScope, api, $stateParams, indexService, $state) {
+    function ProductController($scope, $document, $rootScope, api, $stateParams, indexService, $state) {
         var vm = this;
         $rootScope.checkProduct();
         var getUsers = indexService.getUser();
@@ -215,8 +215,8 @@
 
         // check exprire date is less than today
         function removeImage() {
-            delete vm.formData.Image;
-            $scope.the_url = undefined
+            vm.formData.Image = 'no';
+            $scope.the_url = 'no'
             console.log('removeImage', $scope.the_url);
         }
 

@@ -112,13 +112,13 @@
             api.deletedata('customer', vm.getRole.customerID).then(function (response) {
                 console.log(response);
                 api.userWiseData('sellerproduct').then(function (res) {
-                    var products = res;
+                    var products = res
                     var bulkdisbleupdate = {};
                     for (var i = 0; i < products.length; i++) {
                         var loca = products[i].$id + '/disable';
-                        bulkdisbleupdate[loca] = true;
+                        bulkdisbleupdate[loca] = false;
                         var uid_disable = products[i].$id + '/uid_disable';
-                        bulkdisbleupdate[uid_disable] = getUsers + "_" + true;
+                        bulkdisbleupdate[uid_disable] = getUsers + "_" + false;
                     }
                     api.bulkupdate('sellerproduct', bulkdisbleupdate).then(function (res) {
                         // disable comapnies
@@ -127,9 +127,9 @@
                             var bulkdisbleupdate = {};
                             for (var i = 0; i < companies.length; i++) {
                                 var loca = companies[i].$id + '/disable';
-                                bulkdisbleupdate[loca] = true;
+                                bulkdisbleupdate[loca] = false;
                                 var uid_disable = companies[i].$id + '/uid_disable';
-                                bulkdisbleupdate[uid_disable] = getUsers + "_" + true;
+                                bulkdisbleupdate[uid_disable] = getUsers + "_" + false;
                             }
                             api.bulkupdate('sellercompany', bulkdisbleupdate).then(function (res) {
                                 api.getUserData('user', getUsers).then(function (success) {
@@ -141,10 +141,13 @@
                                     delete userdata.subcription;
                                     delete userdata.$id;
                                     delete userdata.$priority;
+                                    console.log('userdata::::', JSON.stringify(userdata))
 
                                     api.update('user', id, userdata).then(function (res) {
+                                        indexService.sucessMessage('You are now buyer')
                                         $state.go('app.pages_auth_login');
-                                        
+                                        // $state.go('app.buyer.dashboard');
+
                                     }, function (err) {
                                         console.log('error', err)
                                     })
@@ -191,7 +194,7 @@
                         customer: vm.getRole.customerID,
                         source: response.id
                     }
-                    $scope.payment = {}
+                    // $scope.payment = {}
                     vm.mulipleSource(card);
                 })
                 .catch(function (err) {
@@ -208,7 +211,8 @@
 
         function mulipleSource(customer) {
             api.postdata('create_source', customer).then(function (response) {
-                vm.defult_scource(sourcId);
+                // vm.defult_scource(customer);
+                indexService.sucessMessage('new Card has been added')
             }, function (error) {
                 console.log('error while createiing customer');
             });
@@ -239,7 +243,7 @@
                 source: id
             }
 
-            api.postdata('defult_source', defultS).then(function (response) {
+            api.postdata('defult_source_card', defultS).then(function (response) {
                 console.log('customer ID', response);
                 indexService.sucessMessage("Card Updated successfully")
                 // vm.getPaymentDetails();

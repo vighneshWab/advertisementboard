@@ -19,7 +19,7 @@
         });
         var list = api.getAll('admin/userRoles').then(function (success) {
             vm.packages = success;
-          
+
         }, function (error) {
             indexService.errorMessage("error while getting data");
         });
@@ -53,14 +53,11 @@
 
         function validateCount(ev) {
             if (vm.lastTransaction.MaxCompanyCount > vm.formData.package.MaxCompanyCount) {
-                console.log('selected downgrad Package', vm.lastTransaction);
-
+                console.log('current Active  Package', vm.lastTransaction);
                 console.log('selected downgrad Package', vm.formData.package);
-
                 if (vm.companyCount > vm.formData.package.MaxCompanyCount) {
                     var needTodiabledComanyCount = vm.companyCount - vm.formData.package.MaxCompanyCount
                     console.log('total number of enabled companies are greated then selected package', needTodiabledComanyCount);
-
                     // Appending dialog to document.body to cover sidenav in docs 
 
                     var textContent = 'You have to disable  ' + needTodiabledComanyCount + '  companies';
@@ -81,12 +78,9 @@
 
                     });
 
-
-
-
                 } else {
-
                     console.log('enabled comapnies are less then selected count')
+                    vm.commpanyLess = true;
                     if (vm.productCount > vm.formData.package.MaxProductCount) {
                         var needTodiabledComanyCount = vm.productCount - vm.formData.package.MaxProductCount
                         console.log('total number of enabled products are greated then selected package', needTodiabledComanyCount);
@@ -108,20 +102,20 @@
                             // NO Pressed
 
                         });
-
-
-
-
-
                     } else {
+                        vm.productsLess = true;
                         console.log('enabled products are less then selected count')
+                        if (vm.commpanyLess == vm.productsLess == true) {
+                            updatePackage();
+
+
+                        }
 
                     }
                 }
 
 
             } else {
-
                 console.log('selected upggrated Package');
                 updatePackage();
             }

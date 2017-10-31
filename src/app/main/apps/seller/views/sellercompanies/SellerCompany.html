@@ -71,6 +71,9 @@
                 </md-tab-label>
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
+
+
+                       
                         <div ng-show="rMaxCompany">
                             <h1>You have Reached Max limit </h1>
                             <div>
@@ -79,7 +82,7 @@
                                 </md-button>
                             </div>
                         </div>
-                        <div ng-show="!rMaxCompany">
+                        <div ng-show="!rMaxCompany || vm.editmode">
                             <form id="productForm" name="productForm">
                                 <div layout="column" layout-gt-xs="row">
                                     <md-input-container flex>
@@ -237,7 +240,9 @@
                                     <td>{{product.CategoryName}}</td>
                                     <td>{{product.CategoryDescription}}</td>
                                     <!--<td>{{product.Image}}</td>-->
-                                    <td><img class="product-image1" ng-src="{{product.Image}}"></td>
+                                    <td>
+                                        <img class="product-image1" ng-src="{{product.Image}}">
+                                    </td>
 
                                     <td>
                                         <md-button class="edit-button md-icon-button" ng-click="vm.gotoProduct(product.$id)" aria-label="Product details" translate>

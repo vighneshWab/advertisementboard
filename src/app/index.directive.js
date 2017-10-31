@@ -3,7 +3,7 @@
 
     angular
         .module('fuse')
-        .directive('abn', abnAvailabilityasyncValidators)
+        .directive('abn', uniqueAbn)
         .directive('uniqueName', uniqueName)
         .directive('uniqueEmail', uniqueEmail)
         .directive('numbersOnly', numbersOnly)
@@ -55,6 +55,52 @@
             }
         };
     }
+
+
+    function uniqueAbn($timeout, api) {
+        console.log('uniqueEmail')
+        return {
+            require: 'ngModel',
+            restrict: 'A',
+            link: function (scope, el, attrs, ctrl) {
+                ctrl.$parsers.push(function (viewValue) {
+                    if (viewValue) {
+                        console.log('abn:', viewValue)
+                        var abn = viewValue;
+                        var pattern = /^.+@.+\..+$/;
+                        if (abn.length == 11) {
+                            $timeout(function () {
+                                api.verifyABN(abn).then(function (success) {
+                                    console.log('verifyAbn');
+                                    var data = success[0];
+                                    console.log(data)
+                                    if (data == undefined) {
+                                        ctrl.$setValidity('abnValidator', true);
+                                    } else {
+
+                                        // if (data.uid == false) {
+                                        //     ctrl.$setValidity('uniqueEmail', true);
+                                        // } else {
+                                        //     // deferred.reject();
+                                        //     ctrl.$setValidity('uniqueEmail', false);
+                                        // }
+                                        ctrl.$setValidity('abnValidator', false);
+
+                                    }
+                                })
+                            }, 200)
+                        }
+                        return viewValue;
+                    }
+                });
+            }
+        };
+    }
+
+
+
+
+    // abn 
 
     function abnAvailabilityasyncValidators(api, $q, $rootScope, $timeout) {
         return {

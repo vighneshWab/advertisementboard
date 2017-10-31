@@ -8,58 +8,75 @@
     /** @ngInject */
     function runBlock($rootScope, $timeout, api, msNavigationService, $state, $location) {
 
+
+        $rootScope.gotoBuyer = gotoBuyer;
+        $rootScope.gotoSeller = gotoSeller;
+        $rootScope.gotoAdmin = gotoAdmin;
+
+
+        $rootScope.showMenu = false;
+
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                console.log('User is signed IN')
+                var emailVerified = user.emailVerified;
+                var uid = user.uid;
+                if (emailVerified) {
+                    console.log('User email is verified');
+                    api.getUserData('user', uid).then(function (success) {
+                        $rootScope.userData = success[0];
+                        api.setRole($rootScope.userData);
+                        $rootScope.userName = $rootScope.userData.userName;
+                        console.log('user:', JSON.stringify($rootScope.userData));
+                        // get trancsactions by users
+                        var getLastTransaction = api.lastTransaction('transaction', uid).then(function (res) {
+                            $rootScope.lastTransaction = res[0];
+                            console.log(JSON.stringify($rootScope.lastTransaction))
+                        });
+
+                    });
+
+
+                }
+            } else {
+                console.log('User is signed out')
+                $rootScope.userData = [];
+
+            }
+        });
+
         // Activate loading indicator
         var stateChangeStartEvent = $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-
             $rootScope.loadingProgress = true;
-            $rootScope.gotoBuyer = gotoBuyer;
-            $rootScope.gotoSeller = gotoSeller;
-            $rootScope.gotoAdmin = gotoAdmin;
             $rootScope.isBuyer = false;
             $rootScope.isSeller = false;
             $rootScope.isAdmin = false;
-            $rootScope.getRole = api.getUserRole();
-            console.log($rootScope.getRole.uid)
-            $rootScope.userName = $rootScope.getRole.userName;
+            if (!Array.isArray($rootScope.userData)) {
+                var userD = api.getUserRole();
 
-
-            if ($rootScope.getRole.userRole == undefined) {
-
-                $location.path('/pages/auth/login');
-            } else {
-
-                if (toState.role == $rootScope.getRole.userRole) {
-                    switch ($rootScope.getRole.userRole) {
+                if (toState.role == userD.userRole) {
+                    switch (toState.role) {
                         case 'buyer':
                             $rootScope.isBuyer = true;
-                            $rootScope.gotoBuyer($rootScope.getRole.userRole)
+                            $rootScope.gotoBuyer()
                             break;
                         case 'seller':
                             $rootScope.isSeller = true;
-                            $rootScope.gotoSeller($rootScope.getRole.userRole)
+                            $rootScope.gotoSeller()
                             break;
 
                         case 'admin':
                             $rootScope.isAdmin = true
-                            $rootScope.gotoAdmin($rootScope.getRole.userRole)
+                            $rootScope.gotoAdmin()
                             break;
-
                         default:
-                            // console.log('defult');
-                            // if(Array.isArray($rootScope.getRole)){
-
-                            //     console.log('blank Array')
-                            //     $location.path('/pages/auth/login')
-                            // }
 
                             break;
                     }
                 }
                 else {
-
                     switch (toState.role) {
                         case 'com':
-
                             break;
 
                         default:
@@ -68,13 +85,13 @@
                             break;
                     }
 
-
                 }
-
-
-
+                /// Menu access ends heres
 
             }
+
+
+
 
         });
 
@@ -97,7 +114,7 @@
 
 
         // function to menu configuration
-        function gotoBuyer(role) {
+        function gotoBuyer() {
             msNavigationService.saveItem('dashboard', {
                 title: 'Dashboard',
                 state: 'app.buyer.dashboard',
@@ -117,7 +134,7 @@
 
         }
         function gotoSeller() {
-
+            console.log('gotoSeller')
             msNavigationService.saveItem('dashboard', {
                 title: 'Dashboard',
                 state: 'app.seller.dashboard',
@@ -156,13 +173,6 @@
                     return !$rootScope.isSeller; // must be a boolean value
                 },
             });
-            msNavigationService.saveItem('seller_setting', {
-                title: 'Seller Settings',
-                state: 'app.seller.seller_setting',
-                hidden: function () {
-                    return !$rootScope.isSeller; // must be a boolean value
-                },
-            });
 
             msNavigationService.saveItem('seller_setting', {
                 title: 'Seller Settings',
@@ -171,13 +181,13 @@
                     return !$rootScope.isSeller; // must be a boolean value
                 },
             });
-            msNavigationService.saveItem('UpdatePackage', {
-                title: 'Seller UpdatePackage',
-                state: 'app.seller.UpdatePackage',
-                hidden: function () {
-                    return !$rootScope.isSeller; // must be a boolean value
-                },
-            });
+            // msNavigationService.saveItem('UpdatePackage', {
+            //     title: 'Seller UpdatePackage',
+            //     state: 'app.seller.UpdatePackage',
+            //     hidden: function () {
+            //         return !$rootScope.isSeller; // must be a boolean value
+            //     },
+            // });
 
 
         }
@@ -218,7 +228,7 @@
         }
 
 
-       
+
 
 
 

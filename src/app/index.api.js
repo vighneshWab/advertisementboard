@@ -217,7 +217,6 @@
             var refD = firebaseDatabase.ref(ref).orderByChild('uid').equalTo(childId);
             var list = $firebaseArray(refD).$loaded(function (success) {
                 var data = success;
-                console.log('get userWiseData ', JSON.stringify(data));
                 qProfile.resolve(data);
             }, function (errorObject) {
                 console.log('eroror code')
@@ -238,6 +237,20 @@
             });
             return qProfile.promise;
         }
+
+
+
+        api.lastTransaction = function (refs, uid) {
+            var qProfile = $q.defer();
+            var ref = firebase.database().ref(refs).child(uid);
+            var list = $firebaseArray(ref.limitToLast(1)).$loaded(function (success) {
+                var data = success;
+                qProfile.resolve(data);
+            }, function (errorObject) {
+                qProfile.reject(errorObject);
+            })
+            return qProfile.promise;
+        };
 
 
         api.insertUser = function (ref, childId, user) {

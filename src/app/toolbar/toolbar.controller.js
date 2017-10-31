@@ -13,7 +13,6 @@
             search: ''
         };
         vm.userBuyerRole = api.getUserRole();
-        console.log(JSON.stringify(vm.userBuyerRole))
         vm.bodyEl = angular.element('body');
         var getUsers = indexService.getUser();
         vm.userStatusOptions = [
@@ -159,6 +158,12 @@
             // indexService.setUser(null);
             // var getUsers = indexService.getUser();
             // console.log(getUsers)
+            firebase.auth().signOut().then(function () {
+                // Sign-out successful.
+                console.log('Sign-out successful')
+            }, function (error) {
+                // An error happened.
+            });
             localStorage.clear();
             $state.go('app.pages_auth_login');
 

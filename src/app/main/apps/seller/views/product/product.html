@@ -8,7 +8,7 @@
             </md-button>
 
             <div layout="row" layout-align="start center">
-                <md-button class="edit-button md-icon-button" ng-show="the_url" ng-click="vm.removeImage()" aria-label="Product details"
+                <md-button class="edit-button md-icon-button" ng-show="the_url!='no'" ng-click="vm.removeImage()" aria-label="Product details"
                     translate>
                     <md-tooltip>Remove Image</md-tooltip>
                     <md-icon md-font-icon="icon-close" class="s24"></md-icon>
@@ -35,7 +35,7 @@
             <md-button class="md-raised md-background" ng-click="vm.saveProduct()" ng-disabled="!vm.isFormValid('productForm')">
                 <span>SAVE</span>
             </md-button>
-           
+
 
         </div>
     </div>

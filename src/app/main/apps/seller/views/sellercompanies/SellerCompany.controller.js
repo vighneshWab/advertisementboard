@@ -26,7 +26,7 @@
         vm.gotoProduct = gotoProduct;
         vm.editmode = false;
         vm.getting = true;
-
+        $rootScope.checkCompany()
         // geting companycategory dropdown 
         var list = api.getAll('admin/companycategory').then(function (success) {
             vm.companyCategories = success;
@@ -35,29 +35,14 @@
 
         });
 
-        var list = api.count('sellercompany').then(function (success) {
-            vm.sellerCompanies = success;
-            console.log(vm.sellerCompanies.length)
-            if (vm.sellerCompanies.length > 0) {
-                $rootScope.checkCompany(vm.sellerCompanies.length)
-            }
-        }, function (error) {
-            indexService.errorMessage("error while getting data");
-
-        });
-
-
-
         if ($stateParams.id) {
             vm.editmode = true;
             api.userEditData('sellercompany', $stateParams.id).then(function (success) {
-                console.log(success);
                 if (success == null) {
                     vm.gotoSellerCompanies();
                 } else {
                     vm.formData = success;
                     $scope.the_url = vm.formData.Image;
-
                 }
                 var list = api.bulkRemove('sellerproduct', $stateParams.id).then(function (success) {
                     vm.products = success;
@@ -92,8 +77,6 @@
                 bulkUpdate[loca] = true;
             });
             api.bulkupdate('sellercompany', bulkUpdate).then(function (res) {
-                console.log('res', res)
-
             }, function (err) {
                 console.log('error', err)
             })
@@ -114,8 +97,6 @@
             var file = $scope.myFile;
             var uploadTask = indexService.strorage(file);
             uploadTask.$error(function (error) {
-                console.error(error);
-
             });
             uploadTask.$complete(function (snapshot) {
                 var urlPath = snapshot.downloadURL;
@@ -155,7 +136,6 @@
             createObject.disable = true;
             createObject.uid = getUsers;
             createObject.uid_disable = getUsers + "_" + true;
-            console.log(JSON.stringify(createObject));
             api.insert('sellercompany', createObject).then(function (success) {
                 indexService.sucessMessage('company added successfully');
                 vm.formData = {};
@@ -198,7 +178,6 @@
                 var uid_disable = id + '/uid_disable';
                 data[uid_disable] = getUsers + "_" + false;
                 api.bulkupdate('sellercompany', data).then(function (res) {
-                    console.log('res', res)
                     indexService.sucessMessage('company is now unabled');
                     vm.gotoSellerCompanies();
                 }, function (err) {
@@ -263,7 +242,6 @@
                 var uid_disable = id + '/uid_disable';
                 data[uid_disable] = getUsers + "_" + false;
                 api.bulkupdate('sellerproduct', data).then(function (res) {
-                    console.log('res', res)
                     indexService.sucessMessage('product  is now unabled');
                 }, function (err) {
                     console.log('error', err)

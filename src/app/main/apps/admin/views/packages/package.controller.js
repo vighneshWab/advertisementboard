@@ -42,6 +42,8 @@
                 api.postdata('plans', res).then(function (success) {
                     console.log('plan created :', JSON.stringify(success));
                     indexService.sucessMessage('Seller Category created successfully')
+                    vm.gotoProducts();
+                    
 
                 }, function (error) {
                     api.admin_delete('admin/userRoles', res.id).then(function (success) {
@@ -59,6 +61,8 @@
         vm.update = function (createObject) {
             indexService.update($scope.FBref, $stateParams.id, createObject).then(function (res) {
                 console.log('package updated')
+                vm.gotoProducts();
+                
                 // indexService.sucessMessage('Seller Category updated successfully')
 
             });

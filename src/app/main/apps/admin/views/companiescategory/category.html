@@ -46,34 +46,7 @@
                 </md-tab-label>
                 <md-tab-body>
                     <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
-                        {{sellercompanies123.length}}
-                        <table>
-                            <thead>
-                                <tr>
-                                    <td>thing</td>
-                                    <td>price</td>
-                                    <td>amount</td>
-                                </tr>
-                            </thead>
-                            <tbody ng-repeat="obj in sellercompanies123">
-                                <tr ng-repeat="data in obj">
-                                    <td>{{data.Name}}</td>
-                                   
-                                </tr>
-                            </tbody>
-                        </table>
-
-
-
-
-                        <div>
-                            <div ng-repeat="obj in sellercompanies123">
-                                <div ng-repeat=" data in obj">
-                                    data {{data}}
-                                </div>
-                            </div>
-                        </div>
-
+                       
                         <form id="productForm" name="productForm" novalidate>
                             <div layout="column" layout-gt-xs="row">
                                 <md-input-container flex>

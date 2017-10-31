@@ -8,14 +8,36 @@
     /** @ngInject */
     function SellerCompaniesController($state, api, $mdDialog, $timeout, $scope, $rootScope, indexService) {
         var vm = this;
+
+        console.log($rootScope.rMaxCompany)
+        vm.gotoAddCompany = checkMe;
+
         vm.sellercompany = 'sellercompany';
-        vm.gotoAddCompany = gotoAddCompany;
-        vm.gotoAddCompany = showAdvanced;
+        // vm.gotoAddCompany = gotoAddCompany;
         vm.gotoCompanyDetail = gotoCompanyDetail;
         vm.unable = unable;
         vm.disable = disable;
         var getUsers = indexService.getUser();
         vm.showConfirm = showConfirm;
+        vm.showAdvanced = showAdvanced;
+
+
+        function checkMe() {
+            $rootScope.checkCompany()
+            $timeout(function () {
+                if ($rootScope.rMaxCompany == true) {
+                    vm.showConfirm()
+                } else {
+                    vm.showAdvanced()
+                }
+
+            }, 1000)
+
+        }
+
+
+
+
 
 
         vm.dtInstance = {};
@@ -86,20 +108,9 @@
 
         // Methods
 
-        var list = api.userWiseData(vm.sellercompany).then(function (success) {
+        var list = api.userWiseData('sellercompany').then(function (success) {
             console.log('vm.sellercompanies', success)
             vm.sellerCompanies = success;
-        }, function (error) {
-            indexService.errorMessage("error while getting data");
-
-        });
-
-        var list = api.count('sellercompany').then(function (success) {
-            vm.sellerCompanies = success;
-            console.log(vm.sellerCompanies.length > 0)
-            if (vm.sellerCompanies.length > 0) {
-                $rootScope.checkCompany(vm.sellerCompanies.MaxCompanyCount)
-            }
         }, function (error) {
             indexService.errorMessage("error while getting data");
 
@@ -151,7 +162,7 @@
 
                 }
 
-            }, 2000)
+            }, 1000)
 
 
         }
@@ -225,6 +236,7 @@
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true,
+                size: 'lg',
                 fullscreen: true // Only for -xs, -sm breakpoints.
             })
                 .then(function (answer) {

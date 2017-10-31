@@ -99,13 +99,15 @@
                         expired: indexService.expireDate30
                     }
                     console.log('update  user role', transaction);
-                    
+
 
                     api.insert_transaction('transaction', user.uid, transaction).then(function (response) {
                         console.log('transaction created');
                         indexService.sucessMessage('you become a seller now');
                         localStorage.clear();
                         $state.go('app.pages_auth_login');
+
+                        // $state.go('app.seller.dashboard');
 
                     }, function (error) {
                         console.log('error while createiing transaction');

@@ -108,8 +108,6 @@
                                         Error: invalid card number!
                                     </div>
                                 </md-input-container>
-
-
                                 <md-input-container flex>
                                     <label>expire </label>
                                     <input ng-model="expiry" name="expiry" payments-validate="expiry" payments-format="expiry" required/>
@@ -174,7 +172,7 @@
             <div ng-controller="UpdatePackage as vm">
 
 
-                <md-tab ng-if="getRole.userRole=='seller'">
+                <md-tab>
                     <md-tab-label>
                         <span>Update Package</span>
                     </md-tab-label>
