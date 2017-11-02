@@ -27,13 +27,6 @@
                         $rootScope.userData = success[0];
                         api.setRole($rootScope.userData);
                         $rootScope.userName = $rootScope.userData.userName;
-                        console.log('user:', JSON.stringify($rootScope.userData));
-                        // get trancsactions by users
-                        var getLastTransaction = api.lastTransaction('transaction', uid).then(function (res) {
-                            $rootScope.lastTransaction = res[0];
-                            console.log(JSON.stringify($rootScope.lastTransaction))
-                        });
-
                     });
 
 
@@ -53,7 +46,12 @@
             $rootScope.isAdmin = false;
             if (!Array.isArray($rootScope.userData)) {
                 var userD = api.getUserRole();
-
+                if(userD.userRole==='seller'){
+                    var getLastTransaction = api.lastTransaction('transaction', userD.uid).then(function (res) {
+                        $rootScope.lastTransaction = res[0];
+                        console.log(JSON.stringify($rootScope.lastTransaction))
+                    });
+                }
                 if (toState.role == userD.userRole) {
                     switch (toState.role) {
                         case 'buyer':

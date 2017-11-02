@@ -106,7 +106,10 @@
                         vm.productsLess = true;
                         console.log('enabled products are less then selected count')
                         if (vm.commpanyLess == vm.productsLess == true) {
-                            updatePackage();
+                            // updatePackage();
+
+                            showUpdateConfrimation(event, vm.formData.package.CategoryDescription);
+
 
 
                         }
@@ -117,7 +120,8 @@
 
             } else {
                 console.log('selected upggrated Package');
-                updatePackage();
+                // updatePackage();
+                showUpdateConfrimation(event, vm.formData.package.CategoryDescription);
             }
 
 
@@ -177,6 +181,33 @@
                 });
 
             }
+
+        };
+
+
+        function showUpdateConfrimation(ev, packageDesc) {
+            // Appending dialog to document.body to cover sidenav in docs app
+            var PackageDes = packageDesc;
+            var confirm = $mdDialog.confirm()
+                .title('Are you sure you want to update Package ? ')
+                .textContent(PackageDes)
+                .ariaLabel('Lucky day')
+                .targetEvent(ev)
+                .ok('YES')
+                .cancel('NO');
+            $mdDialog.show(confirm).then(function (res) {
+                // YES pressed
+                console.log('you yes ')
+                updatePackage();
+
+            }, function () {
+
+                console.log('you pressed no')
+                // NO Pressed
+
+            });
+
+
 
         };
 

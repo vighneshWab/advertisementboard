@@ -13,7 +13,7 @@
         // Base Url
         api.baseUrl = 'app/data/';
         api.apiUrl = "http://localhost:2017/";
-        api.stripeUrl = " https://stripewebhookadv.herokuapp.com/";
+        api.stripeUrl = "https://stripewebhookadv.herokuapp.com/";
         // api.stripeUrl = "http://localhost:8080/";
 
 

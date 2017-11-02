@@ -144,7 +144,6 @@
             $rootScope.checkCompany();
             $timeout(function () {
                 console.log($rootScope.rMaxCompany)
-
                 if (!$rootScope.rMaxCompany) {
                     var data = {};
                     var loca = id + '/disable';
