@@ -6,7 +6,7 @@
         .controller('UpdatePackage', UpdatePackage);
 
     /** @ngInject */
-    function UpdatePackage(indexService, $scope, $filter, api, $mdDialog, $state) {
+    function UpdatePackage(indexService, $scope, $filter, api, $mdDialog, $rootScope, $state) {
         var vm = this;
         vm.isFormValid = isFormValid;
         vm.updatePackage = validateCount;
@@ -15,7 +15,9 @@
 
         var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
             vm.lastTransaction = res[0];
-            vm.packageId = vm.lastTransaction.packageId
+            vm.formData.package = vm.lastTransaction;
+            vm.packageId = vm.lastTransaction.packageId;
+
         });
         var list = api.getAll('admin/userRoles').then(function (success) {
             vm.packages = success;
@@ -51,7 +53,9 @@
             $state.go('app.seller.products.detail', { id: id });
         };
 
-        function validateCount(ev) {
+        function validateCount(ev, role) {
+            vm.formData.package = role
+
             if (vm.lastTransaction.MaxCompanyCount > vm.formData.package.MaxCompanyCount) {
                 console.log('current Active  Package', vm.lastTransaction);
                 console.log('selected downgrad Package', vm.formData.package);
@@ -108,7 +112,7 @@
                         if (vm.commpanyLess == vm.productsLess == true) {
                             // updatePackage();
 
-                            showUpdateConfrimation(event, vm.formData.package.CategoryDescription);
+                            showUpdateConfrimation(ev, vm.formData.package.CategoryDescription);
 
 
 
@@ -121,7 +125,7 @@
             } else {
                 console.log('selected upggrated Package');
                 // updatePackage();
-                showUpdateConfrimation(event, vm.formData.package.CategoryDescription);
+                showUpdateConfrimation(ev, vm.formData.package.CategoryDescription);
             }
 
 
@@ -147,7 +151,13 @@
                 var getUsers = indexService.getUser();
                 api.insert_transaction('transaction', getUsers, transaction).then(function (response) {
                     console.log('transaction created');
-                    indexService.errorMessage('Package has been updated successfully')
+                    indexService.errorMessage('Package has been updated successfully');
+                    var getLastTransaction = indexService.lastTransaction('transaction').then(function (res) {
+                        vm.lastTransaction = res[0];
+                        vm.formData.package = vm.lastTransaction;
+                        vm.packageId = vm.lastTransaction.packageId;
+
+                    });
 
                 }, function (error) {
                     console.log('error while createiing transaction');
@@ -210,6 +220,9 @@
 
 
         };
+
+
+
 
 
 

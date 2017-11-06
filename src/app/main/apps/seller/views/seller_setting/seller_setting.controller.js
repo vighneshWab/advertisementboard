@@ -25,6 +25,12 @@
         vm.defult_scource = defult_scource;
         vm.defult_scource_card = defult_scource_card
 
+        vm.changeMe = changeMe;
+
+        function changeMe(form) {
+            console.log('changeMEs', form)
+        }
+
 
         var list = api.getAll('admin/userRoles').then(function (success) {
             vm.packages = success;

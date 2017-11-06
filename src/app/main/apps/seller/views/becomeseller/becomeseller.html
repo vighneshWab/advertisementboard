@@ -64,25 +64,43 @@
                                     <label>Card Number</label>
                                     <input ng-model="payment.card.number" placeholder="Card Number" payments-format="card" payments-validate="card" name="card"
                                         required/>
-                                    <div ng-if="productForm.card.$invalid">
-                                        Error: invalid card number!
+                                    <div ng-messages="productForm.card.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>card number is required</span>
+                                        </div>
+                                        <div ng-message="card">
+                                            <span>Invalid card Number</span>
+                                        </div>
+
                                     </div>
                                 </md-input-container>
 
                                 <md-input-container flex>
                                     <label>expire </label>
                                     <input ng-model="expiry" name="expiry" payments-validate="expiry" payments-format="expiry" required/>
-                                    <div ng-if="productForm.expiry.$invalid">
-                                        Error: invalid card number!
+                                    <div ng-messages="productForm.expiry.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>expire month / year  is required</span>
+                                        </div>
+                                        <div ng-message="expiry">
+                                            <span>Invalid expiry date</span>
+                                        </div>
                                     </div>
                                 </md-input-container>
 
                                 <md-input-container flex>
                                     <label>CVC</label>
                                     <input ng-model="payment.card.cvc" placeholder="CVC" payments-format="cvc" payments-validate="cvc" name="cvc" required/>
-                                    <div ng-if="productForm.cvc.$invalid">
-                                        Error: invalid card number!
+                                    <div ng-messages="productForm.cvc.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>cvc number is required</span>
+                                        </div>
+                                        <div ng-message="cvc">
+                                            <span>Invalid cvc  Number</span>
+                                        </div>
+
                                     </div>
+
                                 </md-input-container>
 
                             </div>

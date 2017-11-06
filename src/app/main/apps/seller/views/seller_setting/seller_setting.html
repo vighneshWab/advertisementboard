@@ -1,5 +1,4 @@
 <div id="e-commerce-product" class="page-layout simple tabbed" layout="column">
-
     <!-- HEADER -->
     <div class="header md-accent-bg" layout="row" layout-align="start center">
         <div class="white-fg" layout="row" layout-align="start center" flex>
@@ -104,15 +103,30 @@
                                     <label>Card Number</label>
                                     <input ng-model="payment.card.number" placeholder="Card Number" payments-format="card" payments-validate="card" name="card"
                                         required/>
-                                    <div ng-if="productForm.card.$invalid">
-                                        Error: invalid card number!
+                                    <div ng-messages="productForm.card.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>card number is required</span>
+                                        </div>
+                                        <div ng-message="card">
+                                            <span>Invalid Number</span>
+                                        </div>
+
                                     </div>
+
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label>expire </label>
                                     <input ng-model="expiry" name="expiry" payments-validate="expiry" payments-format="expiry" required/>
-                                    <div ng-if="productForm.expiry.$invalid">
-                                        Error: invalid card number!
+
+                                    <div ng-messages="productForm.expiry.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>expire month / year is required</span>
+
+                                        </div>
+                                        <div ng-message="expiry">
+                                            <span>Invalid expiry date</span>
+
+                                        </div>
                                     </div>
                                 </md-input-container>
 
@@ -120,17 +134,27 @@
                                 <md-input-container flex>
                                     <label>CVC</label>
                                     <input ng-model="payment.card.cvc" placeholder="CVC" payments-format="cvc" payments-validate="cvc" name="cvc" required/>
-                                    <div ng-if="productForm.cvc.$invalid">
-                                        Error: invalid card number!
+                                    <div ng-messages="productForm.cvc.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span>cvc number is required</span>
+                                        </div>
+                                        <div ng-message="cvc">
+                                            <span>Invalid cvc Number</span>
+                                        </div>
+
                                     </div>
+
                                 </md-input-container>
 
                             </div>
                             <md-button type="submit" class="md-raised md-background" ng-disabled="!vm.isFormValid('productForm')">
                                 <span>Add </span>
+
                             </md-button>
 
                         </form>
+
+                        <!-- {{ vm.sources | json}} -->
                         <div ng-repeat="card in vm.sources">
                             <md-card md-theme="dark-purple" md-theme-watch>
                                 <md-card-title>
@@ -144,6 +168,9 @@
                                         </span>
                                         <span class="md-headline">Year :
                                             <span class="md-subhead">{{card.exp_year}}</span>
+                                        </span>
+                                        <span class="md-headline">Brand :
+                                            <span class="md-subhead">{{card.brand}}</span>
                                         </span>
                                     </md-card-title-text>
                                 </md-card-title>
@@ -178,12 +205,41 @@
                     </md-tab-label>
                     <md-tab-body>
                         <div class="product-detail-form-container md-background-bg md-whiteframe-1dp">
-                            <form id="productForm" name="productForm">
+
+
+
+
+                            <!-- card example  -->
+                            <div layout="column" layout-gt-xs="row">
+                                <div ng-repeat="role in vm.packages">
+                                    <md-card>
+                                        <md-card-title>
+                                            <md-card-title-text>
+                                                <span class="md-headline">{{role.UserRole}}</span>
+                                                <span class="md-subhead"> {{role.CategoryDescription}}</span>
+                                            </md-card-title-text>
+                                            <md-card-title-media>
+                                                <div class="md-media-sm card-media"></div>
+                                            </md-card-title-media>
+                                        </md-card-title>
+                                        <md-card-actions layout="row" layout-align="end center">
+                                            <md-button ng-disabled="role.$id==vm.packageId" ng-click="vm.updatePackage($event,role)">Subscribe({{role.price}})</md-button>
+                                            <!--<md-button>Action 2</md-button>-->
+                                        </md-card-actions>
+                                    </md-card>
+
+                                </div>
+                            </div>
+
+
+                            <!-- drop down example -->
+
+                            <!-- <form id="productForm" name="productForm">
                                 <div layout="column" layout-gt-xs="row">
                                     <md-input-container flex>
                                         <label>Select Package</label>
                                         <md-select ng-model="vm.formData.package" required>
-                                            <md-option ng-repeat="role in vm.packages" ng-disabled="role.$id== vm.packageId" ng-value="role">
+                                            <md-option ng-repeat="role in vm.packages" ng-disabled="role.$id==vm.packageId" ng-value="role">
                                                 {{role.CategoryDescription}}
                                             </md-option>
                                         </md-select>
@@ -195,7 +251,7 @@
                                         <span>Update Package </span>
                                     </md-button>
                                 </div>
-                            </form>
+                            </form> -->
                         </div>
                     </md-tab-body>
                 </md-tab>

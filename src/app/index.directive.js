@@ -8,8 +8,6 @@
         .directive('uniqueEmail', uniqueEmail)
         .directive('numbersOnly', numbersOnly)
         .directive("limitTo", limitTo)
-        .directive("companyDetails", companyDetails)
-        .directive('compareTo', compareTo)
         .filter('capitalize', function () {
             return function (input) {
                 return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
@@ -102,33 +100,17 @@
 
     // abn 
 
-    function abnAvailabilityasyncValidators(api, $q, $rootScope, $timeout) {
+    function cardNumberTest(api, $q, $rootScope, $timeout) {
+        console.log('cardNumberTest')
         return {
             require: 'ngModel',
             link: function (scope, element, attrs, ngModel) {
-                // ngModel.$viewChangeListeners.push(function () {
-                ngModel.$asyncValidators.abnValidator = function (modelvalue, viewvalue) {
-                    var deferred = $q.defer();
-                    var abn = modelvalue;
-                    if (abn.length == 11) {
-                        api.verifyABN(abn).then(function (success) {
-                            var data = success[0];
-                            console.log(data)
-                            if (data == undefined) {
-                                deferred.resolve();
-                            } else {
-                                // if (data.uid == false) {
-                                //     deferred.resolve();
-                                // } else {
-                                //     deferred.reject();
-                                // }
-                                deferred.reject();
-                            }
+                console.log(attrs)
+                ngModel.$validators.abnValidator = function (modelvalue, viewvalue) {
+                    var value = viewValue;
 
-                        })
 
-                    }
-                    return deferred.promise;
+                    return false;
                 }
                 // });
 
@@ -188,7 +170,6 @@
                 function fromUser(text) {
                     if (text) {
                         var transformedInput = text.replace(/[^0-9]/g, '');
-
                         if (transformedInput !== text) {
                             ngModelCtrl.$setViewValue(transformedInput);
                             ngModelCtrl.$render();
@@ -221,33 +202,7 @@
     }
 
 
-    function companyDetails() {
 
-
-    }
-
-
-    function compareTo() {
-
-        return {
-            // require: "ngModel",
-            scope: {
-                otherModelValue: "=compareTo"
-            },
-            link: function (scope, element, attributes, ngModel) {
-
-                // ngModel.$validators.compareTo = function (modelValue) {
-                //     return modelValue == scope.otherModelValue;
-                // };
-
-                // scope.$watch("otherModelValue", function () {
-                //     ngModel.$validate();
-                // });
-            }
-        };
-
-
-    }
 
 
 })();
