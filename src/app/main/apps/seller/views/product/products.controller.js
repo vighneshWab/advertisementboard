@@ -75,9 +75,12 @@
         // Methods
         vm.gotoAddProduct = gotoAddProduct;
         vm.gotoProduct = gotoProduct;
-        vm.unable = unable;
+        // vm.unable = unable;
+
+        vm.unable = checkCompany;
         vm.disable = disable;
         vm.showConfirm = showConfirm;
+        vm.showAlert = showAlert;
 
         function gotoProduct(id) {
             $state.go('app.seller.products.detail', { id: id });
@@ -150,6 +153,45 @@
             }, function (err) {
                 console.log('error', err)
             })
+        }
+
+
+        function checkCompany(product) {
+            console.log(product)
+
+            api.userEditData('sellercompany', product.companyId).then(function (success) {
+                console.log(success)
+
+                if (success.disable == true) {
+                    unable(product.$id)
+                } else {
+
+                    vm.showAlert()
+
+                }
+
+            }, function (error) {
+                indexService.errorMessage('error while adding company');
+
+            })
+            console.log('checkCompanies', product.companyId);
+
+
+
+        }
+
+        function showAlert() {
+            alert = $mdDialog.alert({
+                title: 'Attention',
+                textContent: 'You cannot enable This product as company is disabled!',
+                ok: 'Close'
+            });
+
+            $mdDialog
+                .show(alert)
+                .finally(function () {
+                    alert = undefined;
+                });
         }
 
 
