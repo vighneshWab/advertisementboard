@@ -23,16 +23,19 @@
 
 
         function checkMe() {
-            $rootScope.checkCompany()
-            $timeout(function () {
-                if ($rootScope.rMaxCompany == true) {
+            $rootScope.checkCompany().then(function (success) {
+                if (success == true) {
                     vm.showConfirm()
                 } else {
                     vm.showAdvanced()
                 }
 
-            }, 1000)
+            }, function (error) {
 
+                indexService.sucessMessage("an error ");
+
+
+            })
         }
 
 
@@ -141,10 +144,10 @@
         }
 
         function unable(id) {
-            $rootScope.checkCompany();
-            $timeout(function () {
+            $rootScope.checkCompany()
+            .then(function (success) {
                 console.log($rootScope.rMaxCompany)
-                if (!$rootScope.rMaxCompany) {
+                if (!success) {
                     var data = {};
                     var loca = id + '/disable';
                     data[loca] = true;
@@ -161,7 +164,10 @@
 
                 }
 
-            }, 1000)
+            }, function (error) {
+
+                indexService.sucessMessage("an error");
+            })
 
 
         }

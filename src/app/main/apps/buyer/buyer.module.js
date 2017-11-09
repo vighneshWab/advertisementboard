@@ -38,6 +38,30 @@
                 role: 'buyer'
             })
 
+            .state('app.buyer.purchase', {
+                url: '/purchase',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/buyer/views/purchase/purchases.html',
+                        controller: 'purchasesController as vm'
+                    }
+                },
+                bodyClass: 'e-commerce',
+                role: 'buyer'
+            })
+
+            .state('app.buyer.purchase.detail', {
+                url: '/:id',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/buyer/views/purchase/purchase.html',
+                        controller: 'purchaseController as vm'
+                    }
+                },
+                bodyClass: 'e-commerce',
+                role: 'buyer'
+            })
+
 
         // Navigation
 

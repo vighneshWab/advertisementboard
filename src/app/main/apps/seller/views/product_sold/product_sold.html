@@ -1,0 +1,58 @@
+<div id="e-commerce-product" class="page-layout simple tabbed" layout="column">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="start center">
+        <div class="white-fg" layout="row" layout-align="start center" flex>
+            <md-button class="goto-products-button md-icon-button" aria-label="Go to products" ng-click="vm.gotoPurchase()">
+                <md-icon md-font-icon="icon-arrow-left"></md-icon>
+            </md-button>
+
+            <div layout="row" layout-align="start center">
+                <div layout="column" layout-align="start start">
+                    <div class="h2">
+                        {{vm.formData.name}}
+                    </div>
+                    <div class="subtitle secondary-text">
+                        <span>Product</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content">
+        <md-content class="md-padding" layout-xs="column" layout="row">
+            <div flex-xs flex-gt-xs="50" layout="column">
+                <md-card md-theme="dark-purple" md-theme-watch>
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline">{{product.product.name}}</span>
+                            <span class="md-subhead">{{product.product.CategoryDescription}}</span>
+                            <span class="md-subhead">${{product.product.price}}</span>
+                            <span class="md-subhead">{{product.orderdetails.orderquantity }}
+
+                            </span>
+
+                            <span class="md-subhead">{{product.orderdetails.Address }}
+
+                            </span>
+
+
+                            <span class="md-subhead">{{product.product.price * product.orderdetails.orderquantity }}
+
+                            </span>
+
+                        </md-card-title-text>
+                        <md-card-title-media>
+                            <div class="md-media-sm card-media"></div>
+                        </md-card-title-media>
+                    </md-card-title>
+                </md-card>
+
+            </div>
+        </md-content>
+
+    </div>
+</div>

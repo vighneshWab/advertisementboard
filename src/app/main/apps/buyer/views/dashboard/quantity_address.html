@@ -1,0 +1,54 @@
+<md-dialog aria-label="Mango (Fruit)">
+    <form ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Add Exsiting company</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <form id="productForm" name="productForm">
+                    <div layout="column" layout-gt-xs="row">
+                        <md-input-container flex>
+                            <label>Quantity</label>
+                            <input type="text"numbers-only ng-model="vm.formdata.orderquantity" ng-change="vm.checkQuantity(vm.formdata.orderquantity,productForm)"
+                                name="orderquantity" required>
+                            <div ng-messages="productForm.orderquantity.$error" role="alert">
+                                <div ng-message="required">
+                                    <span>abn field is required</span>
+                                </div>
+
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="column" layout-gt-xs="row">
+                        <md-input-container flex>
+                            <label>Address</label>
+                            <textarea type="text" ng-model="vm.formdata.Address" name="Address" required></textarea>
+                            <div ng-messages="productForm.Address.$error" role="alert">
+                                <div ng-message="required">
+                                    <span>email field is required</span>
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </form>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button ng-click="answer(vm.formdata)">
+                confirm
+            </md-button>
+            <span flex></span>
+            <md-button ng-click="answer('no')">
+                No
+            </md-button>
+
+        </md-dialog-actions>
+    </form>
+</md-dialog>

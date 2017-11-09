@@ -2,13 +2,13 @@
     'use strict';
 
     angular
-        .module('app.seller')
-        .controller('ProductsController', ProductsController);
+        .module('app.buyer')
+        .controller('purchasesController', purchasesController);
 
     /** @ngInject */
-    function ProductsController($state, $scope, $rootScope, $timeout, $mdDialog, api, indexService) {
+    function purchasesController($state, $scope, $rootScope, $timeout, $mdDialog, api, indexService) {
         var vm = this;
-        var list = api.userWiseData('sellerproduct').then(function (success) {
+        var list = api.buyer_purchase('orders').then(function (success) {
             vm.products = success;
         });
 
@@ -74,7 +74,7 @@
 
         // Methods
         vm.gotoAddProduct = gotoAddProduct;
-        vm.gotoProduct = gotoProduct;
+        vm.gotoPurchase = gotoProduct;
         // vm.unable = unable;
 
         vm.unable = checkCompany;
@@ -83,7 +83,7 @@
         vm.showAlert = showAlert;
 
         function gotoProduct(id) {
-            $state.go('app.seller.products.detail', { id: id });
+            $state.go('app.buyer.purchase.detail', { id: id });
         };
 
 

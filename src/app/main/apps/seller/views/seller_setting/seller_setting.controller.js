@@ -218,6 +218,7 @@
         function mulipleSource(customer) {
             api.postdata('create_source', customer).then(function (response) {
                 // vm.defult_scource(customer);
+                vm.getPaymentDetails();
                 indexService.sucessMessage('new Card has been added')
             }, function (error) {
                 console.log('error while createiing customer');
@@ -234,7 +235,7 @@
             api.postdata('defult_source', defultS).then(function (response) {
                 indexService.sucessMessage("Card Inserted successfully")
                 vm.getPaymentDetails();
-                $scope.payment = {}
+                // $scope.payment = {}
             }, function (error) {
                 console.log('error while createiing customer');
 
@@ -252,8 +253,8 @@
             api.postdata('defult_source_card', defultS).then(function (response) {
                 console.log('customer ID', response);
                 indexService.sucessMessage("Card Updated successfully")
-                // vm.getPaymentDetails();
-                $scope.payment = {}
+                vm.getPaymentDetails();
+                // $scope.payment = {}
             }, function (error) {
                 console.log('error while createiing customer');
 

@@ -40,6 +40,9 @@
 
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then(function (user) {
+
+
+                    
                     var userProfile = {
                         userRole: 'buyer',
                         contactNumber: formData.contactnumber,

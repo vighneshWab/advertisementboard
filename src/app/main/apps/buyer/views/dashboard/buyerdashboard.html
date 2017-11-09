@@ -1,62 +1,34 @@
 <div id="e-commerce-product" class="page-layout simple tabbed" layout="column">
     <!-- CONTENT -->
     <div class="content">
+        <md-content class="md-padding" layout-xs="column" layout="row">
+            <div flex-xs flex-gt-xs="50" layout="column" ng-repeat="product in vm.products">
+                <md-card md-theme="dark-purple" md-theme-watch>
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline">{{product.CategoryName}}</span>
+                            <span class="md-subhead">{{product.CategoryDescription}}</span>
+                            <span class="md-subhead">${{product.price}}</span>
+                            <span class="md-subhead">Stock: {{product.quantity}}</span>
 
-        <!--<md-tabs md-dynamic-height>
+                        </md-card-title-text>
+                        <md-card-title-media>
+                            <div class="md-media-sm card-media"></div>
+                        </md-card-title-media>
+                    </md-card-title>
+                    <md-card-actions layout="row" layout-align="end center">
+                        <md-button class="md-raised md-background" ng-click="vm.buyProduct($event,product)">
+                            <span id="customButton">Buy Product</span>
+                        </md-button>
 
-            <md-tab>
-                <md-tab-body>
-                   
-                </md-tab-body>
-            </md-tab>
-        </md-tabs>-->
+                        <md-button class="md-raised md-background" ng-click="vm.addToCart(product)">
+                            <span>Add To cart</span>
+                        </md-button>
+                    </md-card-actions>
+                </md-card>
 
-        <div md-theme="dark-grey" >
-
-            <h2>Buyer Dashboard</h2>
-            <md-content class="md-padding" layout-xs="column" layout="row">
-
-                <div flex-xs flex-gt-xs="50" layout="column">
-                    <md-card md-theme="dark-blue" md-theme-watch>
-                        <md-card-title>
-                            <md-card-title-text>
-                                <span class="md-headline">Purchase details</span>
-                                <span class="md-subhead">Medium</span>
-                            </md-card-title-text>
-                            <md-card-title-media>
-                                <div class="md-media-md card-media"></div>
-                            </md-card-title-media>
-                        </md-card-title>
-                        <md-card-actions layout="row" layout-align="end center">
-                            <md-button>View</md-button>
-                            <!--<md-button>Action 2</md-button>-->
-                        </md-card-actions>
-                    </md-card>
-                </div>
-                <div flex-xs flex-gt-xs="50" layout="column">
-                    
-                    <md-card md-theme="dark-blue" md-theme-watch>
-                        <md-card-title>
-                            <md-card-title-text>
-                                <span class="md-headline">Payment Details</span>
-                                <span class="md-subhead">Medium</span>
-                            </md-card-title-text>
-                            <md-card-title-media>
-                                <div class="md-media-md card-media"></div>
-                            </md-card-title-media>
-                        </md-card-title>
-                        <md-card-actions layout="row" layout-align="end center">
-                            <md-button>View</md-button>
-                            <!--<md-button>Action 2</md-button>-->
-                        </md-card-actions>
-                    </md-card>
-                </div>
-
-            </md-content>
-
-
-        </div>
-
+            </div>
+        </md-content>
     </div>
     <!-- / CONTENT -->
 

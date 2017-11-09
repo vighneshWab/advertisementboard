@@ -13,8 +13,8 @@
         // Base Url
         api.baseUrl = 'app/data/';
         api.apiUrl = "http://localhost:2017/";
-        api.stripeUrl = "https://stripewebhookadv.herokuapp.com/";
-        // api.stripeUrl = "http://localhost:8080/";
+        // api.stripeUrl = "https://stripewebhookadv.herokuapp.com/";
+        api.stripeUrl = "http://localhost:8080/";
 
 
         api.setRole = function (users) {
@@ -27,7 +27,6 @@
             return JSON.parse(localStorage.advboardRole);
         }
         api.insert = function (ref, data) {
-            console.log('insert', JSON.stringify(data));
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
             firebaseDatabase.ref(ref).push(data).on('value', function (snap) {
@@ -41,9 +40,6 @@
         }
 
         api.update = function (ref, chidid, data) {
-            console.log('ref', ref)
-            console.log('childid', chidid)
-            console.log('data', JSON.stringify(data));
             var qProfile = $q.defer();
             var uid = api.getUserRole().uid;
             firebaseDatabase.ref(ref).child(chidid).update(data, function (snap) {
@@ -111,7 +107,6 @@
                 var data = success;
                 qProfile.resolve(data);
             }, function (errorObject) {
-                console.log('eroror code')
                 qProfile.reject(errorObject);
             });
             return qProfile.promise;
@@ -124,7 +119,6 @@
                 var data = success;
                 qProfile.resolve(data);
             }, function (errorObject) {
-                console.log('eroror code')
                 qProfile.reject(errorObject);
             });
             return qProfile.promise;
@@ -146,7 +140,6 @@
             var uid = api.getUserRole().uid;
             var refD = firebaseDatabase.ref('admin/productcategory').orderByChild("CategoryName").equalTo("Fridges");
             var list = $firebaseArray(refD).$loaded(function (success) {
-                console.log(JSON.stringify(success))
                 var data = success;
                 qProfile.resolve(data);
             }, function (errorObject) {
@@ -168,7 +161,21 @@
             });
             return qProfile.promise;
         }
+
         // 
+        // buyer role use
+
+        api.getAllEnabledProducts = function (ref) {
+            var qProfile = $q.defer();
+            var refD = firebaseDatabase.ref('sellerproduct').orderByChild("disable").equalTo(true);
+            var list = $firebaseArray(refD).$loaded(function (success) {
+                var data = success;
+                qProfile.resolve(data);
+            }, function (errorObject) {
+                qProfile.reject(errorObject);
+            });
+            return qProfile.promise;
+        }
 
         api.verifyEmail = function (Email) {
             var qProfile = $q.defer();
@@ -194,11 +201,48 @@
                 var data = success;
                 qProfile.resolve(data);
             }, function (errorObject) {
-                console.log('eroror code')
                 qProfile.reject(errorObject);
             });
             return qProfile.promise;
 
+        }
+        api.buyer_purchase = function (ref) {
+            var qProfile = $q.defer();
+            var uid = api.getUserRole().uid;
+            var refD = firebaseDatabase.ref(ref).orderByChild('buyer_id').equalTo(uid);
+            var list = $firebaseArray(refD).$loaded(function (success) {
+                var data = success;
+                qProfile.resolve(data);
+            }, function (errorObject) {
+                qProfile.reject(errorObject);
+            });
+            return qProfile.promise;
+
+        }
+
+        api.seller_purchase = function (ref) {
+            var qProfile = $q.defer();
+            var uid = api.getUserRole().uid;
+            var refD = firebaseDatabase.ref(ref).orderByChild('seller_id').equalTo(uid);
+            var list = $firebaseArray(refD).$loaded(function (success) {
+                var data = success;
+                qProfile.resolve(data);
+            }, function (errorObject) {
+                qProfile.reject(errorObject);
+            });
+            return qProfile.promise;
+
+        }
+
+
+        api.updateMaxSellerCount = function (seller_id, childId, quantity) {
+            var qProfile = $q.defer();
+            var amandaAgeRef = firebaseDatabase.ref("transaction").child(seller_id).child(childId).child('MaxSellCount');
+            amandaAgeRef.transaction(function (currentAge) {
+                return currentAge - quantity;
+                qProfile.resolve("updated");
+            });
+            return qProfile.promise;
         }
         api.userEditData = function (ref, childId) {
             var qProfile = $q.defer();
@@ -254,9 +298,11 @@
 
 
         api.insertUser = function (ref, childId, user) {
+            console.log('insertUser', user)
             var qProfile = $q.defer();
             var refD = firebaseDatabase.ref(ref).push(user);
             refD.on('value', function (snap) {
+                console.log('value added')
                 var data = snap.val();
 
                 qProfile.resolve(data);

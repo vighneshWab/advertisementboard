@@ -46,7 +46,9 @@
             $rootScope.isAdmin = false;
             if (!Array.isArray($rootScope.userData)) {
                 var userD = api.getUserRole();
-                if(userD.userRole==='seller'){
+                if (userD.userRole === 'seller') {
+
+                    
                     var getLastTransaction = api.lastTransaction('transaction', userD.uid).then(function (res) {
                         $rootScope.lastTransaction = res[0];
                         console.log(JSON.stringify($rootScope.lastTransaction))
@@ -130,6 +132,15 @@
                 },
             });
 
+            msNavigationService.saveItem('purchase', {
+                title: 'purchase',
+                icon: 'icon-cart',
+                state: 'app.buyer.purchase',
+                hidden: function () {
+                    return !$rootScope.isBuyer; // must be a boolean value
+                },
+            });
+
         }
         function gotoSeller() {
             console.log('gotoSeller')
@@ -186,6 +197,15 @@
             //         return !$rootScope.isSeller; // must be a boolean value
             //     },
             // });
+
+            msNavigationService.saveItem('purchase', {
+                title: 'purchase',
+                icon: 'icon-cart',
+                state: 'app.seller.purchase',
+                hidden: function () {
+                    return !$rootScope.isSeller; // must be a boolean value
+                },
+            });
 
 
         }

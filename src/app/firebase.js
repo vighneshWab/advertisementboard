@@ -21,4 +21,4 @@ var development = {
 
 
 
-firebase.initializeApp(production);
+firebase.initializeApp(development);

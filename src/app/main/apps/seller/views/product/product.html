@@ -112,6 +112,17 @@
                                     </div>
                                 </md-input-container>
 
+                                <md-input-container flex>
+                                    <label>Quantity</label>
+                                    <input type="text" numbers-only ng-model="vm.formData.quantity" name="quantity" required>
+
+                                    <div ng-messages="productForm.quantity.$error" role="alert">
+                                        <div ng-message="required">
+                                            <span> quantity field is required</span>
+                                        </div>
+                                    </div>
+                                </md-input-container>
+
                             </div>
 
                             <div layout="column" layout-gt-xs="row">

@@ -56,7 +56,7 @@
                 role: 'seller',
                 bodyClass: 'e-commerce'
             })
-        
+
             .state('app.seller.sellercompanies.SellerCompany', {
                 url: '/SellerCompany',
                 views: {
@@ -173,6 +173,34 @@
                 },
                 role: 'com',
                 bodyClass: 'login'
+            })
+
+
+
+            /// sold producst
+
+            .state('app.seller.purchase', {
+                url: '/purchase',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/seller/views/product_sold/product_solds.html',
+                        controller: 'product_soldsController as vm'
+                    }
+                },
+                bodyClass: 'e-commerce',
+                role: 'seller'
+            })
+
+            .state('app.seller.purchase.detail', {
+                url: '/:id',
+                views: {
+                    'content@app': {
+                        templateUrl: 'app/main/apps/seller/views/product_sold/product_sold.html',
+                        controller: 'product_soldController as vm'
+                    }
+                },
+                bodyClass: 'e-commerce',
+                role: 'seller'
             })
 
 
